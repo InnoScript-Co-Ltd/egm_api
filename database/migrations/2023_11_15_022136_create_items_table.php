@@ -1,0 +1,39 @@
+<?php
+
+use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
+use App\Enums\GeneralStatusEnum;
+
+return new class extends Migration
+{
+    /**
+     * Run the migrations.
+     */
+    public function up(): void
+    {
+        Schema::create('items', function (Blueprint $table) {
+            $table->snowflakeIdAndPrimary();
+            $table->snowflakeId('category_id');
+            $table->string('name');
+            $table->string('code')->unique();
+            $table->longtext('description')->nullable()->default(null);
+            $table->longtext('content')->nullable()->default(null);
+            $table->float('price',10,2)->nullable()->default(null);
+            $table->float('sell_price',9,2);
+            $table->boolean('out_of_stock')->default(false);
+            $table->string('status')->default(GeneralStatusEnum::DISABLE->value);
+            $table->auditColumns();
+
+            $table->foreign('category_id')->references('id')->on('categories')->onDelete('cascade');
+        });
+    }
+
+    /**
+     * Reverse the migrations.
+     */
+    public function down(): void
+    {
+        Schema::dropIfExists('items');
+    }
+};
