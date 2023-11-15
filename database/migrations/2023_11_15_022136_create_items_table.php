@@ -19,7 +19,7 @@ return new class extends Migration
             $table->string('code')->unique();
             $table->longtext('description')->nullable()->default(null);
             $table->longtext('content')->nullable()->default(null);
-            $table->float('price',10,2)->nullable()->default(null);
+            $table->float('price',9,2)->nullable()->default(null);
             $table->float('sell_price',9,2);
             $table->boolean('out_of_stock')->default(false);
             $table->string('status')->default(GeneralStatusEnum::DISABLE->value);

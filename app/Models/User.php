@@ -12,6 +12,7 @@ use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
 use Tymon\JWTAuth\Contracts\JWTSubject;
 use App\Models\DeliveryAddress;
+use App\Models\Order;
 
 class User extends Authenticatable implements JWTSubject
 {
@@ -54,6 +55,10 @@ class User extends Authenticatable implements JWTSubject
         return $this->hasOne(DeliveryAddress::class, "id", "user_id");
     }
 
+    public function order()
+    {
+        return $this->hasMany(Order::class, "id", "user_id");
+    }
 
     public function getJWTIdentifier()
     {

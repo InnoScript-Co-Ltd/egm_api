@@ -9,6 +9,7 @@ use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\ItemController;
 use App\Http\Controllers\PromotionController;
 use App\Http\Controllers\DeliveryAddressController;
+use App\Http\Controllers\OrderController;
 
 /*
 |--------------------------------------------------------------------------
@@ -89,6 +90,13 @@ Route::middleware('jwt')->group(function () {
         Route::get('/{id}', [DeliveryAddressController::class, 'show']);
         Route::put('/{id}', [DeliveryAddressController::class, 'update']);
         Route::delete('/{id}', [DeliveryAddressController::class, 'delete']);
+
+    });
+
+    Route::group(['prefix' => 'order'], function () {
+
+        Route::get('/', [OrderController::class, 'index']);
+        Route::post('/', [OrderController::class, 'store']);
 
     });
 

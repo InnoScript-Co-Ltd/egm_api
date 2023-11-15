@@ -1,0 +1,81 @@
+<?php
+
+namespace App\Http\Controllers;
+
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+use App\Models\Order;
+use App\Http\Requests\OrderStoreRequest;
+use App\Models\User;
+use App\Models\DeliveryAddress;
+
+class OrderController extends Controller
+{
+    public function index()
+    {
+        $order = Order::with(['users','deliveryAddress'])
+                    ->searchQuery()
+                    ->sortingQuery()
+                    ->paginationQuery();
+        DB::beginTransaction();
+        try {
+            
+            DB::commit();
+
+            return $this->success('Order list is successfully retrived', $order);
+
+        } catch (Exception $e) {
+        DB::rollback();
+        throw $e;
+        }
+    }
+
+    public function store(OrderStoreRequest $request)
+    {
+        $payload = collect($request->validated());
+        DB::beginTransaction();
+        try {
+
+            $paymentType = $payload['payment_type'];
+            $deliveryAddressId = $payload['delivery_address_id'];
+            $userId = $payload['user_id'];
+
+            $deliveryAddress = DeliveryAddress::findOrFail($deliveryAddressId);
+            $user = User::findOrFail($userId);
+            
+            $username = $user['name'];
+            $phone = $user['phone'];
+            $email = $user['email'];
+
+            $address = $deliveryAddress["address"];
+            $contact_phone = $deliveryAddress["contact_phone"];
+            $contact_person = $deliveryAddress["contact_person"];
+
+            $order = Order::create([
+                "delivery_address_id" => $deliveryAddressId,
+                "user_id" => $userId,
+                "user_name" => $username,
+                "phone" => $phone,
+                "email" => $email,
+                "delivery_address" => $address,
+                "delivery_contact_person" => $contact_person,
+                "delivery_contact_phone" => $contact_phone,
+                "discount" => 1000,
+                "delivery_feed" => 1000,
+                "total_amount" => 1000,
+                "items" => ["kasmdkas"],
+                "payment_type" => $paymentType
+            ]);
+
+             
+            DB::commit();
+
+            return $this->success('Order is created successfully', $order);
+
+        } catch (Exception $e) {
+        DB::rollback();
+        throw $e;
+        }
+    }
+
+}
