@@ -2,8 +2,8 @@
 
 namespace App\Http\Requests;
 
-use Illuminate\Foundation\Http\FormRequest;
 use App\Enums\REGXEnum;
+use Illuminate\Foundation\Http\FormRequest;
 
 class UserStoreRequest extends FormRequest
 {
@@ -30,7 +30,7 @@ class UserStoreRequest extends FormRequest
             'email' => 'required | email | unique:users,email',
             'phone' => ['required', 'unique:users,phone', "regex:$mobileRule"],
             'password' => 'required | max: 24 | min: 6',
-            "confirm_password" => 'required_with:password|same:password|min:6'
+            'confirm_password' => 'required_with:password|same:password|min:6',
         ];
 
     }

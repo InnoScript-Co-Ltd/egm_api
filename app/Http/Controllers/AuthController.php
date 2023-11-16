@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Enums\UserStatusEnum;
 use App\Http\Requests\LoginRequest;
-use App\Models\User;
+use App\Models\Admin;
 use Illuminate\Support\Facades\DB;
 
 class AuthController extends Controller
@@ -22,7 +22,7 @@ class AuthController extends Controller
         DB::beginTransaction();
 
         try {
-            $user = User::where([
+            $user = Admin::where([
                 'name' => $payload['name'],
             ])->first();
 

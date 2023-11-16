@@ -3,20 +3,18 @@
 namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
-use App\Traits\SnowflakeID;
 use App\Traits\BasicAudit;
+use App\Traits\SnowflakeID;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
 use Tymon\JWTAuth\Contracts\JWTSubject;
-use App\Models\DeliveryAddress;
-use App\Models\Order;
 
 class User extends Authenticatable implements JWTSubject
 {
-    use HasApiTokens, HasFactory, Notifiable, SnowflakeID, BasicAudit, SoftDeletes;
+    use BasicAudit, HasApiTokens, HasFactory, Notifiable, SnowflakeID, SoftDeletes;
 
     /**
      * The attributes that are mass assignable.
@@ -24,9 +22,8 @@ class User extends Authenticatable implements JWTSubject
      * @var array<int, string>
      */
     protected $fillable = [
-        'name', 'profile', 'reward_point', 'coupons','email', 'phone', 'password', 'status', 'email_verified_at', 'phone_verified_at',
+        'name', 'profile', 'reward_point', 'coupons', 'email', 'phone', 'password', 'status', 'email_verified_at', 'phone_verified_at',
     ];
-
 
     /**
      * The attributes that should be hidden for serialization.
@@ -37,7 +34,6 @@ class User extends Authenticatable implements JWTSubject
         'password',
         'remember_token',
     ];
-
 
     /**
      * The attributes that should be cast.
@@ -52,12 +48,12 @@ class User extends Authenticatable implements JWTSubject
 
     public function deliveryAddress()
     {
-        return $this->hasOne(DeliveryAddress::class, "id", "user_id");
+        return $this->hasOne(DeliveryAddress::class, 'id', 'user_id');
     }
 
     public function order()
     {
-        return $this->hasMany(Order::class, "id", "user_id");
+        return $this->hasMany(Order::class, 'id', 'user_id');
     }
 
     public function getJWTIdentifier()
@@ -69,5 +65,4 @@ class User extends Authenticatable implements JWTSubject
     {
         return [];
     }
-
 }

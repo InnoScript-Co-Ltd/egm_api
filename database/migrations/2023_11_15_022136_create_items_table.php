@@ -1,9 +1,9 @@
 <?php
 
+use App\Enums\GeneralStatusEnum;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
-use App\Enums\GeneralStatusEnum;
 
 return new class extends Migration
 {
@@ -19,8 +19,8 @@ return new class extends Migration
             $table->string('code')->unique();
             $table->longtext('description')->nullable()->default(null);
             $table->longtext('content')->nullable()->default(null);
-            $table->float('price',9,2)->nullable()->default(null);
-            $table->float('sell_price',9,2);
+            $table->float('price', 9, 2)->nullable()->default(null);
+            $table->float('sell_price', 9, 2);
             $table->boolean('out_of_stock')->default(false);
             $table->string('status')->default(GeneralStatusEnum::DISABLE->value);
             $table->auditColumns();

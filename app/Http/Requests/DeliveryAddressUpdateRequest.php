@@ -2,9 +2,9 @@
 
 namespace App\Http\Requests;
 
-use Illuminate\Foundation\Http\FormRequest;
-use App\Models\User;
 use App\Enums\REGXEnum;
+use App\Models\User;
+use Illuminate\Foundation\Http\FormRequest;
 
 class DeliveryAddressUpdateRequest extends FormRequest
 {
@@ -27,10 +27,10 @@ class DeliveryAddressUpdateRequest extends FormRequest
         $mobileRule = REGXEnum::MOBILE_NUMBER->value;
 
         return [
-            "user_id" => "in:$userId | nullable",
-            "address" => "string | nullable",
-            "contact_phone" => [ 'nullable','string', "regex:$mobileRule"],
-            "contact_person" => "string | nullable",
+            'user_id' => "in:$userId | nullable",
+            'address' => 'string | nullable',
+            'contact_phone' => ['nullable', 'string', "regex:$mobileRule"],
+            'contact_person' => 'string | nullable',
         ];
     }
 }

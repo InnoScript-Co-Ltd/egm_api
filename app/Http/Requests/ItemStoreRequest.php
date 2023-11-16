@@ -2,8 +2,8 @@
 
 namespace App\Http\Requests;
 
-use Illuminate\Foundation\Http\FormRequest;
 use App\Models\Category;
+use Illuminate\Foundation\Http\FormRequest;
 
 class ItemStoreRequest extends FormRequest
 {
@@ -26,14 +26,14 @@ class ItemStoreRequest extends FormRequest
         $categoryId = implode(',', Category::all()->pluck('id')->toArray());
 
         return [
-            "category_id" => "in:$categoryId | required",
-            "name" => "string",
-            "code" => "string",
-            "description" => "string | nullable",
-            "content" => "string | nullable",
-            "price" => "numeric | nullable",
-            "sell_price" => "numeric",
-            "out_of_stock" => "boolean"
+            'category_id' => "in:$categoryId | required",
+            'name' => 'string',
+            'code' => 'string',
+            'description' => 'string | nullable',
+            'content' => 'string | nullable',
+            'price' => 'numeric | nullable',
+            'sell_price' => 'numeric',
+            'out_of_stock' => 'boolean',
         ];
     }
 }

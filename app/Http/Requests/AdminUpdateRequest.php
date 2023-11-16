@@ -2,10 +2,10 @@
 
 namespace App\Http\Requests;
 
-use Illuminate\Foundation\Http\FormRequest;
 use App\Enums\REGXEnum;
-use App\Helpers\Enum;
 use App\Enums\UserStatusEnum;
+use App\Helpers\Enum;
+use Illuminate\Foundation\Http\FormRequest;
 
 class AdminUpdateRequest extends FormRequest
 {
@@ -27,15 +27,14 @@ class AdminUpdateRequest extends FormRequest
         $mobileRule = REGXEnum::MOBILE_NUMBER->value;
         $userStatusEnum = implode(',', (new Enum(UserStatusEnum::class))->values());
 
-
         return [
             'name' => 'required | string | max: 24 | min: 8',
             'profile' => 'string | nullable',
             'email' => 'required | email | unique:users,email',
             'phone' => ['required', 'unique:users,phone', "regex:$mobileRule"],
             'password' => 'required | max: 24 | min: 6',
-            "confirm_password" => 'required_with:password|same:password|min:6',
-            "status" => "in:$userStatusEnum | nullable"
+            'confirm_password' => 'required_with:password|same:password|min:6',
+            'status' => "in:$userStatusEnum | nullable",
         ];
     }
 }

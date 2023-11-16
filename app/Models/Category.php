@@ -2,26 +2,24 @@
 
 namespace App\Models;
 
-use App\Traits\SnowflakeID;
 use App\Traits\BasicAudit;
-use Illuminate\Database\Eloquent\SoftDeletes;
+use App\Traits\SnowflakeID;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use App\Models\Item;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Category extends Model
 {
-    use HasFactory,SnowflakeID,BasicAudit,SoftDeletes;
+    use BasicAudit,HasFactory,SnowflakeID,SoftDeletes;
 
     protected $fillable = [
-        "title","level","category_id","description","status"
+        'title', 'level', 'category_id', 'description', 'status',
     ];
 
-    public $table = "categories";
+    public $table = 'categories';
 
     public function item()
     {
         return $this->hasOne(Item::class, 'id', 'category_id');
     }
-
 }
