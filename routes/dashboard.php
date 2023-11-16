@@ -1,7 +1,7 @@
 <?php
 
+use App\Http\Controllers\AdminAuthController;
 use App\Http\Controllers\AdminController;
-use App\Http\Controllers\AuthController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\DeliveryAddressController;
 use App\Http\Controllers\ItemController;
@@ -22,14 +22,14 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::group(['prefix' => 'auth'], function () {
-    Route::post('/login', [AuthController::class, 'login']);
+    Route::post('/login', [AdminAuthController::class, 'login']);
 });
 
 Route::middleware('jwt')->group(function () {
 
     Route::group(['prefix' => 'auth'], function () {
-        Route::post('/logout', [AuthController::class, 'logout']);
-        Route::post('/refresh', [AuthController::class, 'refresh']);
+        Route::post('/logout', [AdminAuthController::class, 'logout']);
+        Route::post('/refresh', [AdminAuthController::class, 'refresh']);
     });
 
     Route::group(['prefix' => 'user'], function () {
