@@ -27,15 +27,11 @@ class AdminAuthController extends Controller
             ])->first();
 
             if (! $user) {
-                return $this->validationError('Login failed', [
-                    'message' => ['Incorrect name and password'],
-                ]);
+                return $this->badRequest('Incorrect username and password');
             }
 
             if ($user->status !== AdminStatusEnum::ACTIVE->value) {
-                return $this->validationError('Login failed', [
-                    'message' => ['Account is not active'],
-                ]);
+                return $this->badRequest('Account is not active');
             }
 
             $token = auth()->attempt($payload->toArray());
@@ -45,9 +41,7 @@ class AdminAuthController extends Controller
                 return $this->createNewToken($token);
             }
 
-            return $this->validationError('Login failed', [
-                'message' => ['incorrect name and password'],
-            ]);
+            return $this->badRequest("Incorrect username and passwrod");
 
         } catch (Exception $e) {
             DB::rollBack();
