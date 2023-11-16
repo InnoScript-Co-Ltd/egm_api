@@ -66,9 +66,7 @@ class AdminAuthController extends Controller
                 return $this->success('Admin successfully signed out', null);
             }
 
-            return $this->validationError('Login failed', [
-                'message' => ['invalid token for logout'],
-            ]);
+            return $this->badRequest('Invalid token for logout');
 
         } catch (Exception $e) {
             DB::rollback();
@@ -89,9 +87,7 @@ class AdminAuthController extends Controller
                 return $this->createNewToken(auth()->refresh());
             }
 
-            return $this->validationError('Login failed', [
-                'message' => ['invalid token'],
-            ]);
+            return $this->badRequest('Invalid token');
 
         } catch (Exception $e) {
             DB::rollback();

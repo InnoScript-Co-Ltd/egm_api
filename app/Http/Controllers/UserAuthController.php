@@ -27,15 +27,11 @@ class UserAuthController extends Controller
             ])->first();
 
             if (! $user) {
-                return $this->validationError('Login failed', [
-                    'message' => ['Incorrect name and password'],
-                ]);
+                return $this->badRequest('Incorrect name and password');
             }
 
             if ($user->status !== UserStatusEnum::ACTIVE->value) {
-                return $this->validationError('Login failed', [
-                    'message' => ['Account is not active'],
-                ]);
+                return $this->badRequest('Account is not active');
             }
 
             $token = auth()->attempt($payload->toArray());
@@ -45,9 +41,7 @@ class UserAuthController extends Controller
                 return $this->createNewToken($token);
             }
 
-            return $this->validationError('Login failed', [
-                'message' => ['Incorrect name and password'],
-            ]);
+            return $this->badRequest('Incorrect name and password');
 
         } catch (Exception $e) {
             DB::rollBack();
@@ -72,9 +66,7 @@ class UserAuthController extends Controller
                 return $this->success('User successfully signed out', null);
             }
 
-            return $this->validationError('Login failed', [
-                'message' => ['Invalid token for logout'],
-            ]);
+            return $this->badRequest('Invalid token for logout');
 
         } catch (Exception $e) {
             DB::rollback();
@@ -95,9 +87,7 @@ class UserAuthController extends Controller
                 return $this->createNewToken(auth()->refresh());
             }
 
-            return $this->validationError('Login failed', [
-                'message' => ['Invalid token'],
-            ]);
+            return $this->badRequest('Invalid token');
 
         } catch (Exception $e) {
             DB::rollback();
