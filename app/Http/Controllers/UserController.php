@@ -2,28 +2,28 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
-use App\Models\User;
 use App\Http\Requests\UserStoreRequest;
 use App\Http\Requests\UserUpdateRequest;
+use App\Models\User;
 use Illuminate\Support\Facades\DB;
 
 class UserController extends Controller
 {
-    public function index ()
+    public function index()
     {
         $user = User::searchQuery()
-                    ->sortingQuery()
-                    ->paginationQuery();
+            ->sortingQuery()
+            ->paginationQuery();
         DB::beginTransaction();
         try {
-            
+
             DB::commit();
+
             return $this->success('User list is successfully retrived', $user);
 
         } catch (Exception $e) {
-        DB::rollback();
-        throw $e;
+            DB::rollback();
+            throw $e;
         }
     }
 
@@ -33,15 +33,15 @@ class UserController extends Controller
         $payload = collect($request->validated());
         DB::beginTransaction();
         try {
-            
+
             $user = User::create($payload->toArray());
             DB::commit();
 
             return $this->success('User is created successfully', $user);
 
         } catch (Exception $e) {
-        DB::rollback();
-        throw $e;
+            DB::rollback();
+            throw $e;
         }
 
     }
@@ -51,15 +51,15 @@ class UserController extends Controller
 
         DB::beginTransaction();
         try {
-            
+
             $user = User::findOrFail($id);
             DB::commit();
 
             return $this->success('User detail is successfully retrived', $user);
 
         } catch (Exception $e) {
-        DB::rollback();
-        throw $e;
+            DB::rollback();
+            throw $e;
         }
 
     }
@@ -70,7 +70,7 @@ class UserController extends Controller
         $payload = collect($request->validated());
         DB::beginTransaction();
         try {
-            
+
             $user = User::findOrFail($id);
             $user->update($payload->toArray());
             DB::commit();
@@ -78,8 +78,8 @@ class UserController extends Controller
             return $this->success('User is updated successfully', $user);
 
         } catch (Exception $e) {
-        DB::rollback();
-        throw $e;
+            DB::rollback();
+            throw $e;
         }
 
     }
@@ -88,7 +88,7 @@ class UserController extends Controller
     {
         DB::beginTransaction();
         try {
-            
+
             $user = User::findOrFail($id);
             $user->delete($id);
             DB::commit();
@@ -96,9 +96,8 @@ class UserController extends Controller
             return $this->success('User is deleted successfully', $user);
 
         } catch (Exception $e) {
-        DB::rollback();
-        throw $e;
+            DB::rollback();
+            throw $e;
         }
     }
-
 }

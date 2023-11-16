@@ -2,9 +2,9 @@
 
 namespace App\Http\Requests;
 
-use Illuminate\Foundation\Http\FormRequest;
 use App\Enums\GeneralStatusEnum;
 use App\Helpers\Enum;
+use Illuminate\Foundation\Http\FormRequest;
 
 class PromotionUpdateRequest extends FormRequest
 {
@@ -26,10 +26,10 @@ class PromotionUpdateRequest extends FormRequest
         $generalStatusEnum = implode(',', (new Enum(GeneralStatusEnum::class))->values());
 
         return [
-            "title" => "string | nullable",
-            "image" => "string | nullable",
-            "url" => "string | nullable",
-            "status" => "in:$generalStatusEnum | nullable"
+            'title' => 'string | nullable',
+            'image' => 'string | nullable',
+            'url' => 'string | nullable',
+            'status' => "in:$generalStatusEnum | nullable",
         ];
     }
 }

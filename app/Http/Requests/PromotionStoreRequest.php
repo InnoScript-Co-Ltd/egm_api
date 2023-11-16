@@ -22,9 +22,9 @@ class PromotionStoreRequest extends FormRequest
     public function rules(): array
     {
         return [
-            "title" => "string",
-            "image" => "string",
-            "url" => "string"
+            'title' => 'string',
+            'image' => 'string',
+            'url' => 'string',
         ];
     }
 }

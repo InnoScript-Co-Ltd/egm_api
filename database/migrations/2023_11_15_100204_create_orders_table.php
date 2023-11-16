@@ -1,9 +1,9 @@
 <?php
 
+use App\Enums\OrderStatusEnum;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
-use App\Enums\OrderStatusEnum;
 
 return new class extends Migration
 {
@@ -22,9 +22,9 @@ return new class extends Migration
             $table->longtext('delivery_address');
             $table->string('delivery_contact_person');
             $table->string('delivery_contact_phone');
-            $table->float('discount', 9,2);
-            $table->float('delivery_feed',9,2);
-            $table->float('total_amount',9,2);
+            $table->float('discount', 9, 2);
+            $table->float('delivery_feed', 9, 2);
+            $table->float('total_amount', 9, 2);
             $table->json('items');
             $table->string('payment_type');
             $table->string('status')->default(OrderStatusEnum::PENDING->value);

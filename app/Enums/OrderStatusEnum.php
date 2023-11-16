@@ -2,10 +2,10 @@
 
 namespace App\Enums;
 
-enum OrderStatusEnum : string
+enum OrderStatusEnum: string
 {
-    case PENDING = "PENDING";
-    case VERIFIED = "VERIFIED";
-    case DELIVERY = "DELIVERY";
-    case COMPLETE = "COMPLETE";
+    case PENDING = 'PENDING';
+    case VERIFIED = 'VERIFIED';
+    case DELIVERY = 'DELIVERY';
+    case COMPLETE = 'COMPLETE';
 }

@@ -2,10 +2,10 @@
 
 namespace App\Http\Requests;
 
-use Illuminate\Foundation\Http\FormRequest;
-use App\Helpers\Enum;
 use App\Enums\GeneralStatusEnum;
+use App\Helpers\Enum;
 use App\Models\Category;
+use Illuminate\Foundation\Http\FormRequest;
 
 class CategoryUpdateRequest extends FormRequest
 {
@@ -28,11 +28,11 @@ class CategoryUpdateRequest extends FormRequest
         $generalStatusEnum = implode(',', (new Enum(GeneralStatusEnum::class))->values());
 
         return [
-            "title" => "nullable | string",
-            "level" => "nullable | numeric",
-            "category_id" => "nullable | in:$categoryId",
-            "description" => "string",
-            "status" => "nullable | in:$generalStatusEnum"
+            'title' => 'nullable | string',
+            'level' => 'nullable | numeric',
+            'category_id' => "nullable | in:$categoryId",
+            'description' => 'string',
+            'status' => "nullable | in:$generalStatusEnum",
         ];
     }
 }

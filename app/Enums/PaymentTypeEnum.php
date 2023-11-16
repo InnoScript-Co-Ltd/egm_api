@@ -2,8 +2,8 @@
 
 namespace App\Enums;
 
-enum PaymentTypeEnum : string
+enum PaymentTypeEnum: string
 {
-    case CASH_ON_DELIVERY = "CASH_ON_DELIVERY";
-    case ONLINE_PAYMENT = "ONLINE_PAYMENT";
+    case CASH_ON_DELIVERY = 'CASH_ON_DELIVERY';
+    case ONLINE_PAYMENT = 'ONLINE_PAYMENT';
 }

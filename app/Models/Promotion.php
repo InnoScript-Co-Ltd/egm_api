@@ -2,19 +2,19 @@
 
 namespace App\Models;
 
-use App\Traits\SnowflakeID;
 use App\Traits\BasicAudit;
-use Illuminate\Database\Eloquent\SoftDeletes;
+use App\Traits\SnowflakeID;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Promotion extends Model
 {
-    use HasFactory,SnowflakeID,BasicAudit,SoftDeletes;
+    use BasicAudit,HasFactory,SnowflakeID,SoftDeletes;
 
     protected $fillable = [
-        "title", "image", "url", "status"
+        'title', 'image', 'url', 'status',
     ];
 
-    public $table = "promotions";
+    public $table = 'promotions';
 }

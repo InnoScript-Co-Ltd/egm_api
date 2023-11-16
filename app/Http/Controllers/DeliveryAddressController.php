@@ -2,10 +2,9 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\DeliveryAddress;
-use Illuminate\Http\Request;
 use App\Http\Requests\DeliveryAddressStoreRequest;
 use App\Http\Requests\DeliveryAddressUpdateRequest;
+use App\Models\DeliveryAddress;
 use Illuminate\Support\Facades\DB;
 
 class DeliveryAddressController extends Controller
@@ -13,19 +12,19 @@ class DeliveryAddressController extends Controller
     public function index()
     {
         $deliveryAddress = DeliveryAddress::with(['users'])
-                                        ->searchQuery()
-                                        ->sortingQuery()
-                                        ->paginationQuery();
+            ->searchQuery()
+            ->sortingQuery()
+            ->paginationQuery();
         DB::beginTransaction();
         try {
 
             DB::commit();
 
             return $this->success('Delivery address list is successfully retrived', $deliveryAddress);
-            
+
         } catch (Exception $e) {
-        DB::rollback();
-        throw $e;
+            DB::rollback();
+            throw $e;
         }
     }
 
@@ -34,15 +33,15 @@ class DeliveryAddressController extends Controller
         $payload = collect($request->validated());
         DB::beginTransaction();
         try {
-            
+
             $deliveryAddress = DeliveryAddress::create($payload->toArray());
             DB::commit();
 
             return $this->success('Delivery address is created successfully', $deliveryAddress);
 
         } catch (Exception $e) {
-        DB::rollback();
-        throw $e;
+            DB::rollback();
+            throw $e;
         }
     }
 
@@ -50,15 +49,15 @@ class DeliveryAddressController extends Controller
     {
         DB::beginTransaction();
         try {
-            
+
             $deliveryAddress = DeliveryAddress::findOrFail($id);
             DB::commit();
 
             return $this->success('Delivery address detail is successfully retrived', $deliveryAddress);
 
         } catch (Exception $e) {
-        DB::rollback();
-        throw $e;
+            DB::rollback();
+            throw $e;
         }
     }
 
@@ -67,7 +66,7 @@ class DeliveryAddressController extends Controller
         $payload = collect($request->validated());
         DB::beginTransaction();
         try {
-            
+
             $deliveryAddress = DeliveryAddress::findOrFail($id);
             $deliveryAddress->update($payload->toArray());
             DB::commit();
@@ -75,8 +74,8 @@ class DeliveryAddressController extends Controller
             return $this->success('Delivery address is updated successfully', $deliveryAddress);
 
         } catch (Exception $e) {
-        DB::rollback();
-        throw $e;
+            DB::rollback();
+            throw $e;
         }
     }
 
@@ -84,7 +83,7 @@ class DeliveryAddressController extends Controller
     {
         DB::beginTransaction();
         try {
-            
+
             $deliveryAddress = DeliveryAddress::findOrFail($id);
             $deliveryAddress->delete($id);
             DB::commit();
@@ -92,9 +91,8 @@ class DeliveryAddressController extends Controller
             return $this->success('Delivery address is deleted successfully', $deliveryAddress);
 
         } catch (Exception $e) {
-        DB::rollback();
-        throw $e;
+            DB::rollback();
+            throw $e;
         }
     }
-
 }

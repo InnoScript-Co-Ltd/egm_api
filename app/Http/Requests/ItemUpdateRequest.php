@@ -2,10 +2,10 @@
 
 namespace App\Http\Requests;
 
-use Illuminate\Foundation\Http\FormRequest;
-use App\Models\Category;
 use App\Enums\GeneralStatusEnum;
 use App\Helpers\Enum;
+use App\Models\Category;
+use Illuminate\Foundation\Http\FormRequest;
 
 class ItemUpdateRequest extends FormRequest
 {
@@ -29,15 +29,15 @@ class ItemUpdateRequest extends FormRequest
         $generalStatusEnum = implode(',', (new Enum(GeneralStatusEnum::class))->values());
 
         return [
-            "category_id" => "in:$categoryId | required",
-            "name" => "string",
-            "code" => "string",
-            "description" => "string | nullable",
-            "content" => "string | nullable",
-            "price" => "numeric | nullable",
-            "sell_price" => "numeric",
-            "out_of_stock" => "boolean",
-            "status" => "in:$generalStatusEnum | nullable"
+            'category_id' => "in:$categoryId | required",
+            'name' => 'string',
+            'code' => 'string',
+            'description' => 'string | nullable',
+            'content' => 'string | nullable',
+            'price' => 'numeric | nullable',
+            'sell_price' => 'numeric',
+            'out_of_stock' => 'boolean',
+            'status' => "in:$generalStatusEnum | nullable",
         ];
     }
 }
