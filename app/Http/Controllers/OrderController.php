@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use App\Models\Order;
 use App\Http\Requests\OrderStoreRequest;
+use App\Http\Requests\OrderUpdateRequest;
 use App\Models\User;
 use App\Models\DeliveryAddress;
 
@@ -71,6 +72,90 @@ class OrderController extends Controller
             DB::commit();
 
             return $this->success('Order is created successfully', $order);
+
+        } catch (Exception $e) {
+        DB::rollback();
+        throw $e;
+        }
+    }
+
+    public function show ($id)
+    {
+
+        DB::beginTransaction();
+        try {
+            
+            $order = Order::findOrFail($id);
+            DB::commit();
+
+            return $this->success('Order detail is successfully retrived', $order);
+
+        } catch (Exception $e) {
+        DB::rollback();
+        throw $e;
+        }
+
+    }
+
+    public function update(OrderUpdateRequest $request, $id)
+    {
+        $payload = collect($request->validated());
+        DB::beginTransaction();
+        try {
+
+            $paymentType = $payload['payment_type'];
+            $deliveryAddressId = $payload['delivery_address_id'];
+            $userId = $payload['user_id'];
+
+            $deliveryAddress = DeliveryAddress::findOrFail($deliveryAddressId);
+            $user = User::findOrFail($userId);
+            
+            $username = $user['name'];
+            $phone = $user['phone'];
+            $email = $user['email'];
+
+            $address = $deliveryAddress["address"];
+            $contact_phone = $deliveryAddress["contact_phone"];
+            $contact_person = $deliveryAddress["contact_person"];
+
+            $order = Order::findOrFail($id);
+            $order->update([
+                "delivery_address_id" => $deliveryAddressId,
+                "user_id" => $userId,
+                "user_name" => $username,
+                "phone" => $phone,
+                "email" => $email,
+                "delivery_address" => $address,
+                "delivery_contact_person" => $contact_person,
+                "delivery_contact_phone" => $contact_phone,
+                "discount" => 1000,
+                "delivery_feed" => 1000,
+                "total_amount" => 1000,
+                "items" => ["kasmdkas"],
+                "payment_type" => $paymentType,
+                "status" => $payload['status']
+            ]);
+
+            DB::commit();
+
+            return $this->success('Order is updated successfully', $order);
+
+        } catch (Exception $e) {
+        DB::rollback();
+        throw $e;
+        }
+    }
+
+    public function delete($id)
+    {
+        DB::beginTransaction();
+        try {
+            
+            $order = Order::findOrFail($id);
+            $order->delete($id);
+            DB::commit();
+
+            return $this->success('Order is deleted successfully', $order);
 
         } catch (Exception $e) {
         DB::rollback();
