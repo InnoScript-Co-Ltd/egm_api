@@ -4,10 +4,10 @@ namespace App\Http\Controllers;
 
 use App\Enums\UserStatusEnum;
 use App\Http\Requests\LoginRequest;
-use App\Models\Admin;
+use App\Models\User;
 use Illuminate\Support\Facades\DB;
 
-class AuthController extends Controller
+class UserAuthController extends Controller
 {
     /**
      * APIs for user login
@@ -22,19 +22,19 @@ class AuthController extends Controller
         DB::beginTransaction();
 
         try {
-            $user = Admin::where([
+            $user = User::where([
                 'name' => $payload['name'],
             ])->first();
 
             if (! $user) {
                 return $this->validationError('Login failed', [
-                    'message' => ['incorrect name and password'],
+                    'message' => ['Incorrect name and password'],
                 ]);
             }
 
             if ($user->status !== UserStatusEnum::ACTIVE->value) {
                 return $this->validationError('Login failed', [
-                    'message' => ['account is not active'],
+                    'message' => ['Account is not active'],
                 ]);
             }
 
@@ -46,7 +46,7 @@ class AuthController extends Controller
             }
 
             return $this->validationError('Login failed', [
-                'message' => ['incorrect name and password'],
+                'message' => ['Incorrect name and password'],
             ]);
 
         } catch (Exception $e) {
@@ -73,7 +73,7 @@ class AuthController extends Controller
             }
 
             return $this->validationError('Login failed', [
-                'message' => ['invalid token for logout'],
+                'message' => ['Invalid token for logout'],
             ]);
 
         } catch (Exception $e) {
@@ -96,7 +96,7 @@ class AuthController extends Controller
             }
 
             return $this->validationError('Login failed', [
-                'message' => ['invalid token'],
+                'message' => ['Invalid token'],
             ]);
 
         } catch (Exception $e) {
