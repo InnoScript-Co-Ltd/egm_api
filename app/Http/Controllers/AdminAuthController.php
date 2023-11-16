@@ -41,7 +41,7 @@ class AdminAuthController extends Controller
                 return $this->createNewToken($token);
             }
 
-            return $this->badRequest("Incorrect username and passwrod");
+            return $this->badRequest('Incorrect username and passwrod');
 
         } catch (Exception $e) {
             DB::rollBack();
