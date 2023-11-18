@@ -7,6 +7,7 @@ use App\Enums\GeneralStatusEnum;
 use App\Enums\OrderStatusEnum;
 use App\Enums\PaymentTypeEnum;
 use App\Enums\UserStatusEnum;
+use App\Helpers\Enum;
 use Illuminate\Http\Request;
 
 class StatusController extends Controller
