@@ -8,6 +8,7 @@ use App\Http\Controllers\ItemController;
 use App\Http\Controllers\OrderController;
 use App\Http\Controllers\PromotionController;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\StatusController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -30,6 +31,10 @@ Route::middleware('jwt')->group(function () {
     Route::group(['prefix' => 'auth'], function () {
         Route::post('/logout', [AdminAuthController::class, 'logout']);
         Route::post('/refresh', [AdminAuthController::class, 'refresh']);
+    });
+
+    Route::group(['prefix' => 'status'], function () {
+        Route::get('/', [StatusController::class, 'index']);
     });
 
     Route::group(['prefix' => 'user'], function () {
