@@ -62,4 +62,9 @@ trait JsonResponder
     {
         return self::respond('Too many attempts, try again later', 429);
     }
+
+    public static function badRequest($message = 'Bad request'): JsonResponse
+    {
+        return self::respond($message, 400);
+    }
 }

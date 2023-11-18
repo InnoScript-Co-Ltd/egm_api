@@ -1,12 +1,13 @@
 <?php
 
 use App\Http\Controllers\AdminController;
-use App\Http\Controllers\AuthController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\DeliveryAddressController;
+use App\Http\Controllers\FileController;
 use App\Http\Controllers\ItemController;
 use App\Http\Controllers\OrderController;
 use App\Http\Controllers\PromotionController;
+use App\Http\Controllers\StatusController;
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
 
@@ -22,14 +23,18 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::group(['prefix' => 'auth'], function () {
-    Route::post('/login', [AuthController::class, 'login']);
+    Route::post('/login', 'AdminAuthController@login');
 });
 
 Route::middleware('jwt')->group(function () {
 
-    Route::group(['prefix' => 'auth'], function () {
-        Route::post('/logout', [AuthController::class, 'logout']);
-        Route::post('/refresh', [AuthController::class, 'refresh']);
+    // Route::group(['prefix' => 'auth'], function () {
+    //     Route::post('/logout', [AdminAuthController::class, 'logout']);
+    //     Route::post('/refresh', [AdminAuthController::class, 'refresh']);
+    // });
+
+    Route::group(['prefix' => 'status'], function () {
+        Route::get('/', [StatusController::class, 'index']);
     });
 
     Route::group(['prefix' => 'user'], function () {
@@ -99,5 +104,7 @@ Route::middleware('jwt')->group(function () {
         Route::delete('/{id}', [OrderController::class, 'delete']);
 
     });
+
+    Route::post('/file/upload/image', [FileController::class, 'store']);
 
 });

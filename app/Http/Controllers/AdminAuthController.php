@@ -2,52 +2,44 @@
 
 namespace App\Http\Controllers;
 
-use App\Enums\UserStatusEnum;
-use App\Http\Requests\LoginRequest;
+use App\Enums\AdminStatusEnum;
+use App\Http\Requests\AdminLoginRequest;
 use App\Models\Admin;
 use Illuminate\Support\Facades\DB;
 
-class AuthController extends Controller
+class AdminAuthController extends Controller
 {
     /**
      * APIs for user login
      *
-     * @bodyParam username required.
+     * @bodyParam email required.
      * @bodyParam password required.
      */
-    public function login(LoginRequest $request)
+    public function login(AdminLoginRequest $request)
     {
         $payload = collect($request->validated());
 
         DB::beginTransaction();
 
         try {
-            $user = Admin::where([
-                'name' => $payload['name'],
-            ])->first();
+            $admin = Admin::where(['email' => $payload['email']])->first();
 
-            if (! $user) {
-                return $this->validationError('Login failed', [
-                    'message' => ['incorrect name and password'],
-                ]);
+            if (! $admin) {
+                return $this->badRequest('Account does not found');
             }
 
-            if ($user->status !== UserStatusEnum::ACTIVE->value) {
-                return $this->validationError('Login failed', [
-                    'message' => ['account is not active'],
-                ]);
+            if ($admin->status !== AdminStatusEnum::ACTIVE->value) {
+                return $this->badRequest('Account is not active');
             }
+            $token = auth()->guard('dashboard')->attempt($payload->toArray());
 
-            $token = auth()->attempt($payload->toArray());
             DB::commit();
 
             if ($token) {
                 return $this->createNewToken($token);
             }
 
-            return $this->validationError('Login failed', [
-                'message' => ['incorrect name and password'],
-            ]);
+            return $this->badRequest('Incorrect email and passwrod');
 
         } catch (Exception $e) {
             DB::rollBack();
@@ -63,18 +55,16 @@ class AuthController extends Controller
         DB::beginTransaction();
 
         try {
-            $user = auth()->user();
+            $admin = auth()->user();
             DB::commit();
 
-            if ($user) {
+            if ($admin) {
                 auth()->logout();
 
-                return $this->success('User successfully signed out', null);
+                return $this->success('Admin successfully signed out', null);
             }
 
-            return $this->validationError('Login failed', [
-                'message' => ['invalid token for logout'],
-            ]);
+            return $this->badRequest('Invalid token for logout');
 
         } catch (Exception $e) {
             DB::rollback();
@@ -95,9 +85,7 @@ class AuthController extends Controller
                 return $this->createNewToken(auth()->refresh());
             }
 
-            return $this->validationError('Login failed', [
-                'message' => ['invalid token'],
-            ]);
+            return $this->badRequest('Invalid token');
 
         } catch (Exception $e) {
             DB::rollback();
@@ -110,7 +98,7 @@ class AuthController extends Controller
      */
     protected function createNewToken($token)
     {
-        return $this->success('User successfully signed in', [
+        return $this->success('Admin successfully signed in', [
             'access_token' => $token,
             'token_type' => 'bearer',
             'expires_in' => auth()->factory()->getTTL() * 60,
