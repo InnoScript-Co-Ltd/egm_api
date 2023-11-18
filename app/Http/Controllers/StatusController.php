@@ -35,5 +35,4 @@ class StatusController extends Controller
 
         return $this->success('Status type list are successfully retrived', $statusTypes);
     }
-
 }

@@ -2,10 +2,10 @@
 
 namespace App\Http\Requests;
 
-use App\Enums\REGXEnum;
+use App\Enums\ValidationEnum;
 use Illuminate\Foundation\Http\FormRequest;
 
-class AdminStoreRequest extends FormRequest
+class FileStoreRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -22,15 +22,12 @@ class AdminStoreRequest extends FormRequest
      */
     public function rules(): array
     {
-
-        $mobileRule = REGXEnum::MOBILE_NUMBER->value;
+        $mimes = ValidationEnum::IMAGE->value;
 
         return [
-            'name' => 'required | string | max: 24 | min: 8',
-            'email' => 'required | email | unique:admins,email',
-            'phone' => ['required', 'unique:admins,phone', "regex:$mobileRule"],
-            'password' => 'required | max: 24 | min: 6',
-            'confirm_password' => 'required_with:password|same:password|min:6',
+            'file' => "required|mimes:$mimes|max:2048",
+            'category' => 'required | string',
         ];
+
     }
 }
