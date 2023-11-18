@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Enums\AdminStatusEnum;
-use App\Http\Requests\LoginRequest;
+use App\Http\Requests\AdminLoginRequest;
 use App\Models\Admin;
 use Illuminate\Support\Facades\DB;
 
@@ -12,36 +12,34 @@ class AdminAuthController extends Controller
     /**
      * APIs for user login
      *
-     * @bodyParam username required.
+     * @bodyParam email required.
      * @bodyParam password required.
      */
-    public function login(LoginRequest $request)
+    public function login(AdminLoginRequest $request)
     {
         $payload = collect($request->validated());
 
         DB::beginTransaction();
 
         try {
-            $user = Admin::where([
-                'name' => $payload['name'],
-            ])->first();
+            $admin = Admin::where(['email' => $payload['email']])->first();
 
-            if (! $user) {
-                return $this->badRequest('Incorrect username and password');
+            if (! $admin) {
+                return $this->badRequest('Account does not found');
             }
 
-            if ($user->status !== AdminStatusEnum::ACTIVE->value) {
+            if ($admin->status !== AdminStatusEnum::ACTIVE->value) {
                 return $this->badRequest('Account is not active');
             }
+            $token = auth()->guard('dashboard')->attempt($payload->toArray());
 
-            $token = auth()->attempt($payload->toArray());
             DB::commit();
 
             if ($token) {
                 return $this->createNewToken($token);
             }
 
-            return $this->badRequest('Incorrect username and passwrod');
+            return $this->badRequest('Incorrect email and passwrod');
 
         } catch (Exception $e) {
             DB::rollBack();
