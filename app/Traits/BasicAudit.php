@@ -8,18 +8,26 @@ trait BasicAudit
     {
         $self = new static();
 
-        static::creating(function ($model) {
-            $model->created_by = auth()->id();
-            $model->updated_by = auth()->id();
+        if (auth('dashboard')->id()) {
+            $userId = auth('dashboard')->id();
+        } elseif (auth('api')->id()) {
+            $userId = auth('api')->id();
+        } else {
+            $userId = null;
+        }
+
+        static::creating(function ($model) use ($userId) {
+            $model->created_by = $userId;
+            $model->updated_by = $userId;
         });
 
-        static::updating(function ($model) {
-            $model->updated_by = auth()->id();
+        static::updating(function ($model) use ($userId) {
+            $model->updated_by = $userId;
         });
 
-        static::deleting(function ($model) use ($self) {
+        static::deleting(function ($model) use ($self, $userId) {
             if ($self->isSoftDeleteEnabled()) {
-                $model->deleted_by = auth()->id();
+                $model->deleted_by = $userId;
                 $model->save();
             }
         });
