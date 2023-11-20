@@ -11,11 +11,12 @@ class AdminController extends Controller
 {
     public function index()
     {
-        $admin = Admin::searchQuery()
-            ->sortingQuery()
-            ->paginationQuery();
         DB::beginTransaction();
+
         try {
+            $admin = Admin::searchQuery()
+                ->sortingQuery()
+                ->paginationQuery();
 
             DB::commit();
 
@@ -31,7 +32,9 @@ class AdminController extends Controller
     {
         $payload = collect($request->validated());
         DB::beginTransaction();
+
         try {
+            $payload['password'] = bcrypt($payload['password']);
 
             $admin = Admin::create($payload->toArray());
             DB::commit();
@@ -48,7 +51,6 @@ class AdminController extends Controller
     {
         DB::beginTransaction();
         try {
-
             $admin = Admin::findOrFail($id);
             DB::commit();
 
