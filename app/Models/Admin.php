@@ -19,9 +19,33 @@ class Admin extends Authenticatable implements JWTSubject
 
     protected $guard = 'dashboard';
 
+    protected $appends = ['created_by', 'updated_by'];
+
     protected $fillable = [
         'name', 'profile', 'email', 'phone', 'password', 'status', 'email_verified_at', 'phone_verified_at',
     ];
+
+    protected function getCreatedByAttribute()
+    {
+        $admin = Admin::where(['id' => $this->attributes['created_by']])->first();
+
+        if ($admin) {
+            return ['name' => $admin->name, 'id' => $admin->id];
+        } else {
+            return null;
+        }
+    }
+
+    protected function getUpdatedByAttribute()
+    {
+        $admin = Admin::where(['id' => $this->attributes['created_by']])->first();
+
+        if ($admin) {
+            return ['name' => $admin->name, 'id' => $admin->id];
+        } else {
+            return null;
+        }
+    }
 
     public function getJWTIdentifier()
     {
