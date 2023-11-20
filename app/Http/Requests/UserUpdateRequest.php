@@ -35,7 +35,7 @@ class UserUpdateRequest extends FormRequest
             'phone' => ['nullable', "regex:$mobileRule"],
             'password' => 'nullable | max: 24 | min: 6',
             'confirm_password' => 'required_with:password|same:password|min:6',
-            'status' => "in:$userStatusEnum | nullable",
+            'status' => "nullable | in:$userStatusEnum",
         ];
     }
 }
