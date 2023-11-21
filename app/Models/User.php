@@ -16,6 +16,8 @@ class User extends Authenticatable implements JWTSubject
 {
     use BasicAudit, HasApiTokens, HasFactory, Notifiable, SnowflakeID, SoftDeletes;
 
+    protected $table = 'users';
+
     /**
      * The attributes that are mass assignable.
      *
@@ -24,6 +26,8 @@ class User extends Authenticatable implements JWTSubject
     protected $fillable = [
         'name', 'profile', 'reward_point', 'coupons', 'email', 'phone', 'password', 'status', 'email_verified_at', 'phone_verified_at',
     ];
+
+    protected $appends = ['created_by', 'updated_by'];
 
     /**
      * The attributes that should be hidden for serialization.
@@ -54,6 +58,40 @@ class User extends Authenticatable implements JWTSubject
     public function order()
     {
         return $this->hasMany(Order::class, 'id', 'user_id');
+    }
+
+    protected function getCreatedByAttribute()
+    {
+        if (auth('dashboard')->id()) {
+            $user = Admin::where(['id' => $this->attributes['created_by']])->first();
+        }
+
+        if (auth('api')->id()) {
+            $user = User::where(['id' => $this->attributes['created_by']])->first();
+        }
+
+        if ($user) {
+            return ['name' => $user->name, 'id' => $user->id];
+        } else {
+            return null;
+        }
+    }
+
+    protected function getUpdatedByAttribute()
+    {
+        if (auth('dashboard')->id()) {
+            $user = Admin::where(['id' => $this->attributes['updated_by']])->first();
+        }
+
+        if (auth('api')->id()) {
+            $user = User::where(['id' => $this->attributes['updated_by']])->first();
+        }
+
+        if ($user) {
+            return ['name' => $user->name, 'id' => $user->id];
+        } else {
+            return null;
+        }
     }
 
     public function getJWTIdentifier()

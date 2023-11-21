@@ -29,7 +29,7 @@ class ItemUpdateRequest extends FormRequest
         $generalStatusEnum = implode(',', (new Enum(GeneralStatusEnum::class))->values());
 
         return [
-            'category_id' => "in:$categoryId | required",
+            'category_id' => "nullable | in:$categoryId",
             'name' => 'string',
             'code' => 'string',
             'description' => 'string | nullable',
@@ -37,7 +37,7 @@ class ItemUpdateRequest extends FormRequest
             'price' => 'numeric | nullable',
             'sell_price' => 'numeric',
             'out_of_stock' => 'boolean',
-            'status' => "in:$generalStatusEnum | nullable",
+            'status' => "nullable | in:$generalStatusEnum",
         ];
     }
 }
