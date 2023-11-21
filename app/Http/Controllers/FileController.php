@@ -47,11 +47,11 @@ class FileController extends Controller
         }
     }
 
-    public function show($name)
+    public function show($id)
     {
         DB::beginTransaction();
         try {
-            $file = File::where(['name' => $name])->first();
+            $file = File::FindOrFail($id);
             $image = file_get_contents(public_path('storage')."/images/$file->name");
             DB::commit();
 
