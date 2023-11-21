@@ -4,6 +4,7 @@ namespace App\Models;
 
 use App\Traits\BasicAudit;
 use App\Traits\SnowflakeID;
+use App\Models\Category;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -19,6 +20,18 @@ class Item extends Model
     ];
 
     public $table = 'items';
+
+    public $appends = ['category_name'];
+
+    protected function getCategoryNameAttribute()
+    {
+        $category = Category::where(['id' => $this->attributes['category_id']])->first();
+        if ($category) {
+            return $category->title;
+        } else {
+            return null;
+        }
+    }
 
     public function category(): BelongsTo
     {
