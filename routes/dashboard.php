@@ -3,7 +3,6 @@
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\DeliveryAddressController;
-use App\Http\Controllers\FileController;
 use App\Http\Controllers\ItemController;
 use App\Http\Controllers\OrderController;
 use App\Http\Controllers\PromotionController;
@@ -21,6 +20,8 @@ use Illuminate\Support\Facades\Route;
 | be assigned to the "api" middleware group. Make something great!
 |
 */
+
+Route::get('/media/{id}', 'FileController@show');
 
 Route::group(['prefix' => 'auth'], function () {
     Route::post('/login', 'AdminAuthController@login');
@@ -105,6 +106,5 @@ Route::middleware('jwt')->group(function () {
 
     });
 
-    Route::post('/file/upload/image', [FileController::class, 'store']);
-
+    Route::post('/file/upload/image', 'FileController@store');
 });

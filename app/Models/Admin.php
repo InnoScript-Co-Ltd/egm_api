@@ -25,6 +25,10 @@ class Admin extends Authenticatable implements JWTSubject
         'name', 'profile', 'email', 'phone', 'password', 'status', 'email_verified_at', 'phone_verified_at',
     ];
 
+    protected $hidden = [
+        'password',
+    ];
+
     protected function getCreatedByAttribute()
     {
         $admin = Admin::where(['id' => $this->attributes['created_by']])->first();
