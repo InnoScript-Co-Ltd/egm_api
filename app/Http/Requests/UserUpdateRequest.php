@@ -29,8 +29,8 @@ class UserUpdateRequest extends FormRequest
         $userStatusEnum = implode(',', (new Enum(UserStatusEnum::class))->values());
 
         return [
-            'name' => 'required | string | max: 24 | min: 8',
-            'profile' => 'string | nullable',
+            'name' => 'string | max: 24 | min: 8',
+            'profile' => 'nullable',
             'email' => 'nullable | email',
             'phone' => ['nullable', "regex:$mobileRule"],
             'password' => 'nullable | max: 24 | min: 6',
