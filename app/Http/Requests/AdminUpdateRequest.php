@@ -28,13 +28,13 @@ class AdminUpdateRequest extends FormRequest
         $userStatusEnum = implode(',', (new Enum(UserStatusEnum::class))->values());
 
         return [
-            'name' => 'required | string | max: 24 | min: 8',
-            'profile' => 'string | nullable',
-            'email' => 'required | email | unique:users,email',
-            'phone' => ['required', 'unique:users,phone', "regex:$mobileRule"],
-            'password' => 'required | max: 24 | min: 6',
+            'name' => 'string | max: 24 | min: 8',
+            'profile' => 'nullable',
+            'email' => 'email | unique:users,email',
+            'phone' => ['unique:users,phone', "regex:$mobileRule"],
+            'password' => 'max: 24 | min: 6',
             'confirm_password' => 'required_with:password|same:password|min:6',
-            'status' => "in:$userStatusEnum | nullable",
+            'status' => "nullable | in:$userStatusEnum",
         ];
     }
 }

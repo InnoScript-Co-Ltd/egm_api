@@ -31,14 +31,19 @@ class Handler extends ExceptionHandler
 
     public function render($request, Throwable $exception)
     {
+
         $exceptionClass = get_class($exception);
         $message = $exception->getMessage();
+
         switch ($exceptionClass) {
             case "Illuminate\Database\Eloquent\NotFoundHttpException":
                 return JsonResponder::notFound('Route Not Found');
 
             case "Illuminate\Database\Eloquent\MethodNotAllowedHttpException":
                 return JsonResponder::methodNotAllowed($exception->getMessage());
+
+            case "Symfony\Component\HttpKernel\Exception\NotFoundHttpException":
+                return JsonResponder::notFound('Resource Not Found');
 
             case "Illuminate\Database\Eloquent\ModelNotFoundException":
                 return JsonResponder::notFound('Resource Not Found');

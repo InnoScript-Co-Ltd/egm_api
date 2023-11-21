@@ -18,6 +18,18 @@ class Category extends Model
 
     public $table = 'categories';
 
+    public $appends = ['category_name'];
+
+    protected function getCategoryNameAttribute()
+    {
+        $category = Category::where(['id' => $this->attributes['category_id']])->first();
+        if ($category) {
+            return $category->title;
+        } else {
+            return null;
+        }
+    }
+
     public function item()
     {
         return $this->hasOne(Item::class, 'id', 'category_id');
