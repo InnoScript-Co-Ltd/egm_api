@@ -34,6 +34,8 @@ Route::middleware('jwt')->group(function () {
     //     Route::post('/refresh', [AdminAuthController::class, 'refresh']);
     // });
 
+    Route::get('/media', 'FileController@index');
+
     Route::group(['prefix' => 'status'], function () {
         Route::get('/', [StatusController::class, 'index']);
     });
