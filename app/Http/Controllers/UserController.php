@@ -2,8 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Enums\PointLabelEnum;
 use App\Http\Requests\UserStoreRequest;
 use App\Http\Requests\UserUpdateRequest;
+use App\Models\Point;
 use App\Models\User;
 use Illuminate\Support\Facades\DB;
 
@@ -32,7 +34,11 @@ class UserController extends Controller
 
         $payload = collect($request->validated());
         DB::beginTransaction();
+
         try {
+
+            $point = collect(Point::where(['label' => PointLabelEnum::LOGIN_POINT->value])->fast());
+            $payload['reward_point'] = $point ? $point->point : 0;
 
             $user = User::create($payload->toArray());
             DB::commit();

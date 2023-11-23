@@ -6,6 +6,7 @@ use App\Enums\AdminStatusEnum;
 use App\Enums\GeneralStatusEnum;
 use App\Enums\OrderStatusEnum;
 use App\Enums\PaymentTypeEnum;
+use App\Enums\PointLabelEnum;
 use App\Enums\UserStatusEnum;
 use App\Helpers\Enum;
 use Illuminate\Http\Request;
@@ -27,6 +28,7 @@ class StatusController extends Controller
             'general' => (new Enum(GeneralStatusEnum::class))->values(),
             'order' => (new Enum(OrderStatusEnum::class))->values(),
             'payment_type' => (new Enum(PaymentTypeEnum::class))->values(),
+            'point' => (new Enum(PointLabelEnum::class))->values(),
         ];
 
         $statusTypes = collect($allowableStatus)->filter(function ($value, $index) use ($requestStatus) {
