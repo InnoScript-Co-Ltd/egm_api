@@ -28,7 +28,13 @@ class ItemStoreRequest extends FormRequest
         return [
             'category_id' => "in:$categoryId | required",
             'name' => 'string',
-            'code' => 'string',
+            'image' => [
+                'required',
+                'array',
+                'id' => ['required', 'numeric'],
+                'is_feature' => ['required', 'boolean']
+            ],
+            'code' => ['unique:items,code', 'string'],
             'description' => 'string | nullable',
             'content' => 'string | nullable',
             'price' => 'numeric | nullable',

@@ -34,6 +34,8 @@ Route::middleware('jwt')->group(function () {
     //     Route::post('/refresh', [AdminAuthController::class, 'refresh']);
     // });
 
+    Route::get('/media', 'FileController@index');
+
     Route::group(['prefix' => 'status'], function () {
         Route::get('/', [StatusController::class, 'index']);
     });
@@ -104,6 +106,14 @@ Route::middleware('jwt')->group(function () {
         Route::put('/{id}', [OrderController::class, 'update']);
         Route::delete('/{id}', [OrderController::class, 'delete']);
 
+    });
+
+    Route::group(['prefix' => 'point'], function () {
+        Route::get('/', 'PointController@index');
+        Route::post('/', 'PointController@store');
+        Route::get('/{id}', 'PointController@show');
+        Route::put('/{id}', 'PointController@update');
+        Route::delete('/{id}', 'PointController@destroy');
     });
 
     Route::post('/file/upload/image', 'FileController@store');

@@ -2,10 +2,12 @@
 
 namespace App\Http\Requests;
 
-use App\Models\Category;
+use App\Enums\PointLabelEnum;
+use App\Helpers\Enum;
+use App\Models\Point;
 use Illuminate\Foundation\Http\FormRequest;
 
-class CategoryStoreRequest extends FormRequest
+class PointUpdateRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -22,14 +24,14 @@ class CategoryStoreRequest extends FormRequest
      */
     public function rules(): array
     {
+        $point = Point::findOrFail(request('id'));
+        $pointId = $point->id;
 
-        $categoryId = implode(',', Category::all()->pluck('id')->toArray());
+        $pointLabelEnum = implode(',', (new Enum(PointLabelEnum::class))->values());
 
         return [
-            'title' => 'string | required',
-            'level' => 'numeric | nullable',
-            'category_id' => "nullable | in:$categoryId",
-            'description' => 'string | nullable',
+            'label' => ['string', "unique:points,label,$pointId", "in:$pointLabelEnum"],
+            'point' => 'numeric',
         ];
     }
 }
