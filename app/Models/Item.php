@@ -14,13 +14,17 @@ class Item extends Model
     use BasicAudit,HasFactory,SnowflakeID,SoftDeletes;
 
     protected $fillable = [
-        'category_id', 'name', 'code', 'description', 'content', 'price', 'sell_price', 'out_of_stock',
+        'category_id', 'name', 'image','code', 'description', 'content', 'price', 'sell_price', 'out_of_stock',
         'status',
     ];
 
     public $table = 'items';
 
     public $appends = ['category_name'];
+
+    protected $casts = [
+        "image" => "array"
+    ];
 
     protected function getCategoryNameAttribute()
     {

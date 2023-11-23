@@ -28,7 +28,7 @@ class CategoryStoreRequest extends FormRequest
         return [
             'title' => 'string | required',
             'level' => 'numeric | nullable',
-            'category_id' => "in:$categoryId | nullable",
+            'category_id' => "nullable | in:$categoryId",
             'description' => 'string | nullable',
         ];
     }
