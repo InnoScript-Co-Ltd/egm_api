@@ -13,12 +13,12 @@ class OrderController extends Controller
 {
     public function index()
     {
-        $order = Order::with(['users', 'deliveryAddress'])
-            ->searchQuery()
-            ->sortingQuery()
-            ->paginationQuery();
         DB::beginTransaction();
         try {
+            $order = Order::with(['users', 'deliveryAddress'])
+                ->searchQuery()
+                ->sortingQuery()
+                ->paginationQuery();
 
             DB::commit();
 

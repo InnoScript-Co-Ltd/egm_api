@@ -108,5 +108,13 @@ Route::middleware('jwt')->group(function () {
 
     });
 
+    Route::group(['prefix' => 'point'], function () {
+        Route::get('/', 'PointController@index');
+        Route::post('/', 'PointController@store');
+        Route::get('/{id}', 'PointController@show');
+        Route::put('/{id}', 'PointController@update');
+        Route::delete('/{id}', 'PointController@destroy');
+    });
+
     Route::post('/file/upload/image', 'FileController@store');
 });
