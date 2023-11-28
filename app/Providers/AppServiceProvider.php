@@ -5,6 +5,7 @@ namespace App\Providers;
 use App\Helpers\QueryBuilderHelper;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
@@ -22,6 +23,8 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
+        Schema::defaultStringLength(191);
+
         $this->registerBlueprintMacros();
         $this->registerQueryBuilderMacros();
     }
