@@ -22,10 +22,8 @@ class Category extends Model
 
     protected function getCategoryNameAttribute()
     {
-        if($this->category_id !== null)
-        {
-            if ($this->attributes['category_id'] !== null)
-            {
+        if ($this->category_id !== null) {
+            if ($this->attributes['category_id'] !== null) {
                 $category = Category::where(['id' => $this->attributes['category_id']])->first();
                 if ($category) {
                     return $category->title;
