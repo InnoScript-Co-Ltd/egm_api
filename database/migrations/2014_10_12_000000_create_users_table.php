@@ -14,7 +14,7 @@ return new class extends Migration
     {
         Schema::create('users', function (Blueprint $table) {
             $table->snowflakeIdAndPrimary();
-            $table->string('name')->unique();
+            $table->string('name');
             $table->snowflakeId('profile')->nullable()->default(null);
             $table->integer('reward_point')->default(0);
             $table->json('coupons')->nullable()->default(null);

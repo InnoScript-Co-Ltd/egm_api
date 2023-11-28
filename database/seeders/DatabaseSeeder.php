@@ -17,8 +17,12 @@ class DatabaseSeeder extends Seeder
             PointSeeder::class,
             RoleSeeder::class,
             UserSeeder::class,
+            DeliveryAddressSeeder::class,
+            OrderSeeder::class,
             AdminSeeder::class,
-            PromotionSeeder::class
+            PromotionSeeder::class,
+            CategorySeeder::class,
+            ItemSeeder::class
         ]);
     }
 }

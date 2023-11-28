@@ -25,7 +25,7 @@ return new class extends Migration
             $table->float('discount', 9, 2);
             $table->float('delivery_feed', 9, 2);
             $table->float('total_amount', 9, 2);
-            $table->json('items');
+            $table->json('items')->nullable()->default(null);
             $table->string('payment_type');
             $table->string('status')->default(OrderStatusEnum::PENDING->value);
             $table->auditColumns();
