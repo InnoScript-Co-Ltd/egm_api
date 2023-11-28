@@ -3,9 +3,13 @@
 namespace App\Http\Controllers;
 
 use App\Enums\UserStatusEnum;
-use App\Http\Requests\LoginRequest;
+use App\Http\Requests\ResendVerifiedCodeRequest;
+use App\Http\Requests\UserLoginRequest;
+use App\Mail\VerifiedCode as MailVerifiedCode;
 use App\Models\User;
+use App\Models\VerifiedCode;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Mail;
 
 class UserAuthController extends Controller
 {
@@ -15,19 +19,23 @@ class UserAuthController extends Controller
      * @bodyParam username required.
      * @bodyParam password required.
      */
-    public function login(LoginRequest $request)
+    public function login(UserLoginRequest $request)
     {
         $payload = collect($request->validated());
 
         DB::beginTransaction();
 
         try {
-            $user = User::where([
-                'name' => $payload['name'],
-            ])->first();
+            if (isset($payload['phone'])) {
+                $user = User::where(['phone' => $payload['phone']])->first();
+            }
+
+            if (isset($payload['email'])) {
+                $user = User::where(['email' => $payload['email']])->first();
+            }
 
             if (! $user) {
-                return $this->badRequest('Incorrect name and password');
+                return $this->badRequest('Account does not found');
             }
 
             if ($user->status !== UserStatusEnum::ACTIVE->value) {
@@ -91,6 +99,31 @@ class UserAuthController extends Controller
 
         } catch (Exception $e) {
             DB::rollback();
+            throw $e;
+        }
+    }
+
+    /**
+     * Resend user account verification code by email and phone number
+     *
+     * @param type [email, phone]
+     */
+    public function ResendVerifiedCode(ResendVerifiedCodeRequest $request, $type)
+    {
+        $payload = collect($request->validated());
+        DB::beginTransaction();
+
+        try {
+            $user = User::FindOrFail($payload['id']);
+            $generateCode = VerifiedCode::create([
+                'user_id' => $user->id,
+                'code' => rand(100000, 999999),
+            ]);
+            $send = Mail::to($user->email)->send(new MailVerifiedCode());
+            DB::commit();
+
+        } catch (Exception $e) {
+            DB::rollBack();
             throw $e;
         }
     }

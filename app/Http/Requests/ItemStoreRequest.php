@@ -32,7 +32,7 @@ class ItemStoreRequest extends FormRequest
                 'required',
                 'array',
                 'id' => ['required', 'numeric'],
-                'is_feature' => ['required', 'boolean']
+                'is_feature' => ['required', 'boolean'],
             ],
             'code' => ['unique:items,code', 'string'],
             'description' => 'string | nullable',
