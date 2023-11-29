@@ -27,7 +27,7 @@ class PromotionUpdateRequest extends FormRequest
 
         return [
             'title' => 'string | nullable',
-            'image' => 'string | nullable',
+            'image' => 'numeric | nullable',
             'url' => 'string | nullable',
             'status' => "in:$generalStatusEnum | nullable",
         ];

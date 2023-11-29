@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use App\Models\User;
 
 class DeliveryAddress extends Model
 {
@@ -18,6 +19,18 @@ class DeliveryAddress extends Model
     ];
 
     public $table = 'delivery_address';
+
+    public $appends = ['user_name'];
+
+    protected function getUserNameAttribute()
+    {
+        $user = User::where(['id' => $this->attributes['user_id']])->first();
+        if ($user) {
+            return $user->name;
+        } else {
+            return null;
+        }
+    }
 
     public function users(): BelongsTo
     {
