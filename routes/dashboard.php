@@ -1,6 +1,5 @@
 <?php
 
-use App\Http\Controllers\AdminController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\DeliveryAddressController;
 use App\Http\Controllers\ItemController;
@@ -50,11 +49,11 @@ Route::middleware('jwt')->group(function () {
 
     Route::group(['prefix' => 'admin'], function () {
 
-        Route::get('/', [AdminController::class, 'index']);
-        Route::post('/', [AdminController::class, 'store']);
-        Route::get('/{id}', [AdminController::class, 'show']);
-        Route::put('/{id}', [AdminController::class, 'update']);
-        Route::delete('/{id}', [AdminController::class, 'delete']);
+        Route::get('/', 'AdminController@index');
+        Route::post('/', 'AdminController@store');
+        Route::get('/{id}', 'AdminController@show');
+        Route::put('/{id}', 'AdminController@update');
+        Route::delete('/{id}', 'AdminController@destroy');
 
     });
 

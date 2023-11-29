@@ -66,11 +66,18 @@ class QueryBuilderHelper
     public static function filterQuery(Builder $builder): mixed
     {
         $requestQuery = app('request')->query();
-        $type = isset($requestQuery['type']) ? $requestQuery['type'] : null;
-        $value = isset($requestQuery['value']) ? $requestQuery['value'] : null;
+        $filter = isset($requestQuery['filter']) ? $requestQuery['filter'] : null;
 
-        if ($type) {
-            return $builder->whereHas($type);
+        if ($filter) {
+            $filterableFields = collect(explode(',', $filter));
+
+            return $builder->where(function (Builder $builder) use ($filterableFields) {
+                return $filterableFields->map(function ($field) use ($builder) {
+                    $getData = explode('-', $field);
+
+                    return $builder->where([$getData[0] => $getData[1]]);
+                });
+            });
         }
 
         return $builder;
