@@ -2,9 +2,9 @@
 
 namespace App\Http\Requests;
 
-use Illuminate\Foundation\Http\FormRequest;
 use App\Enums\GeneralStatusEnum;
 use App\Helpers\Enum;
+use Illuminate\Foundation\Http\FormRequest;
 
 class RegionUpdateRequest extends FormRequest
 {
@@ -26,8 +26,8 @@ class RegionUpdateRequest extends FormRequest
         $generalStatusEnum = implode(',', (new Enum(GeneralStatusEnum::class))->values());
 
         return [
-            "name" => "string",
-            "status" => "nullable | in:$generalStatusEnum"
+            'name' => 'string',
+            'status' => "nullable | in:$generalStatusEnum",
         ];
     }
 }

@@ -7,16 +7,15 @@ use App\Traits\SnowflakeID;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
-use App\Models\Shop;
 
 class Region extends Model
 {
     use BasicAudit,HasFactory,SnowflakeID,SoftDeletes;
 
-    public $table = "regions";
+    public $table = 'regions';
 
     protected $fillable = [
-        "name", "status"
+        'name', 'status',
     ];
 
     public function shop()

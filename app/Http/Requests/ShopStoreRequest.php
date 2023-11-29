@@ -2,9 +2,9 @@
 
 namespace App\Http\Requests;
 
-use Illuminate\Foundation\Http\FormRequest;
-use App\Models\Region;
 use App\Enums\REGXEnum;
+use App\Models\Region;
+use Illuminate\Foundation\Http\FormRequest;
 
 class ShopStoreRequest extends FormRequest
 {
@@ -27,11 +27,11 @@ class ShopStoreRequest extends FormRequest
         $mobileRule = REGXEnum::MOBILE_NUMBER->value;
 
         return [
-            "region_id" => "required | in:$regionId",
-            "name" => "string",
+            'region_id' => "required | in:$regionId",
+            'name' => 'string',
             'phone' => ['nullable', 'string', "regex:$mobileRule"],
-            "address" => "string",
-            "location" => "string"
+            'address' => 'string',
+            'location' => 'string',
         ];
     }
 }

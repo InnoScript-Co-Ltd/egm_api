@@ -2,9 +2,9 @@
 
 namespace App\Http\Requests;
 
-use Illuminate\Foundation\Http\FormRequest;
 use App\Enums\GeneralStatusEnum;
 use App\Helpers\Enum;
+use Illuminate\Foundation\Http\FormRequest;
 
 class FaqUpdateRequest extends FormRequest
 {
@@ -26,9 +26,9 @@ class FaqUpdateRequest extends FormRequest
         $generalStatusEnum = implode(',', (new Enum(GeneralStatusEnum::class))->values());
 
         return [
-            "answer" => "string",
-            "question" => "string",
-            "status" => "nullable | in:$generalStatusEnum"
+            'answer' => 'string',
+            'question' => 'string',
+            'status' => "nullable | in:$generalStatusEnum",
         ];
     }
 }

@@ -2,31 +2,30 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
-use App\Models\Shop;
 use App\Http\Requests\ShopStoreRequest;
 use App\Http\Requests\ShopUpdateRequest;
+use App\Models\Shop;
+use Illuminate\Support\Facades\DB;
 
 class ShopController extends Controller
 {
-    public function index ()
+    public function index()
     {
         DB::beginTransaction();
         try {
-            
-            $shop = Shop::with("region")
-                        ->searchQuery()
-                        ->sortingQuery()
-                        ->paginationQuery();
+
+            $shop = Shop::with('region')
+                ->searchQuery()
+                ->sortingQuery()
+                ->paginationQuery();
             DB::commit();
 
             return $this->success('Shop list is successfully retrived', $shop);
 
         } catch (Exception $e) {
-        DB::rollback();
-        throw $e;
-        }   
+            DB::rollback();
+            throw $e;
+        }
     }
 
     public function store(ShopStoreRequest $request)
@@ -35,32 +34,32 @@ class ShopController extends Controller
         $payload = collect($request->validated());
         DB::beginTransaction();
         try {
-            
+
             $shop = Shop::create($payload->toArray());
             DB::commit();
 
             return $this->success('Shop is created successfully', $shop);
 
         } catch (Exception $e) {
-        DB::rollback();
-        throw $e;
+            DB::rollback();
+            throw $e;
         }
 
     }
 
-    public function show ($id)
+    public function show($id)
     {
         DB::beginTransaction();
         try {
-            
+
             $shop = Shop::findOrFail($id);
             DB::commit();
 
             return $this->success('Shop detail is successfully retrived', $shop);
 
         } catch (Exception $e) {
-        DB::rollback();
-        throw $e;
+            DB::rollback();
+            throw $e;
         }
     }
 
@@ -77,8 +76,8 @@ class ShopController extends Controller
             return $this->success('Shop is updated successfully', $shop);
 
         } catch (Exception $e) {
-        DB::rollback();
-        throw $e;
+            DB::rollback();
+            throw $e;
         }
     }
 
@@ -86,7 +85,7 @@ class ShopController extends Controller
     {
         DB::beginTransaction();
         try {
-            
+
             $shop = Shop::findOrFail($id);
             $shop->delete($id);
             DB::commit();
@@ -94,9 +93,8 @@ class ShopController extends Controller
             return $this->success('Shop is deleted successfully', $shop);
 
         } catch (Exception $e) {
-        DB::rollback();
-        throw $e;
+            DB::rollback();
+            throw $e;
         }
     }
-
 }

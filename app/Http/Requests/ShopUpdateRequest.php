@@ -2,11 +2,11 @@
 
 namespace App\Http\Requests;
 
-use Illuminate\Foundation\Http\FormRequest;
-use App\Models\Region;
-use App\Enums\REGXEnum;
 use App\Enums\GeneralStatusEnum;
+use App\Enums\REGXEnum;
 use App\Helpers\Enum;
+use App\Models\Region;
+use Illuminate\Foundation\Http\FormRequest;
 
 class ShopUpdateRequest extends FormRequest
 {
@@ -30,12 +30,12 @@ class ShopUpdateRequest extends FormRequest
         $generalStatusEnum = implode(',', (new Enum(GeneralStatusEnum::class))->values());
 
         return [
-            "region_id" => "required | in:$regionId",
-            "name" => "string",
+            'region_id' => "required | in:$regionId",
+            'name' => 'string',
             'phone' => ['nullable', 'string', "regex:$mobileRule"],
-            "address" => "string",
-            "location" => "string",
-            "status" => "in:$generalStatusEnum | nullable | string"
+            'address' => 'string',
+            'location' => 'string',
+            'status' => "in:$generalStatusEnum | nullable | string",
         ];
     }
 }

@@ -116,7 +116,7 @@ Route::middleware('jwt')->group(function () {
         Route::delete('/{id}', 'PointController@destroy');
     });
 
-    Route::group(['prefix' => "faq"], function () {
+    Route::group(['prefix' => 'faq'], function () {
         Route::get('/', 'FaqController@index');
         Route::post('/', 'FaqController@store');
         Route::get('/{id}', 'FaqController@show');

@@ -14,9 +14,9 @@ class DeliveryAddressController extends Controller
         DB::beginTransaction();
         try {
             $deliveryAddress = DeliveryAddress::with(['users'])
-            ->searchQuery()
-            ->sortingQuery()
-            ->paginationQuery();
+                ->searchQuery()
+                ->sortingQuery()
+                ->paginationQuery();
 
             DB::commit();
 

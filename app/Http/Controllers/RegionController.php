@@ -2,29 +2,28 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
-use App\Models\Region;
 use App\Http\Requests\RegionStoreRequest;
 use App\Http\Requests\RegionUpdateRequest;
+use App\Models\Region;
+use Illuminate\Support\Facades\DB;
 
 class RegionController extends Controller
 {
-    public function index ()
+    public function index()
     {
         DB::beginTransaction();
         try {
-            
+
             $region = Region::searchQuery()
-                      ->sortingQuery()
-                      ->paginationQuery();
+                ->sortingQuery()
+                ->paginationQuery();
             DB::commit();
-            
+
             return $this->success('Region list is successfully retrived', $region);
 
         } catch (Exception $e) {
-        DB::rollback();
-        throw $e;
+            DB::rollback();
+            throw $e;
         }
     }
 
@@ -40,24 +39,24 @@ class RegionController extends Controller
             return $this->success('Region is created successfully', $region);
 
         } catch (Exception $e) {
-        DB::rollback();
-        throw $e;
+            DB::rollback();
+            throw $e;
         }
     }
 
-    public function show ($id)
+    public function show($id)
     {
         DB::beginTransaction();
         try {
-            
+
             $region = Region::findOrFail($id);
             DB::commit();
 
-            return $this->success('Region detail is successfully retrived',$region);
+            return $this->success('Region detail is successfully retrived', $region);
 
         } catch (Exception $e) {
-        DB::rollback();
-        throw $e;
+            DB::rollback();
+            throw $e;
         }
     }
 
@@ -66,7 +65,7 @@ class RegionController extends Controller
         $payload = collect($request->validated());
         DB::beginTransaction();
         try {
-            
+
             $region = Region::findOrFail($id);
             $region->update($payload->toArray());
             DB::commit();
@@ -74,8 +73,8 @@ class RegionController extends Controller
             return $this->success('Region is updated successfully', $region);
 
         } catch (Exception $e) {
-        DB::rollback();
-        throw $e;
+            DB::rollback();
+            throw $e;
         }
     }
 
@@ -83,7 +82,7 @@ class RegionController extends Controller
     {
         DB::beginTransaction();
         try {
-            
+
             $region = Region::findOrFail($id);
             $region->delete($id);
             DB::commit();
@@ -91,8 +90,8 @@ class RegionController extends Controller
             return $this->success('Region is deleted successfully', $region);
 
         } catch (Exception $e) {
-        DB::rollback();
-        throw $e;
+            DB::rollback();
+            throw $e;
         }
     }
 }

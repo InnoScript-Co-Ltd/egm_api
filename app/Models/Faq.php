@@ -12,9 +12,9 @@ class Faq extends Model
 {
     use BasicAudit,HasFactory,SnowflakeID,SoftDeletes;
 
-    public $table = "faq";
+    public $table = 'faq';
 
     protected $fillable = [
-        "answer", "question", "status"
+        'answer', 'question', 'status',
     ];
 }
