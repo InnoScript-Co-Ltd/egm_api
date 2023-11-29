@@ -4,7 +4,7 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class PromotionStoreRequest extends FormRequest
+class FaqStoreRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -22,9 +22,8 @@ class PromotionStoreRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'title' => 'string',
-            'image' => 'numeric',
-            'url' => 'string',
+            "answer" => "string",
+            "question" => "string"
         ];
     }
 }
