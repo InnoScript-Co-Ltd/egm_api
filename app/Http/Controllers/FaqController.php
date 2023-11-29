@@ -2,25 +2,24 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\CategoryStoreRequest;
-use App\Http\Requests\CategoryUpdateRequest;
-use App\Models\Category;
+use App\Http\Requests\FaqStoreRequest;
+use App\Http\Requests\FaqUpdateRequest;
+use App\Models\Faq;
 use Illuminate\Support\Facades\DB;
 
-class CategoryController extends Controller
+class FaqController extends Controller
 {
     public function index()
     {
         DB::beginTransaction();
-
         try {
-            $category = Category::searchQuery()
+
+            $faq = Faq::searchQuery()
                 ->sortingQuery()
-                ->filterQuery()
                 ->paginationQuery();
             DB::commit();
 
-            return $this->success('Category list is successfully retrived', $category);
+            return $this->success('Faq list is successfully retrived', $faq);
 
         } catch (Exception $e) {
             DB::rollback();
@@ -28,16 +27,16 @@ class CategoryController extends Controller
         }
     }
 
-    public function store(CategoryStoreRequest $request)
+    public function store(FaqStoreRequest $request)
     {
         $payload = collect($request->validated());
         DB::beginTransaction();
         try {
 
-            $category = Category::create($payload->toArray());
+            $faq = Faq::create($payload->toArray());
             DB::commit();
 
-            return $this->success('Category is created successfully', $category);
+            return $this->success('Faq is created successfully', $faq);
 
         } catch (Exception $e) {
             DB::rollback();
@@ -47,33 +46,31 @@ class CategoryController extends Controller
 
     public function show($id)
     {
-
         DB::beginTransaction();
         try {
 
-            $category = Category::findOrFail($id);
+            $faq = Faq::findOrFail($id);
             DB::commit();
 
-            return $this->success('Category detail is successfully retrived', $category);
+            return $this->success('Faq detail is successfully retrived', $faq);
 
         } catch (Exception $e) {
             DB::rollback();
             throw $e;
         }
-
     }
 
-    public function update(CategoryUpdateRequest $request, $id)
+    public function update(FaqUpdateRequest $request, $id)
     {
         $payload = collect($request->validated());
         DB::beginTransaction();
         try {
 
-            $category = Category::findOrFail($id);
-            $category->update($payload->toArray());
+            $faq = Faq::findOrFail($id);
+            $faq->update($payload->toArray());
             DB::commit();
 
-            return $this->success('Category is updated successfully', $category);
+            return $this->success('Faq is updated successfully', $faq);
 
         } catch (Exception $e) {
             DB::rollback();
@@ -81,16 +78,15 @@ class CategoryController extends Controller
         }
     }
 
-    public function delete($id)
+    public function destroy($id)
     {
         DB::beginTransaction();
         try {
 
-            $category = Category::findOrFail($id);
-            $category->delete($id);
-            DB::commit();
+            $faq = Faq::findOrFail($id);
+            $faq->delete($id);
 
-            return $this->success('Category is deleted successfully', $category);
+            return $this->success('Faq is deleted successfully', $faq);
 
         } catch (Exception $e) {
             DB::rollback();

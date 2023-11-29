@@ -2,9 +2,11 @@
 
 namespace App\Http\Requests;
 
+use App\Enums\GeneralStatusEnum;
+use App\Helpers\Enum;
 use Illuminate\Foundation\Http\FormRequest;
 
-class PromotionStoreRequest extends FormRequest
+class FaqUpdateRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -21,10 +23,12 @@ class PromotionStoreRequest extends FormRequest
      */
     public function rules(): array
     {
+        $generalStatusEnum = implode(',', (new Enum(GeneralStatusEnum::class))->values());
+
         return [
-            'title' => 'string',
-            'image' => 'numeric',
-            'url' => 'string',
+            'answer' => 'string',
+            'question' => 'string',
+            'status' => "nullable | in:$generalStatusEnum",
         ];
     }
 }

@@ -1,6 +1,5 @@
 <?php
 
-use App\Http\Controllers\AdminController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\DeliveryAddressController;
 use App\Http\Controllers\ItemController;
@@ -50,11 +49,11 @@ Route::middleware('jwt')->group(function () {
 
     Route::group(['prefix' => 'admin'], function () {
 
-        Route::get('/', [AdminController::class, 'index']);
-        Route::post('/', [AdminController::class, 'store']);
-        Route::get('/{id}', [AdminController::class, 'show']);
-        Route::put('/{id}', [AdminController::class, 'update']);
-        Route::delete('/{id}', [AdminController::class, 'delete']);
+        Route::get('/', 'AdminController@index');
+        Route::post('/', 'AdminController@store');
+        Route::get('/{id}', 'AdminController@show');
+        Route::put('/{id}', 'AdminController@update');
+        Route::delete('/{id}', 'AdminController@destroy');
 
     });
 
@@ -114,6 +113,30 @@ Route::middleware('jwt')->group(function () {
         Route::get('/{id}', 'PointController@show');
         Route::put('/{id}', 'PointController@update');
         Route::delete('/{id}', 'PointController@destroy');
+    });
+
+    Route::group(['prefix' => 'faq'], function () {
+        Route::get('/', 'FaqController@index');
+        Route::post('/', 'FaqController@store');
+        Route::get('/{id}', 'FaqController@show');
+        Route::put('/{id}', 'FaqController@update');
+        Route::delete('/{id}', 'FaqController@destroy');
+    });
+
+    Route::group(['prefix' => 'region'], function () {
+        Route::get('/', 'RegionController@index');
+        Route::post('/', 'RegionController@store');
+        Route::get('/{id}', 'RegionController@show');
+        Route::put('/{id}', 'RegionController@update');
+        Route::delete('/{id}', 'RegionController@destroy');
+    });
+
+    Route::group(['prefix' => 'shop'], function () {
+        Route::get('/', 'ShopController@index');
+        Route::post('/', 'ShopController@store');
+        Route::get('/{id}', 'ShopController@show');
+        Route::put('/{id}', 'ShopController@update');
+        Route::delete('/{id}', 'ShopController@destroy');
     });
 
     Route::post('/file/upload/image', 'FileController@store');

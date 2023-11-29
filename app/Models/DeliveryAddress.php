@@ -19,6 +19,18 @@ class DeliveryAddress extends Model
 
     public $table = 'delivery_address';
 
+    public $appends = ['user_name'];
+
+    protected function getUserNameAttribute()
+    {
+        $user = User::where(['id' => $this->attributes['user_id']])->first();
+        if ($user) {
+            return $user->name;
+        } else {
+            return null;
+        }
+    }
+
     public function users(): BelongsTo
     {
         return $this->belongsTo(User::class, 'user_id', 'id');

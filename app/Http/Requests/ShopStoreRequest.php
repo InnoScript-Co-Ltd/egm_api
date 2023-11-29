@@ -2,9 +2,11 @@
 
 namespace App\Http\Requests;
 
+use App\Enums\REGXEnum;
+use App\Models\Region;
 use Illuminate\Foundation\Http\FormRequest;
 
-class PromotionStoreRequest extends FormRequest
+class ShopStoreRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -21,10 +23,15 @@ class PromotionStoreRequest extends FormRequest
      */
     public function rules(): array
     {
+        $regionId = implode(',', Region::all()->pluck('id')->toArray());
+        $mobileRule = REGXEnum::MOBILE_NUMBER->value;
+
         return [
-            'title' => 'string',
-            'image' => 'numeric',
-            'url' => 'string',
+            'region_id' => "required | in:$regionId",
+            'name' => 'string',
+            'phone' => ['nullable', 'string', "regex:$mobileRule"],
+            'address' => 'string',
+            'location' => 'string',
         ];
     }
 }

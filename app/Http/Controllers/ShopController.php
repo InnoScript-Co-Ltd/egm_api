@@ -2,25 +2,25 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\CategoryStoreRequest;
-use App\Http\Requests\CategoryUpdateRequest;
-use App\Models\Category;
+use App\Http\Requests\ShopStoreRequest;
+use App\Http\Requests\ShopUpdateRequest;
+use App\Models\Shop;
 use Illuminate\Support\Facades\DB;
 
-class CategoryController extends Controller
+class ShopController extends Controller
 {
     public function index()
     {
         DB::beginTransaction();
-
         try {
-            $category = Category::searchQuery()
+
+            $shop = Shop::with('region')
+                ->searchQuery()
                 ->sortingQuery()
-                ->filterQuery()
                 ->paginationQuery();
             DB::commit();
 
-            return $this->success('Category list is successfully retrived', $category);
+            return $this->success('Shop list is successfully retrived', $shop);
 
         } catch (Exception $e) {
             DB::rollback();
@@ -28,52 +28,52 @@ class CategoryController extends Controller
         }
     }
 
-    public function store(CategoryStoreRequest $request)
+    public function store(ShopStoreRequest $request)
     {
+
         $payload = collect($request->validated());
         DB::beginTransaction();
         try {
 
-            $category = Category::create($payload->toArray());
+            $shop = Shop::create($payload->toArray());
             DB::commit();
 
-            return $this->success('Category is created successfully', $category);
+            return $this->success('Shop is created successfully', $shop);
 
         } catch (Exception $e) {
             DB::rollback();
             throw $e;
         }
+
     }
 
     public function show($id)
     {
-
         DB::beginTransaction();
         try {
 
-            $category = Category::findOrFail($id);
+            $shop = Shop::findOrFail($id);
             DB::commit();
 
-            return $this->success('Category detail is successfully retrived', $category);
+            return $this->success('Shop detail is successfully retrived', $shop);
 
         } catch (Exception $e) {
             DB::rollback();
             throw $e;
         }
-
     }
 
-    public function update(CategoryUpdateRequest $request, $id)
+    public function update(ShopUpdateRequest $request, $id)
     {
         $payload = collect($request->validated());
         DB::beginTransaction();
         try {
 
-            $category = Category::findOrFail($id);
-            $category->update($payload->toArray());
+            $shop = Shop::findOrFail($id);
+            $shop->update($payload->toArray());
             DB::commit();
 
-            return $this->success('Category is updated successfully', $category);
+            return $this->success('Shop is updated successfully', $shop);
 
         } catch (Exception $e) {
             DB::rollback();
@@ -81,16 +81,16 @@ class CategoryController extends Controller
         }
     }
 
-    public function delete($id)
+    public function destroy($id)
     {
         DB::beginTransaction();
         try {
 
-            $category = Category::findOrFail($id);
-            $category->delete($id);
+            $shop = Shop::findOrFail($id);
+            $shop->delete($id);
             DB::commit();
 
-            return $this->success('Category is deleted successfully', $category);
+            return $this->success('Shop is deleted successfully', $shop);
 
         } catch (Exception $e) {
             DB::rollback();

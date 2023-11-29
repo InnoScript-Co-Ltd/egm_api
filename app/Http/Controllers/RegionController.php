@@ -2,25 +2,24 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\CategoryStoreRequest;
-use App\Http\Requests\CategoryUpdateRequest;
-use App\Models\Category;
+use App\Http\Requests\RegionStoreRequest;
+use App\Http\Requests\RegionUpdateRequest;
+use App\Models\Region;
 use Illuminate\Support\Facades\DB;
 
-class CategoryController extends Controller
+class RegionController extends Controller
 {
     public function index()
     {
         DB::beginTransaction();
-
         try {
-            $category = Category::searchQuery()
+
+            $region = Region::searchQuery()
                 ->sortingQuery()
-                ->filterQuery()
                 ->paginationQuery();
             DB::commit();
 
-            return $this->success('Category list is successfully retrived', $category);
+            return $this->success('Region list is successfully retrived', $region);
 
         } catch (Exception $e) {
             DB::rollback();
@@ -28,16 +27,16 @@ class CategoryController extends Controller
         }
     }
 
-    public function store(CategoryStoreRequest $request)
+    public function store(RegionStoreRequest $request)
     {
         $payload = collect($request->validated());
         DB::beginTransaction();
         try {
 
-            $category = Category::create($payload->toArray());
+            $region = Region::create($payload->toArray());
             DB::commit();
 
-            return $this->success('Category is created successfully', $category);
+            return $this->success('Region is created successfully', $region);
 
         } catch (Exception $e) {
             DB::rollback();
@@ -47,33 +46,31 @@ class CategoryController extends Controller
 
     public function show($id)
     {
-
         DB::beginTransaction();
         try {
 
-            $category = Category::findOrFail($id);
+            $region = Region::findOrFail($id);
             DB::commit();
 
-            return $this->success('Category detail is successfully retrived', $category);
+            return $this->success('Region detail is successfully retrived', $region);
 
         } catch (Exception $e) {
             DB::rollback();
             throw $e;
         }
-
     }
 
-    public function update(CategoryUpdateRequest $request, $id)
+    public function update(RegionUpdateRequest $request, $id)
     {
         $payload = collect($request->validated());
         DB::beginTransaction();
         try {
 
-            $category = Category::findOrFail($id);
-            $category->update($payload->toArray());
+            $region = Region::findOrFail($id);
+            $region->update($payload->toArray());
             DB::commit();
 
-            return $this->success('Category is updated successfully', $category);
+            return $this->success('Region is updated successfully', $region);
 
         } catch (Exception $e) {
             DB::rollback();
@@ -81,16 +78,16 @@ class CategoryController extends Controller
         }
     }
 
-    public function delete($id)
+    public function destroy($id)
     {
         DB::beginTransaction();
         try {
 
-            $category = Category::findOrFail($id);
-            $category->delete($id);
+            $region = Region::findOrFail($id);
+            $region->delete($id);
             DB::commit();
 
-            return $this->success('Category is deleted successfully', $category);
+            return $this->success('Region is deleted successfully', $region);
 
         } catch (Exception $e) {
             DB::rollback();
