@@ -5,7 +5,7 @@ namespace App\Http\Requests;
 use App\Enums\REGXEnum;
 use App\Enums\UserStatusEnum;
 use App\Helpers\Enum;
-use App\Models\User;
+use App\Models\Admin;
 use Illuminate\Foundation\Http\FormRequest;
 
 class AdminUpdateRequest extends FormRequest
@@ -27,14 +27,15 @@ class AdminUpdateRequest extends FormRequest
     {
         $mobileRule = REGXEnum::MOBILE_NUMBER->value;
         $userStatusEnum = implode(',', (new Enum(UserStatusEnum::class))->values());
-        $userId = User::findOrFail(request('id'))->id();
+        $user = Admin::findOrFail(request('id'));
+        $userId = $user->id;
 
         return [
-            'name' => 'string | max: 24 | min: 8',
+            'name' => 'string | max: 24 | min: 4',
             'profile' => 'nullable',
-            'email' => 'email | unique:users,email',
-            'phone' => ['unique:users,phone', "regex:$mobileRule"],
-            'password' => 'max: 24 | min: 6',
+            'email' => "email | unique:users,email,$userId",
+            'phone' => ["unique:users,phone,$userId", "regex:$mobileRule"],
+            'password' => 'max: 24 | min: 4',
             'confirm_password' => 'required_with:password|same:password|min:6',
             'status' => "nullable | in:$userStatusEnum",
         ];

@@ -11,12 +11,13 @@ class CategoryController extends Controller
 {
     public function index()
     {
-        $category = Category::searchQuery()
-            ->sortingQuery()
-            ->paginationQuery();
         DB::beginTransaction();
-        try {
 
+        try {
+            $category = Category::searchQuery()
+                ->sortingQuery()
+                ->filterQuery()
+                ->paginationQuery();
             DB::commit();
 
             return $this->success('Category list is successfully retrived', $category);
