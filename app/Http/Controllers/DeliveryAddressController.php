@@ -11,12 +11,12 @@ class DeliveryAddressController extends Controller
 {
     public function index()
     {
-        $deliveryAddress = DeliveryAddress::with(['users'])
-            ->searchQuery()
-            ->sortingQuery()
-            ->paginationQuery();
         DB::beginTransaction();
         try {
+            $deliveryAddress = DeliveryAddress::with(['users'])
+                ->searchQuery()
+                ->sortingQuery()
+                ->paginationQuery();
 
             DB::commit();
 

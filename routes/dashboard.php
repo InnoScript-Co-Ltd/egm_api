@@ -116,5 +116,29 @@ Route::middleware('jwt')->group(function () {
         Route::delete('/{id}', 'PointController@destroy');
     });
 
+    Route::group(['prefix' => 'faq'], function () {
+        Route::get('/', 'FaqController@index');
+        Route::post('/', 'FaqController@store');
+        Route::get('/{id}', 'FaqController@show');
+        Route::put('/{id}', 'FaqController@update');
+        Route::delete('/{id}', 'FaqController@destroy');
+    });
+
+    Route::group(['prefix' => 'region'], function () {
+        Route::get('/', 'RegionController@index');
+        Route::post('/', 'RegionController@store');
+        Route::get('/{id}', 'RegionController@show');
+        Route::put('/{id}', 'RegionController@update');
+        Route::delete('/{id}', 'RegionController@destroy');
+    });
+
+    Route::group(['prefix' => 'shop'], function () {
+        Route::get('/', 'ShopController@index');
+        Route::post('/', 'ShopController@store');
+        Route::get('/{id}', 'ShopController@show');
+        Route::put('/{id}', 'ShopController@update');
+        Route::delete('/{id}', 'ShopController@destroy');
+    });
+
     Route::post('/file/upload/image', 'FileController@store');
 });

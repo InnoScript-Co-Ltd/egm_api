@@ -3,10 +3,12 @@
 namespace App\Http\Requests;
 
 use App\Enums\GeneralStatusEnum;
+use App\Enums\REGXEnum;
 use App\Helpers\Enum;
+use App\Models\Region;
 use Illuminate\Foundation\Http\FormRequest;
 
-class PromotionUpdateRequest extends FormRequest
+class ShopUpdateRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -23,13 +25,17 @@ class PromotionUpdateRequest extends FormRequest
      */
     public function rules(): array
     {
+        $regionId = implode(',', Region::all()->pluck('id')->toArray());
+        $mobileRule = REGXEnum::MOBILE_NUMBER->value;
         $generalStatusEnum = implode(',', (new Enum(GeneralStatusEnum::class))->values());
 
         return [
-            'title' => 'string | nullable',
-            'image' => 'numeric | nullable',
-            'url' => 'string | nullable',
-            'status' => "in:$generalStatusEnum | nullable",
+            'region_id' => "required | in:$regionId",
+            'name' => 'string',
+            'phone' => ['nullable', 'string', "regex:$mobileRule"],
+            'address' => 'string',
+            'location' => 'string',
+            'status' => "in:$generalStatusEnum | nullable | string",
         ];
     }
 }
