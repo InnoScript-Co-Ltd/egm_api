@@ -85,6 +85,7 @@ class FaqController extends Controller
 
             $faq = Faq::findOrFail($id);
             $faq->delete($id);
+            DB::commit();
 
             return $this->success('Faq is deleted successfully', $faq);
 
