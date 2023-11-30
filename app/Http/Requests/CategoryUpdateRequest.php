@@ -24,14 +24,19 @@ class CategoryUpdateRequest extends FormRequest
      */
     public function rules(): array
     {
-        $categoryId = implode(',', Category::all()->pluck('id')->toArray());
+
+        $categoryIds = implode(',', Category::all()->pluck('id')->toArray());
         $generalStatusEnum = implode(',', (new Enum(GeneralStatusEnum::class))->values());
 
+        $category = Category::FindOrFail(request('id'));
+        $categoryId = $category->id;
+
         return [
-            'title' => 'nullable | string',
+            'title' => "nullable | string | unique:categories,title,$categoryId",
             'level' => 'nullable | numeric',
-            'category_id' => "nullable | in:$categoryId",
-            'description' => 'string',
+            'icon' => 'nullable | numeric',
+            'category_id' => "nullable | in:$categoryIds",
+            'description' => 'nullable | string',
             'status' => "nullable | in:$generalStatusEnum",
         ];
     }

@@ -23,6 +23,7 @@ class CategoryFactory extends Factory
 
         return [
             'title' => fake()->name(),
+            'icon' => null,
             'level' => 0,
             'status' => $activeStatus,
         ];

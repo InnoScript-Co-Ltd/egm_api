@@ -26,8 +26,9 @@ class CategoryStoreRequest extends FormRequest
         $categoryId = implode(',', Category::all()->pluck('id')->toArray());
 
         return [
-            'title' => 'string | required',
+            'title' => 'string | required | unique:categories,title',
             'level' => 'numeric | nullable',
+            'icon' => 'numeric',
             'category_id' => "nullable | in:$categoryId",
             'description' => 'string | nullable',
         ];
