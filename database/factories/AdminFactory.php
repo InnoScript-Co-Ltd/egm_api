@@ -2,6 +2,8 @@
 
 namespace Database\Factories;
 
+use App\Enums\AdminStatusEnum;
+use App\Helpers\Enum;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Facades\Hash;
 
@@ -19,12 +21,17 @@ class AdminFactory extends Factory
      */
     public function definition(): array
     {
+        $adminStatus = (new Enum(AdminStatusEnum::class))->values();
+        $status = $adminStatus[rand(0, count($adminStatus) - 1)];
+        $verified_at = $status === 'PENDING' ? null : now();
+
         return [
-            'name' => 'admin',
+            'name' => fake()->name(),
             'email' => fake()->unique()->safeEmail(),
-            'email_verified_at' => now(),
-            'phone' => '9952732787',
-            'status' => 'ACTIVE',
+            'email_verified_at' => $verified_at,
+            'phone_verified_at' => $verified_at,
+            'phone' => '9'.rand(100000000, 999999999),
+            'status' => $status,
             'password' => static::$password ??= Hash::make('password'),
         ];
     }
@@ -36,6 +43,7 @@ class AdminFactory extends Factory
     {
         return $this->state(fn (array $attributes) => [
             'email_verified_at' => null,
+            'phone_verified_at' => null,
         ]);
     }
 }
