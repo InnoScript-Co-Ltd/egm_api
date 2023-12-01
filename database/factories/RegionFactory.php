@@ -2,9 +2,9 @@
 
 namespace Database\Factories;
 
-use Illuminate\Database\Eloquent\Factories\Factory;
 use App\Enums\GeneralStatusEnum;
 use App\Helpers\Enum;
+use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
  * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Region>
@@ -24,7 +24,7 @@ class RegionFactory extends Factory
 
         return [
             'name' => fake()->name(),
-            'status' => $activeStatus
+            'status' => $activeStatus,
         ];
     }
 }

@@ -2,10 +2,10 @@
 
 namespace Database\Factories;
 
-use Illuminate\Database\Eloquent\Factories\Factory;
-use App\Models\Region;
 use App\Enums\GeneralStatusEnum;
 use App\Helpers\Enum;
+use App\Models\Region;
+use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
  * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Shop>
@@ -26,12 +26,12 @@ class ShopFactory extends Factory
         $activeStatus = $status[rand(0, count($status) - 1)];
 
         return [
-            "region_id" => $regionId,
-            "name" => fake()->name(),
-            "phone" => fake()->name(),
-            "address" => fake()->name(),
-            "location" => fake()->name(),
-            "status" => $activeStatus
+            'region_id' => $regionId,
+            'name' => fake()->name(),
+            'phone' => fake()->name(),
+            'address' => fake()->name(),
+            'location' => fake()->name(),
+            'status' => $activeStatus,
         ];
     }
 }
