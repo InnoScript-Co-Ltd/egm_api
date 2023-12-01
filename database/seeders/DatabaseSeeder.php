@@ -21,6 +21,9 @@ class DatabaseSeeder extends Seeder
             OrderSeeder::class,
             AdminSeeder::class,
             PromotionSeeder::class,
+            FaqSeeder::class,
+            RegionSeeder::class,
+            ShopSeeder::class,
             CategorySeeder::class,
             ItemSeeder::class,
         ]);
