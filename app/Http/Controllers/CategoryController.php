@@ -4,8 +4,11 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\CategoryStoreRequest;
 use App\Http\Requests\CategoryUpdateRequest;
+use Illuminate\Http\Request;
 use App\Models\Category;
 use Illuminate\Support\Facades\DB;
+use App\Exports\ExportCategory;
+use Maatwebsite\Excel\Facades\Excel;
 
 class CategoryController extends Controller
 {
@@ -96,5 +99,10 @@ class CategoryController extends Controller
             DB::rollback();
             throw $e;
         }
+    }
+
+    public function export(Request $request)
+    {
+        return Excel::download(new ExportCategory, 'categories.xlsx');
     }
 }

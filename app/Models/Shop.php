@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use App\Models\Region;
 
 class Shop extends Model
 {
@@ -18,6 +19,18 @@ class Shop extends Model
     protected $fillable = [
         'region_id', 'name', 'phone', 'address', 'location', 'status',
     ];
+
+    public $appends = ['region_name'];
+
+    protected function getRegionNameAttribute()
+    {
+        $region = Region::where(['id' => $this->attributes['region_id']])->first();
+        if ($region) {
+            return $region->name;
+        } else {
+            return null;
+        }
+    }
 
     public function region(): BelongsTo
     {

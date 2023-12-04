@@ -7,6 +7,8 @@ use App\Http\Requests\OrderUpdateRequest;
 use App\Models\DeliveryAddress;
 use App\Models\Order;
 use App\Models\User;
+use App\Exports\ExportOrder;
+use Maatwebsite\Excel\Facades\Excel;
 use Illuminate\Support\Facades\DB;
 
 class OrderController extends Controller
@@ -126,10 +128,10 @@ class OrderController extends Controller
                 'delivery_address' => $address,
                 'delivery_contact_person' => $contact_person,
                 'delivery_contact_phone' => $contact_phone,
-                'discount' => 1000,
-                'delivery_feed' => 1000,
-                'total_amount' => 1000,
-                'items' => ['kasmdkas'],
+                'discount' => $payload['discount'],
+                'delivery_feed' => $payload['delivery_feed'],
+                'total_amount' => $payload['total_amount'],
+                'items' => $payload['items'],
                 'payment_type' => $paymentType,
                 'status' => $payload['status'],
             ]);
@@ -159,5 +161,10 @@ class OrderController extends Controller
             DB::rollback();
             throw $e;
         }
+    }
+
+    public function export()
+    {
+        return Excel::download(new ExportOrder, 'Orders.xlsx');
     }
 }
