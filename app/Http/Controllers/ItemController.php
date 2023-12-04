@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use App\Http\Requests\ItemStoreRequest;
 use App\Http\Requests\ItemUpdateRequest;
 use App\Models\Item;
+use App\Exports\ExportItem;
+use Maatwebsite\Excel\Facades\Excel;
 use Illuminate\Support\Facades\DB;
 
 class ItemController extends Controller
@@ -96,5 +98,10 @@ class ItemController extends Controller
             DB::rollback();
             throw $e;
         }
+    }
+
+    public function export()
+    {
+        return Excel::download(new ExportItem, 'Items.xlsx');
     }
 }

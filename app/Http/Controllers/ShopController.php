@@ -5,7 +5,9 @@ namespace App\Http\Controllers;
 use App\Http\Requests\ShopStoreRequest;
 use App\Http\Requests\ShopUpdateRequest;
 use App\Models\Shop;
+use App\Exports\ExportShop;
 use Illuminate\Support\Facades\DB;
+use Maatwebsite\Excel\Facades\Excel;
 
 class ShopController extends Controller
 {
@@ -96,5 +98,10 @@ class ShopController extends Controller
             DB::rollback();
             throw $e;
         }
+    }
+
+    public function export()
+    {
+        return Excel::download(new ExportShop, 'Shops.xlsx');
     }
 }

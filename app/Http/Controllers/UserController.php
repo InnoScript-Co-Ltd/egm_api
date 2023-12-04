@@ -7,7 +7,9 @@ use App\Http\Requests\UserStoreRequest;
 use App\Http\Requests\UserUpdateRequest;
 use App\Models\Point;
 use App\Models\User;
+use App\Exports\ExportUser;
 use Illuminate\Support\Facades\DB;
+use Maatwebsite\Excel\Facades\Excel;
 
 class UserController extends Controller
 {
@@ -105,5 +107,10 @@ class UserController extends Controller
             DB::rollback();
             throw $e;
         }
+    }
+
+    public function export()
+    {
+        return Excel::download(new ExportUser, 'users.xlsx');
     }
 }
