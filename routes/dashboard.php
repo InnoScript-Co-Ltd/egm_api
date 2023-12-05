@@ -45,6 +45,11 @@ Route::middleware('jwt')->group(function () {
         Route::get('/', [StatusController::class, 'index']);
     });
 
+    Route::group(['prefix' => 'count'], function () {
+        Route::get('/order', 'DashboardController@orderCount');
+        Route::get('/item', 'DashboardController@itemCount');
+    });
+
     Route::group(['prefix' => 'user'], function () {
         Route::get('/', [UserController::class, 'index']);
         Route::post('/', [UserController::class, 'store']);
