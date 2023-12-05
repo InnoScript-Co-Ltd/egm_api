@@ -9,8 +9,8 @@ use Maatwebsite\Excel\Concerns\WithHeadings;
 class ExportOrder implements FromCollection, WithHeadings
 {
     /**
-    * @return \Illuminate\Support\Collection
-    */
+     * @return \Illuminate\Support\Collection
+     */
     public function collection()
     {
         return Order::select(
@@ -30,7 +30,7 @@ class ExportOrder implements FromCollection, WithHeadings
             'status')->get();
     }
 
-    public function headings():array
+    public function headings(): array
     {
         return [
             'id',
@@ -46,7 +46,7 @@ class ExportOrder implements FromCollection, WithHeadings
             'delivery_feed',
             'total_amount',
             'payment_type',
-            'status'
+            'status',
         ];
     }
 }

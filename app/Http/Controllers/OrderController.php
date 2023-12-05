@@ -2,14 +2,14 @@
 
 namespace App\Http\Controllers;
 
+use App\Exports\ExportOrder;
 use App\Http\Requests\OrderStoreRequest;
 use App\Http\Requests\OrderUpdateRequest;
 use App\Models\DeliveryAddress;
 use App\Models\Order;
 use App\Models\User;
-use App\Exports\ExportOrder;
-use Maatwebsite\Excel\Facades\Excel;
 use Illuminate\Support\Facades\DB;
+use Maatwebsite\Excel\Facades\Excel;
 
 class OrderController extends Controller
 {

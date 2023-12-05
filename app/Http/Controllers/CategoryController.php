@@ -2,12 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use App\Exports\ExportCategory;
 use App\Http\Requests\CategoryStoreRequest;
 use App\Http\Requests\CategoryUpdateRequest;
-use Illuminate\Http\Request;
 use App\Models\Category;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
-use App\Exports\ExportCategory;
 use Maatwebsite\Excel\Facades\Excel;
 
 class CategoryController extends Controller

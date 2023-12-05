@@ -10,8 +10,8 @@ use Maatwebsite\Excel\Concerns\WithMapping;
 class ExportShop implements FromCollection, WithHeadings, WithMapping
 {
     /**
-    * @return \Illuminate\Support\Collection
-    */
+     * @return \Illuminate\Support\Collection
+     */
     public function collection()
     {
         return Shop::select(
@@ -25,7 +25,7 @@ class ExportShop implements FromCollection, WithHeadings, WithMapping
         )->get();
     }
 
-    public function headings():array
+    public function headings(): array
     {
         return [
             'Id',
@@ -34,7 +34,7 @@ class ExportShop implements FromCollection, WithHeadings, WithMapping
             'Phone',
             'Address',
             'Location',
-            'Status'
+            'Status',
         ];
     }
 
@@ -48,7 +48,7 @@ class ExportShop implements FromCollection, WithHeadings, WithMapping
             $post->phone,
             $post->address,
             $post->location,
-            $post->status
+            $post->status,
             // Add other columns as needed
         ];
     }
