@@ -9,14 +9,14 @@ use Maatwebsite\Excel\Concerns\WithHeadings;
 class ExportUser implements FromCollection, WithHeadings
 {
     /**
-    * @return \Illuminate\Support\Collection
-    */
+     * @return \Illuminate\Support\Collection
+     */
     public function collection()
     {
-        return User::select('name','email','phone','reward_point','coupons','status')->get();
+        return User::select('name', 'email', 'phone', 'reward_point', 'coupons', 'status')->get();
     }
 
-    public function headings():array
+    public function headings(): array
     {
         return [
             'id',
@@ -25,7 +25,7 @@ class ExportUser implements FromCollection, WithHeadings
             'phone',
             'reward_point',
             'coupons',
-            'status'
+            'status',
         ];
     }
 }

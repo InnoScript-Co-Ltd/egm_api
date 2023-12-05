@@ -5,21 +5,19 @@ namespace App\Exports;
 use App\Models\Item;
 use Maatwebsite\Excel\Concerns\FromCollection;
 use Maatwebsite\Excel\Concerns\WithHeadings;
-use Maatwebsite\Excel\Concerns\WithEvents;
 use Maatwebsite\Excel\Concerns\WithMapping;
-use Maatwebsite\Excel\Events\AfterSheet;
 
 class ExportItem implements FromCollection, WithHeadings, WithMapping
 {
     /**
-    * @return \Illuminate\Support\Collection
-    */
+     * @return \Illuminate\Support\Collection
+     */
     public function collection()
     {
-        return Item::select('id','category_id','name','code','description','content','price','sell_price','out_of_stock','status')->get();
+        return Item::select('id', 'category_id', 'name', 'code', 'description', 'content', 'price', 'sell_price', 'out_of_stock', 'status')->get();
     }
 
-    public function headings():array
+    public function headings(): array
     {
         return [
             'Id',
@@ -31,7 +29,7 @@ class ExportItem implements FromCollection, WithHeadings, WithMapping
             'Price',
             'Sell Price',
             'Out of stock',
-            'Status'
+            'Status',
         ];
     }
 
@@ -48,7 +46,7 @@ class ExportItem implements FromCollection, WithHeadings, WithMapping
             $post->price,
             $post->sell_price,
             $post->out_of_stock,
-            $post->status
+            $post->status,
             // Add other columns as needed
         ];
     }

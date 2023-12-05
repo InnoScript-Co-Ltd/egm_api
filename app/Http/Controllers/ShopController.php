@@ -2,10 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Exports\ExportShop;
 use App\Http\Requests\ShopStoreRequest;
 use App\Http\Requests\ShopUpdateRequest;
 use App\Models\Shop;
-use App\Exports\ExportShop;
 use Illuminate\Support\Facades\DB;
 use Maatwebsite\Excel\Facades\Excel;
 

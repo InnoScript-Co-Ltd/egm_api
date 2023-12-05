@@ -2,12 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use App\Exports\ExportItem;
 use App\Http\Requests\ItemStoreRequest;
 use App\Http\Requests\ItemUpdateRequest;
 use App\Models\Item;
-use App\Exports\ExportItem;
-use Maatwebsite\Excel\Facades\Excel;
 use Illuminate\Support\Facades\DB;
+use Maatwebsite\Excel\Facades\Excel;
 
 class ItemController extends Controller
 {

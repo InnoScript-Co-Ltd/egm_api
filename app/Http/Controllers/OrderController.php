@@ -2,14 +2,14 @@
 
 namespace App\Http\Controllers;
 
+use App\Exports\ExportOrder;
 use App\Http\Requests\OrderStoreRequest;
 use App\Http\Requests\OrderUpdateRequest;
 use App\Models\DeliveryAddress;
 use App\Models\Order;
 use App\Models\User;
-use App\Exports\ExportOrder;
-use Maatwebsite\Excel\Facades\Excel;
 use Illuminate\Support\Facades\DB;
+use Maatwebsite\Excel\Facades\Excel;
 
 class OrderController extends Controller
 {
@@ -128,10 +128,10 @@ class OrderController extends Controller
                 'delivery_address' => $address,
                 'delivery_contact_person' => $contact_person,
                 'delivery_contact_phone' => $contact_phone,
-                'discount' => $payload['discount'],
-                'delivery_feed' => $payload['delivery_feed'],
-                'total_amount' => $payload['total_amount'],
-                'items' => $payload['items'],
+                'discount' => 1000,
+                'delivery_feed' => 1000,
+                'total_amount' => 1000,
+                'items' => ['asds,d,as,'],
                 'payment_type' => $paymentType,
                 'status' => $payload['status'],
             ]);
