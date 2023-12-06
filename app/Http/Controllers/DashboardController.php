@@ -5,40 +5,53 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Order;
 use App\Models\Item;
+use App\Models\User;
 use App\Enums\OrderStatusEnum;
 use App\Enums\GeneralStatusEnum;
+use App\Enums\UserStatusEnum;
+use App\Helpers\Enum;
 
 class DashboardController extends Controller
 {
+    public function countByStatus($modelClass, $enumClass, $statusColumn)
+    {
+        $statusEnums = (new Enum($enumClass))->values();
+        $response = ["total" => $modelClass::count()];
+
+        foreach ($statusEnums as $status) {
+            $response[strtolower($status)] = $modelClass::where($statusColumn, $status)->count();
+        }
+
+        return $response;
+    }
+
     public function orderCount()
     {
-        $isPendingStatus = count(collect(Order::where(['status' => OrderStatusEnum::PENDING->value])->get())->toArray());
-        $isVerifiedStatus = count(collect(Order::where(['status' => OrderStatusEnum::VERIFIED->value])->get())->toArray());
-        $isDeliveryStatus = count(collect(Order::where(['status' => OrderStatusEnum::DELIVERY->value])->get())->toArray());
-        $isCompleteStatus = count(collect(Order::where(['status' => OrderStatusEnum::COMPLETE->value])->get())->toArray());
-
-        $orderCount = count(collect(Order::all())->toArray());
-        return response()->json([
-            "total" => $orderCount,
-            "pending" => $isPendingStatus,
-            "verified" => $isVerifiedStatus,
-            "delivery" => $isDeliveryStatus,
-            "complete" => $isCompleteStatus
-        ]);
+        return $this->countByStatus(Order::class, OrderStatusEnum::class, 'status');
     }
 
     public function itemCount()
     {
-        $isActiveStatus = count(collect(Item::where(['status' => GeneralStatusEnum::ACTIVE->value])->get())->toArray());
-        $isDisableStatus = count(collect(Item::where(['status' => GeneralStatusEnum::DISABLE->value])->get())->toArray());
-        $isDeleteStatus = count(collect(Item::where(['status' => GeneralStatusEnum::DELETED->value])->get())->toArray());
+        return $this->countByStatus(Item::class, GeneralStatusEnum::class, 'status');
+    }
 
-        $itemCount = count(collect(Item::all())->toArray());
-        return response()->json([
-            "total" => $itemCount,
-            "active" => $isActiveStatus,
-            "disable" => $isDisableStatus,
-            "delete" => $isDeleteStatus
-        ]);
+    public function userCount()
+    {
+        return $this->countByStatus(User::class, UserStatusEnum::class, 'status');
+    }
+
+    public function count()
+    {
+        $item = $this->itemCount();
+        $order = $this->orderCount();
+        $user = $this->userCount();
+
+        $response = [
+            "item" => $item,
+            "order" => $order,
+            "user" => $user
+        ];
+
+        return $this->success('Count list is successfully retrieved', $response);
     }
 }
