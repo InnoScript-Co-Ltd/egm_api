@@ -14,18 +14,18 @@ class DatabaseSeeder extends Seeder
     {
         $this->call([
             PermissionSeeder::class,
-            PointSeeder::class,
+            // PointSeeder::class,
             RoleSeeder::class,
-            UserSeeder::class,
-            DeliveryAddressSeeder::class,
-            OrderSeeder::class,
-            AdminSeeder::class,
-            PromotionSeeder::class,
-            FaqSeeder::class,
-            RegionSeeder::class,
-            ShopSeeder::class,
-            CategorySeeder::class,
-            ItemSeeder::class,
+            // UserSeeder::class,
+            // DeliveryAddressSeeder::class,
+            // OrderSeeder::class,
+            // AdminSeeder::class,
+            // PromotionSeeder::class,
+            // FaqSeeder::class,
+            // RegionSeeder::class,
+            // ShopSeeder::class,
+            // CategorySeeder::class,
+            // ItemSeeder::class,
         ]);
     }
 }

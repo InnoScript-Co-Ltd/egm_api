@@ -15,20 +15,23 @@ class RoleSeeder extends Seeder
      */
     public function run(): void
     {
+
         $permissions = Enum::make(PermissionEnum::class)->values();
 
-        $roles = collect(Enum::make(RoleEnum::class)->values())->map(function ($role, $key) use ($permissions) {
-
+        $roles = collect(Enum::make(RoleEnum::class)->values())->map(function ($role, $key) use($permissions) {
             try {
                 $createRole = Role::create([
                     'name' => $role,
                     'guard_name' => 'api',
                 ]);
 
-                $createRole->syncPermissions($permissions);
+                if($createRole->name === RoleEnum::SUPER_ADMIN->value)
+                {
+                    $createRole->syncPermissions($permissions);
+                }
 
             } catch (Exception $e) {
-                throw $e;
+                info($e);
             }
         });
     }

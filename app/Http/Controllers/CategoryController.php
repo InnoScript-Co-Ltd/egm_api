@@ -84,7 +84,7 @@ class CategoryController extends Controller
         }
     }
 
-    public function delete($id)
+    public function destroy($id)
     {
         DB::beginTransaction();
         try {

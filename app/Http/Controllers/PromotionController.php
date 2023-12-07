@@ -82,7 +82,7 @@ class PromotionController extends Controller
 
     }
 
-    public function delete($id)
+    public function destory($id)
     {
         DB::beginTransaction();
         try {
