@@ -26,4 +26,13 @@ class AdminLoginRequest extends FormRequest
             'password' => 'required | string | min: 6 | max: 18',
         ];
     }
+
+    public function messages()
+    {
+        return [
+            'email.required' => 'Please provide your email address',
+            'password.required' => 'Please provide your password',
+            
+        ];
+    }
 }

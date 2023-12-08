@@ -22,9 +22,19 @@ class PromotionStoreRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'title' => 'string',
-            'image' => 'numeric',
+            'title' => 'string | required',
+            'image' => 'numeric | required',
             'url' => 'string',
+        ];
+    }
+
+    public function messages()
+    {
+        return [
+            'title.required' => 'Please enter your promotion title',
+            'title.stirng' => 'Please enter title using letters only in the title field.',
+            'image.required' => 'Please enter your promotion image',
+            'url.string' => 'Please check your promotion url must be string'
         ];
     }
 }

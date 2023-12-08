@@ -7,6 +7,8 @@ use App\Http\Controllers\OrderController;
 use App\Http\Controllers\PromotionController;
 use App\Http\Controllers\StatusController;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\PermissionController;
+use App\Http\Controllers\RoleController;
 use Illuminate\Support\Facades\Route;
 use App\Enums\PermissionEnum;
 
@@ -53,12 +55,25 @@ Route::middleware('jwt')->group(function () {
         Route::get('/', 'DashboardController@count');
     });
 
+    Route::group(['prefix' => 'permission'], function () {
+        Route::get('/', [PermissionController::class, 'index']);
+        Route::get('/{id}', [PermissionController::class, 'show']);
+    });
+
+    Route::group(['prefix' => 'role'], function () {
+        Route::get('/', [RoleController::class, 'index']);
+        Route::post('/', [RoleController::class, 'store'])->permission(PermissionEnum::ROLE_STORE->value);
+        Route::put('/{id}', [RoleController::class, 'update']);
+        Route::get('/{id}', [RoleController::class, 'show']);
+    });
+
+
     Route::group(['prefix' => 'user'], function () {
-        Route::get('/', 'UserController@index')->permission(PermissionEnum::USER_INDEX->value);
-        Route::post('/', 'UserController@store')->permission(PermissionEnum::USER_STORE->value);
-        Route::get('/{id}', 'UserController@show')->permission(PermissionEnum::USER_SHOW->value);
-        Route::put('/{id}', 'UserController@update')->permission(PermissionEnum::USER_UPDATE->value);
-        Route::delete('/{id}', 'UserController@destroy')->permission(PermissionEnum::USER_DESTROY->value);
+        Route::get('/', 'UserController@index');
+        Route::post('/', 'UserController@store');
+        Route::get('/{id}', 'UserController@show');
+        Route::put('/{id}', 'UserController@update');
+        Route::delete('/{id}', 'UserController@destroy');
         Route::get('/export', 'UserController@export');
     });
 

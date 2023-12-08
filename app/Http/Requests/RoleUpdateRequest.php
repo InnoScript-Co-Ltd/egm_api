@@ -3,8 +3,10 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
+use App\Models\Role;
+use App\Models\Permission;
 
-class RegionStoreRequest extends FormRequest
+class RoleUpdateRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -21,15 +23,17 @@ class RegionStoreRequest extends FormRequest
      */
     public function rules(): array
     {
-        return [
-            'name' => 'string',
-        ];
-    }
+        $role = Role::findOrFail(request('id'));
+        $roleId = $role->id;
 
-    public function messages()
-    {
+        $permissions = Permission::all()->pluck('id');
+
         return [
-            'name.string' => 'Please enter your name using letters only in the name field.'
+            'name' => "string | unique:roles,name,$roleId",
+            'description' => 'string | nullable',
+            'permissions' => 'array | nullable',
+            'permissions*' => "required | numeric | in:$permissions",
         ];
+
     }
 }

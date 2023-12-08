@@ -30,4 +30,11 @@ class RegionUpdateRequest extends FormRequest
             'status' => "nullable | in:$generalStatusEnum",
         ];
     }
+
+    public function messages()
+    {
+        return [
+            'name.string' => 'Please enter your name using letters only in the name field.',
+        ];
+    }
 }

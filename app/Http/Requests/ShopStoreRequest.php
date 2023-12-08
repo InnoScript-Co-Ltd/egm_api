@@ -34,4 +34,15 @@ class ShopStoreRequest extends FormRequest
             'location' => 'string',
         ];
     }
+
+    public function messages()
+    {
+        return [
+            'region_id.required' => 'Please choose your region name',
+            'name.string' => 'Please enter your name using letters only in the name field.',
+            'phone.regex' => 'Please provide your phone number will start only 9xxxxxxx.',
+            'address.string' => 'Please enter your address using letters only in the address field',
+            'location.string' => 'Please enter your location using letters only in the address field'
+        ];
+    }
 }
