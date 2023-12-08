@@ -7,7 +7,10 @@ use App\Http\Controllers\OrderController;
 use App\Http\Controllers\PromotionController;
 use App\Http\Controllers\StatusController;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\PermissionController;
+use App\Http\Controllers\RoleController;
 use Illuminate\Support\Facades\Route;
+use App\Enums\PermissionEnum;
 
 /*
 |--------------------------------------------------------------------------
@@ -52,13 +55,26 @@ Route::middleware('jwt')->group(function () {
         Route::get('/', 'DashboardController@count');
     });
 
+    Route::group(['prefix' => 'permission'], function () {
+        Route::get('/', [PermissionController::class, 'index']);
+        Route::get('/{id}', [PermissionController::class, 'show']);
+    });
+
+    Route::group(['prefix' => 'role'], function () {
+        Route::get('/', [RoleController::class, 'index']);
+        Route::post('/', [RoleController::class, 'store'])->permission(PermissionEnum::ROLE_STORE->value);
+        Route::put('/{id}', [RoleController::class, 'update']);
+        Route::get('/{id}', [RoleController::class, 'show']);
+    });
+
+
     Route::group(['prefix' => 'user'], function () {
-        Route::get('/', [UserController::class, 'index']);
-        Route::post('/', [UserController::class, 'store']);
-        Route::get('/{id}', [UserController::class, 'show']);
-        Route::put('/{id}', [UserController::class, 'update']);
-        Route::delete('/{id}', [UserController::class, 'delete']);
-        Route::get('/export', [UserController::class, 'export']);
+        Route::get('/', 'UserController@index');
+        Route::post('/', 'UserController@store');
+        Route::get('/{id}', 'UserController@show');
+        Route::put('/{id}', 'UserController@update');
+        Route::delete('/{id}', 'UserController@destroy');
+        Route::get('/export', 'UserController@export');
     });
 
     Route::group(['prefix' => 'admin'], function () {
@@ -73,51 +89,51 @@ Route::middleware('jwt')->group(function () {
 
     Route::group(['prefix' => 'category'], function () {
 
-        Route::get('/', [CategoryController::class, 'index']);
-        Route::post('/', [CategoryController::class, 'store']);
-        Route::get('/{id}', [CategoryController::class, 'show']);
-        Route::put('/{id}', [CategoryController::class, 'update']);
-        Route::delete('/{id}', [CategoryController::class, 'delete']);
+        Route::get('/', 'CategoryController@index');
+        Route::post('/', 'CategoryController@store');
+        Route::get('/{id}', 'CategoryController@show');
+        Route::put('/{id}', 'CategoryController@update');
+        Route::delete('/{id}', 'CategoryController@destroy');
 
     });
 
     Route::group(['prefix' => 'item'], function () {
 
-        Route::get('/', [ItemController::class, 'index']);
-        Route::post('/', [ItemController::class, 'store']);
-        Route::get('/{id}', [ItemController::class, 'show']);
-        Route::put('/{id}', [ItemController::class, 'update']);
-        Route::delete('/{id}', [ItemController::class, 'delete']);
+        Route::get('/', 'ItemController@index');
+        Route::post('/', 'ItemController@store');
+        Route::get('/{id}', 'ItemController@show');
+        Route::put('/{id}', 'ItemController@update');
+        Route::delete('/{id}', 'ItemController@destroy');
 
     });
 
     Route::group(['prefix' => 'promotion'], function () {
 
-        Route::get('/', [PromotionController::class, 'index']);
-        Route::post('/', [PromotionController::class, 'store']);
-        Route::get('/{id}', [PromotionController::class, 'show']);
-        Route::put('/{id}', [PromotionController::class, 'update']);
-        Route::delete('/{id}', [PromotionController::class, 'delete']);
+        Route::get('/', 'PromotionController@index');
+        Route::post('/', 'PromotionController@store');
+        Route::get('/{id}', 'PromotionController@show');
+        Route::put('/{id}', 'PromotionController@update');
+        Route::delete('/{id}', 'PromotionController@destory');
 
     });
 
     Route::group(['prefix' => 'delivery-address'], function () {
 
-        Route::get('/', [DeliveryAddressController::class, 'index']);
-        Route::post('/', [DeliveryAddressController::class, 'store']);
-        Route::get('/{id}', [DeliveryAddressController::class, 'show']);
-        Route::put('/{id}', [DeliveryAddressController::class, 'update']);
-        Route::delete('/{id}', [DeliveryAddressController::class, 'delete']);
+        Route::get('/', 'DeliveryAddressController@index');
+        Route::post('/', 'DeliveryAddressController@store');
+        Route::get('/{id}', 'DeliveryAddressController@show');
+        Route::put('/{id}', 'DeliveryAddressController@update');
+        Route::delete('/{id}', 'DeliveryAddressController@destroy');
 
     });
 
     Route::group(['prefix' => 'order'], function () {
 
-        Route::get('/', [OrderController::class, 'index']);
-        Route::post('/', [OrderController::class, 'store']);
-        Route::get('/{id}', [OrderController::class, 'show']);
-        Route::put('/{id}', [OrderController::class, 'update']);
-        Route::delete('/{id}', [OrderController::class, 'delete']);
+        Route::get('/', 'OrderController@index');
+        Route::post('/', 'OrderController@store');
+        Route::get('/{id}', 'OrderController@show');
+        Route::put('/{id}', 'OrderController@update');
+        Route::delete('/{id}', 'OrderController@destroy');
 
     });
 

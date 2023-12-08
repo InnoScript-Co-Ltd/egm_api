@@ -30,12 +30,23 @@ class ShopUpdateRequest extends FormRequest
         $generalStatusEnum = implode(',', (new Enum(GeneralStatusEnum::class))->values());
 
         return [
-            'region_id' => "required | in:$regionId",
+            'region_id' => "nullable | in:$regionId",
             'name' => 'string',
             'phone' => ['nullable', 'string', "regex:$mobileRule"],
             'address' => 'string',
             'location' => 'string',
             'status' => "in:$generalStatusEnum | nullable | string",
+        ];
+    }
+
+    public function messages()
+    {
+        return [
+            'name.string' => 'Please enter your name using letters only in the name field.',
+            'phone.regex' => 'Please provide your phone number will start only 9xxxxxxx.',
+            'address.string' => 'Please enter your address using letters only in the address field',
+            'location.string' => 'Please enter your location using letters only in the address field',
+            'status.in' => 'Please choose shop status'
         ];
     }
 }

@@ -38,4 +38,15 @@ class UserUpdateRequest extends FormRequest
             'status' => "nullable | in:$userStatusEnum",
         ];
     }
+
+    public function messages()
+    {
+        return [
+            'name.string' => 'Please enter your name using letters only in the name field.',
+            'name.max' => 'Please keep your input within 24 letter.',
+            'password.max' => 'Please keep your input within 24 letter.',
+            'password.min' => 'Please password field at least 6 letter.',
+            'phone.regex' => 'Please provide your phone number will start only 9xxxxxxx.',
+        ];
+    }
 }

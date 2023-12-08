@@ -4,7 +4,7 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class RegionStoreRequest extends FormRequest
+class RoleStoreRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -22,14 +22,7 @@ class RegionStoreRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'name' => 'string',
-        ];
-    }
-
-    public function messages()
-    {
-        return [
-            'name.string' => 'Please enter your name using letters only in the name field.'
+            'name' => 'required | unique:roles,name',
         ];
     }
 }
