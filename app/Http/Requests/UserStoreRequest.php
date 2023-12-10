@@ -45,7 +45,7 @@ class UserStoreRequest extends FormRequest
             'password.required' => 'Please provide your password.',
             'password.max' => 'Please keep your input within 24 letter.',
             'password.min' => 'Please password field at least 6 letter.',
-            'phone.regex' => 'Please provide your phone number will start only 9xxxxxxx.'
+            'phone.regex' => 'Please provide your phone number will start only 9xxxxxxx.',
         ];
     }
 }

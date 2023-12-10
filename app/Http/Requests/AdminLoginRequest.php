@@ -32,7 +32,7 @@ class AdminLoginRequest extends FormRequest
         return [
             'email.required' => 'Please provide your email address',
             'password.required' => 'Please provide your password',
-            
+
         ];
     }
 }

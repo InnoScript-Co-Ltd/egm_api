@@ -29,7 +29,7 @@ class RegionStoreRequest extends FormRequest
     public function messages()
     {
         return [
-            'name.string' => 'Please enter your name using letters only in the name field.'
+            'name.string' => 'Please enter your name using letters only in the name field.',
         ];
     }
 }

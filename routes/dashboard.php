@@ -1,16 +1,10 @@
 <?php
 
-use App\Http\Controllers\CategoryController;
-use App\Http\Controllers\DeliveryAddressController;
-use App\Http\Controllers\ItemController;
-use App\Http\Controllers\OrderController;
-use App\Http\Controllers\PromotionController;
-use App\Http\Controllers\StatusController;
-use App\Http\Controllers\UserController;
+use App\Enums\PermissionEnum;
 use App\Http\Controllers\PermissionController;
 use App\Http\Controllers\RoleController;
+use App\Http\Controllers\StatusController;
 use Illuminate\Support\Facades\Route;
-use App\Enums\PermissionEnum;
 
 /*
 |--------------------------------------------------------------------------
@@ -66,7 +60,6 @@ Route::middleware('jwt')->group(function () {
         Route::put('/{id}', [RoleController::class, 'update']);
         Route::get('/{id}', [RoleController::class, 'show']);
     });
-
 
     Route::group(['prefix' => 'user'], function () {
         Route::get('/', 'UserController@index');

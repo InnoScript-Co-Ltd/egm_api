@@ -39,7 +39,7 @@ class OrderUpdateRequest extends FormRequest
             'user_id' => "in:$userId | required",
             'user_name' => 'string | nullable',
             'phone' => ['nullable', 'string', "regex:$mobileRule"],
-            'email' => "email | nullable",
+            'email' => 'email | nullable',
             'delivery_address' => 'string | nullable',
             'delivery_contact_person' => 'string | nullable',
             'delivery_contact_phone' => ['nullable', 'string', "regex:$mobileRule"],

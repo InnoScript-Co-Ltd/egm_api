@@ -16,7 +16,7 @@ use Tymon\JWTAuth\Contracts\JWTSubject;
 
 class User extends Authenticatable implements JWTSubject
 {
-    use BasicAudit, HasRoles, HasPermissions, HasApiTokens, HasFactory, Notifiable, SnowflakeID, SoftDeletes;
+    use BasicAudit, HasApiTokens, HasFactory, HasPermissions, HasRoles, Notifiable, SnowflakeID, SoftDeletes;
 
     protected $table = 'users';
 

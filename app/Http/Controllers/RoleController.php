@@ -2,29 +2,28 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
 use App\Http\Requests\RoleStoreRequest;
 use App\Http\Requests\RoleUpdateRequest;
 use App\Models\Role;
+use Illuminate\Support\Facades\DB;
 
 class RoleController extends Controller
 {
-    public function index ()
+    public function index()
     {
         DB::beginTransaction();
         try {
-            
+
             $role = Role::searchQuery()
-                        ->sortingQuery()
-                        ->paginationQuery();
+                ->sortingQuery()
+                ->paginationQuery();
             DB::commit();
 
             return $this->success('Role list is successfully retrived', $role);
 
         } catch (Exception $e) {
-        DB::rollback();
-        throw $e;
+            DB::rollback();
+            throw $e;
         }
     }
 
@@ -93,7 +92,4 @@ class RoleController extends Controller
             throw $e;
         }
     }
-
-
-
 }

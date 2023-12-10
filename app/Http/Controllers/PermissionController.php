@@ -2,27 +2,26 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
 use App\Models\Permission;
+use Illuminate\Support\Facades\DB;
 
 class PermissionController extends Controller
 {
-    public function index ()
+    public function index()
     {
         DB::beginTransaction();
         try {
-            
+
             $permission = Permission::searchQuery()
-                                ->sortingQuery()
-                                ->paginationQuery();
+                ->sortingQuery()
+                ->paginationQuery();
             DB::commit();
 
             return $this->success('Permission list is successfully retrived', $permission);
 
         } catch (Exception $e) {
-        DB::rollback();
-        throw $e;
+            DB::rollback();
+            throw $e;
         }
     }
 
@@ -30,15 +29,15 @@ class PermissionController extends Controller
     {
         DB::beginTransaction();
         try {
-            
+
             $permission = Permission::findOrFail($id);
             DB::commit();
 
             return $this->success('Permission detail is successfully retrived', $permission);
 
         } catch (Exception $e) {
-        DB::rollback();
-        throw $e;
+            DB::rollback();
+            throw $e;
         }
     }
 }

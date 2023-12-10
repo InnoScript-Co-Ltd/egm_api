@@ -2,21 +2,20 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
-use App\Models\Order;
-use App\Models\Item;
-use App\Models\User;
-use App\Enums\OrderStatusEnum;
 use App\Enums\GeneralStatusEnum;
+use App\Enums\OrderStatusEnum;
 use App\Enums\UserStatusEnum;
 use App\Helpers\Enum;
+use App\Models\Item;
+use App\Models\Order;
+use App\Models\User;
 
 class DashboardController extends Controller
 {
     public function countByStatus($modelClass, $enumClass, $statusColumn)
     {
         $statusEnums = (new Enum($enumClass))->values();
-        $response = ["total" => $modelClass::count()];
+        $response = ['total' => $modelClass::count()];
 
         foreach ($statusEnums as $status) {
             $response[strtolower($status)] = $modelClass::where($statusColumn, $status)->count();
@@ -47,9 +46,9 @@ class DashboardController extends Controller
         $user = $this->userCount();
 
         $response = [
-            "item" => $item,
-            "order" => $order,
-            "user" => $user
+            'item' => $item,
+            'order' => $order,
+            'user' => $user,
         ];
 
         return $this->success('Count list is successfully retrieved', $response);

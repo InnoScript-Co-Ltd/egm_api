@@ -34,7 +34,7 @@ class PromotionStoreRequest extends FormRequest
             'title.required' => 'Please enter your promotion title',
             'title.stirng' => 'Please enter title using letters only in the title field.',
             'image.required' => 'Please enter your promotion image',
-            'url.string' => 'Please check your promotion url must be string'
+            'url.string' => 'Please check your promotion url must be string',
         ];
     }
 }
