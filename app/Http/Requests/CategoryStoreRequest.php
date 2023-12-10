@@ -28,8 +28,8 @@ class CategoryStoreRequest extends FormRequest
         return [
             'title' => 'string | required | unique:categories,title',
             'level' => 'numeric | nullable',
-            'icon' => 'numeric',
-            'category_id' => "nullable | in:$categoryId",
+            'icon' => 'numeric | nullable',
+            'main_category_id' => "nullable | in:$categoryId",
             'description' => 'string | nullable',
         ];
     }

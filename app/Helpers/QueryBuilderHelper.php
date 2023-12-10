@@ -67,17 +67,17 @@ class QueryBuilderHelper
     {
         $requestQuery = app('request')->query();
         $filter = isset($requestQuery['filter']) ? $requestQuery['filter'] : null;
+        $value = isset($requestQuery['value']) ? $requestQuery['value'] : null;
 
-        if ($filter) {
-            $filterableFields = collect(explode(',', $filter));
+        if ($filter && $value) {
+            $filterableFields = explode(',', $filter);
+            $values = explode(',', $value);
 
-            return $builder->where(function (Builder $builder) use ($filterableFields) {
-                return $filterableFields->map(function ($field) use ($builder) {
-                    $getData = explode('-', $field);
+            foreach ($filterableFields as $key => $field) {
+                $payload[$field] = $values[$key];
+            }
 
-                    return $builder->where([$getData[0] => $getData[1]]);
-                });
-            });
+            return $builder->where($payload);
         }
 
         return $builder;
