@@ -19,7 +19,7 @@ return new class extends Migration
             $table->integer('level')->default(0);
             $table->snowflakeId('main_category_id')->nullable()->default(null);
             $table->longtext('description')->nullable()->default(null);
-            $table->string('status')->default(GeneralStatusEnum::DISABLE->value);
+            $table->string('status')->default(GeneralStatusEnum::ACTIVE->value);
             $table->auditColumns();
         });
     }

@@ -18,11 +18,16 @@ class Category extends Model
 
     public $table = 'categories';
 
-    public $appends = ['main_category_name'];
+    public $appends = ['created_by', 'updated_by', 'main_category_name'];
+
+    public function item()
+    {
+        return $this->hasOne(Item::class, 'id', 'main_category_id');
+    }
 
     protected function getMainCategoryNameAttribute()
     {
-        if ($this->category_id !== null) {
+        if ($this->main_category_id !== null) {
             if ($this->attributes['main_category_id'] !== null) {
                 $category = Category::where(['id' => $this->attributes['main_category_id']])->first();
                 if ($category) {
@@ -34,8 +39,37 @@ class Category extends Model
         }
     }
 
-    public function item()
+    protected function getCreatedByAttribute()
     {
-        return $this->hasOne(Item::class, 'id', 'main_category_id');
+        if (auth('dashboard')->id()) {
+            $user = Admin::where(['id' => $this->attributes['created_by']])->first();
+        }
+
+        if (auth('api')->id()) {
+            $user = User::where(['id' => $this->attributes['created_by']])->first();
+        }
+
+        if ($user) {
+            return ['name' => $user->name, 'id' => $user->id];
+        } else {
+            return null;
+        }
+    }
+
+    protected function getUpdatedByAttribute()
+    {
+        if (auth('dashboard')->id()) {
+            $user = Admin::where(['id' => $this->attributes['updated_by']])->first();
+        }
+
+        if (auth('api')->id()) {
+            $user = User::where(['id' => $this->attributes['updated_by']])->first();
+        }
+
+        if ($user) {
+            return ['name' => $user->name, 'id' => $user->id];
+        } else {
+            return null;
+        }
     }
 }
