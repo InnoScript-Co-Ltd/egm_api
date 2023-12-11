@@ -13,6 +13,7 @@ enum PermissionEnum: string
     case USER_STORE = 'USER_STORE';
     case USER_UPDATE = 'USER_UPDATE';
     case USER_DESTROY = 'USER_DESTROY';
+    case USER_EXPORT = 'USER_EXPORT';
 
     /** ITEM */
     case ITEM_STORE = 'ITEM_STORE';
