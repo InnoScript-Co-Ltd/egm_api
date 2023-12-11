@@ -4,16 +4,20 @@ namespace App\Models;
 
 use App\Traits\BasicAudit;
 use App\Traits\SnowflakeID;
+use App\Models\Role;
+use App\Models\Permission;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
+use Spatie\Permission\Traits\HasPermissions;
+use Spatie\Permission\Traits\HasRoles;
 use Tymon\JWTAuth\Contracts\JWTSubject;
 
 class Admin extends Authenticatable implements JWTSubject
 {
-    use BasicAudit, HasApiTokens, HasFactory, Notifiable, SnowflakeID, SoftDeletes;
+    use BasicAudit, HasApiTokens, HasRoles,  HasFactory, HasPermissions, Notifiable, SnowflakeID, SoftDeletes;
 
     protected $table = 'admins';
 

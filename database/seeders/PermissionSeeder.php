@@ -17,7 +17,7 @@ class PermissionSeeder extends Seeder
         $permissions = collect(Enum::make(PermissionEnum::class)->values())->map(function ($permission) {
             return [
                 'name' => $permission,
-                'guard_name' => 'api',
+                'guard_name' => 'dashboard',
             ];
         });
 
