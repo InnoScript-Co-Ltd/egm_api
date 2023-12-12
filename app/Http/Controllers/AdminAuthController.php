@@ -31,6 +31,7 @@ class AdminAuthController extends Controller
             if ($admin->status !== AdminStatusEnum::ACTIVE->value) {
                 return $this->badRequest('Account is not active');
             }
+
             $token = auth()->guard('dashboard')->attempt($payload->toArray());
 
             DB::commit();
@@ -98,11 +99,13 @@ class AdminAuthController extends Controller
      */
     protected function createNewToken($token)
     {
+        $auth = auth('dashboard');
+
         return $this->success('Admin successfully signed in', [
             'access_token' => $token,
             'token_type' => 'bearer',
             'expires_in' => auth('dashboard')->factory()->getTTL() * 60,
-            'user' => auth('dashboard')->user(),
+            'user' => $auth->user(),
         ]);
     }
 }

@@ -31,11 +31,10 @@ class AdminSeeder extends Seeder
         $roles = Enum::make(RoleEnum::class)->values();
 
         try {
-            $admin = Admin::updateOrCreate($superAdmin)->assignRole($roles);
+            $admin = Admin::updateOrCreate($superAdmin)->assignRole('SUPER_ADMIN');
             Admin::factory(100)->create();
-            info($admin);
         } catch (Exception $e) {
-            info($e);
+            throw ($e);
         }
     }
 }

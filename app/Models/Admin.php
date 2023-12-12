@@ -21,14 +21,14 @@ class Admin extends Authenticatable implements JWTSubject
 
     protected $guard = 'dashboard';
 
-    protected $appends = ['created_by', 'updated_by'];
+    protected $appends = ['created_by', 'updated_by', 'rnp'];
 
     protected $fillable = [
         'name', 'profile', 'email', 'phone', 'password', 'status', 'email_verified_at', 'phone_verified_at',
     ];
 
     protected $hidden = [
-        'password',
+        'password', 'roles',
     ];
 
     protected function getCreatedByAttribute()
@@ -51,6 +51,16 @@ class Admin extends Authenticatable implements JWTSubject
         } else {
             return null;
         }
+    }
+
+    protected function getRnpAttribute()
+    {
+        $role = $this->roles->first();
+
+        return [
+            'role' => $role->name,
+            'permissions' => $role->permissions->pluck('name'),
+        ];
     }
 
     public function getJWTIdentifier()
