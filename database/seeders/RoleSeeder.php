@@ -28,7 +28,7 @@ class RoleSeeder extends Seeder
                 }
 
             } catch (Exception $e) {
-                info($e);
+                throw ($e);
             }
         });
     }
