@@ -2,11 +2,11 @@
 
 namespace Database\Seeders;
 
+use App\Enums\RoleEnum;
+use App\Helpers\Enum;
+use App\Models\Admin;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Hash;
-use App\Models\Admin;
-use App\Helpers\Enum;
-use App\Enums\RoleEnum;
 
 class AdminSeeder extends Seeder
 {
@@ -36,6 +36,6 @@ class AdminSeeder extends Seeder
             info($admin);
         } catch (Exception $e) {
             info($e);
-        } 
+        }
     }
 }
