@@ -4,6 +4,7 @@ namespace App\Http\Requests;
 
 use App\Enums\REGXEnum;
 use App\Models\File;
+use App\Models\Role;
 use Illuminate\Foundation\Http\FormRequest;
 
 class AdminStoreRequest extends FormRequest
@@ -26,6 +27,7 @@ class AdminStoreRequest extends FormRequest
 
         $mobileRule = REGXEnum::MOBILE_NUMBER->value;
         $fileIds = implode(',', File::all()->pluck('id')->toArray());
+        $roleIds = implode(',', Role::all()->pluck('id')->toArray());
 
         return [
             'name' => 'required | string | max: 24 | min: 8',
@@ -34,6 +36,8 @@ class AdminStoreRequest extends FormRequest
             'password' => 'required | max: 24 | min: 6',
             'confirm_password' => 'required_with:password|same:password|min:6',
             'profile' => "nullable | in:$fileIds",
+            'role_id' => "required",
+            'role_id.*' => "in:$roleIds"
         ];
     }
 }

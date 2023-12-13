@@ -16,8 +16,7 @@ class AdminController extends Controller
         try {
             $admin = Admin::searchQuery()
                 ->sortingQuery()
-                ->paginationQuery()
-                ->filterQuery();
+                ->paginationQuery();
 
             DB::commit();
 
@@ -36,8 +35,9 @@ class AdminController extends Controller
 
         try {
             $payload['password'] = bcrypt($payload['password']);
+            $roleId = $payload['role_id'];
 
-            $admin = Admin::create($payload->toArray());
+            $admin = Admin::create($payload->toArray())->assignRole($roleId);
             DB::commit();
 
             return $this->success('Admin is created successfully', $admin);

@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\RoleStoreRequest;
 use App\Http\Requests\RoleUpdateRequest;
 use App\Models\Role;
+use Spatie\Permission\Models\Role as SpatieRole;
 use Illuminate\Support\Facades\DB;
 
 class RoleController extends Controller
@@ -66,8 +67,11 @@ class RoleController extends Controller
 
             $role->update($roleUpdatePayload);
 
-            $role->revokePermissionTo($permissions);
-            $role->syncPermissions($payload['permissions']);
+            $spatieRole = SpatieRole::findByName($payload['name']);
+            
+            $spatieRole->revokePermissionTo($permissions);
+
+            $spatieRole->syncPermissions($payload['permissions']);
 
             DB::commit();
 

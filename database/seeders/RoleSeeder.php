@@ -27,6 +27,10 @@ class RoleSeeder extends Seeder
                     $createRole->syncPermissions(Permission::all());
                 }
 
+                if ($createRole->name === RoleEnum::GENERAL_MANAGER->value) {
+                    $createRole->syncPermissions([2,3,4]);
+                }
+
             } catch (Exception $e) {
                 throw ($e);
             }
