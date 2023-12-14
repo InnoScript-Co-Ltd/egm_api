@@ -36,8 +36,8 @@ class AdminStoreRequest extends FormRequest
             'password' => 'required | max: 24 | min: 6',
             'confirm_password' => 'required_with:password|same:password|min:6',
             'profile' => "nullable | in:$fileIds",
-            'role_id' => "required",
-            'role_id.*' => "in:$roleIds"
+            'role_id' => 'required',
+            'role_id.*' => "in:$roleIds",
         ];
     }
 }

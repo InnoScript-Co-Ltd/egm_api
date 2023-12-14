@@ -56,7 +56,7 @@ class Admin extends Authenticatable implements JWTSubject
     protected function getRnpAttribute()
     {
         $role = $this->roles->first();
-        
+
         return [
             'role' => $role->name,
             'permissions' => $role->permissions->pluck('name'),
