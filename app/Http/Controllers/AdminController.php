@@ -16,6 +16,7 @@ class AdminController extends Controller
         try {
             $admin = Admin::searchQuery()
                 ->sortingQuery()
+                ->filterQuery()
                 ->paginationQuery();
 
             DB::commit();

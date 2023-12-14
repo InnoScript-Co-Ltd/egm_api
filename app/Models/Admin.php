@@ -58,8 +58,8 @@ class Admin extends Authenticatable implements JWTSubject
         $role = $this->roles->first();
 
         return [
-            'role' => $role->name,
-            'permissions' => $role->permissions->pluck('name'),
+            'role' => $role ? $role->name : null,
+            'permissions' => $role ? $role->permissions->pluck('name') : [],
         ];
     }
 
