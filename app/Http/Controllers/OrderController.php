@@ -21,6 +21,7 @@ class OrderController extends Controller
                 ->searchQuery()
                 ->sortingQuery()
                 ->filterQuery()
+                ->filterDateQuery()
                 ->paginationQuery();
 
             DB::commit();

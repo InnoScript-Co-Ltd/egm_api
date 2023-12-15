@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\RemovePermissionRequest;
 use App\Http\Requests\RoleStoreRequest;
 use App\Http\Requests\RoleUpdateRequest;
+use App\Models\Role;
 use Illuminate\Support\Facades\DB;
 use Spatie\Permission\Models\Permission;
 use Spatie\Permission\Models\Role as SpatieRole;
@@ -18,6 +19,8 @@ class RoleController extends Controller
 
             $role = Role::searchQuery()
                 ->sortingQuery()
+                ->filterQuery()
+                ->filterDateQuery()
                 ->paginationQuery();
             DB::commit();
 

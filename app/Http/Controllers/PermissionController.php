@@ -14,6 +14,8 @@ class PermissionController extends Controller
 
             $permission = Permission::searchQuery()
                 ->sortingQuery()
+                ->filterQuery()
+                ->filterDateQuery()
                 ->paginationQuery();
             DB::commit();
 

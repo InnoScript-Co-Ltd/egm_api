@@ -20,6 +20,7 @@ class CategoryController extends Controller
             $category = Category::searchQuery()
                 ->sortingQuery()
                 ->filterQuery()
+                ->filterDateQuery()
                 ->paginationQuery();
             DB::commit();
 

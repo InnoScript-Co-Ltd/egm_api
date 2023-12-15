@@ -17,6 +17,7 @@ class ItemController extends Controller
             ->searchQuery()
             ->sortingQuery()
             ->filterQuery()
+            ->filterDateQuery()
             ->paginationQuery();
         DB::beginTransaction();
         try {

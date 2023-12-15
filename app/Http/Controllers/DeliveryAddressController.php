@@ -16,6 +16,8 @@ class DeliveryAddressController extends Controller
             $deliveryAddress = DeliveryAddress::with(['users'])
                 ->searchQuery()
                 ->sortingQuery()
+                ->filterQuery()
+                ->filterDateQuery()
                 ->paginationQuery();
 
             DB::commit();

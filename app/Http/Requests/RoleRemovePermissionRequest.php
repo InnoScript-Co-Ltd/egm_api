@@ -2,8 +2,8 @@
 
 namespace App\Http\Requests;
 
-use Illuminate\Foundation\Http\FormRequest;
 use App\Models\Permission;
+use Illuminate\Foundation\Http\FormRequest;
 
 class RoleRemovePermissionRequest extends FormRequest
 {
@@ -21,12 +21,12 @@ class RoleRemovePermissionRequest extends FormRequest
      * @return array<string, \Illuminate\Contracts\Validation\ValidationRule|array<mixed>|string>
      */
     public function rules(): array
-    {   
+    {
         $permission = implode(',', Permission::all()->pluck('id')->toArray());
 
         return [
             'permissions' => 'required | array',
-            'permissions.*' => "in:$permission"
+            'permissions.*' => "in:$permission",
         ];
     }
 }

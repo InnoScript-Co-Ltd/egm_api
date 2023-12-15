@@ -2,6 +2,7 @@
 
 namespace App\Helpers;
 
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Builder;
 
 class QueryBuilderHelper
@@ -78,6 +79,25 @@ class QueryBuilderHelper
             }
 
             return $builder->where($payload);
+        }
+
+        return $builder;
+    }
+
+    /**
+     * @return Builder
+     */
+    public static function filterDateQuery(Builder $builder): mixed
+    {
+        $requestQuery = app('request')->query();
+        $start_date = isset($requestQuery['start_date']) ? $requestQuery['start_date'] : null;
+        $end_date = isset($requestQuery['end_date']) ? $requestQuery['end_date'] : null;
+
+        if ($start_date && $end_date) {
+            $startDate = Carbon::createFromFormat('Y-m-d', $start_date)->startOfDay();
+            $endDate = Carbon::createFromFormat('Y-m-d', $end_date)->endOfDay();
+
+            return $builder->whereBetween('created_at', [$startDate, $endDate]);
         }
 
         return $builder;

@@ -12,7 +12,11 @@ class FileController extends Controller
     {
         DB::beginTransaction();
         try {
-            $file = File::searchQuery()->sortingQuery()->paginationQuery();
+            $file = File::searchQuery()
+                ->sortingQuery()
+                ->filterQuery()
+                ->filterDateQuery()
+                ->paginationQuery();
             DB::commit();
 
             return $this->success('file list are successfully retrived', $file);

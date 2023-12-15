@@ -16,6 +16,8 @@ class PointController extends Controller
         try {
             $points = Point::searchQuery()
                 ->sortingQuery()
+                ->filterQuery()
+                ->filterDateQuery()
                 ->paginationQuery();
 
             DB::commit();

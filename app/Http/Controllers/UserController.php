@@ -18,6 +18,7 @@ class UserController extends Controller
         $user = User::searchQuery()
             ->sortingQuery()
             ->filterQuery()
+            ->filterDateQuery()
             ->paginationQuery();
         DB::beginTransaction();
         try {

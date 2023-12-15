@@ -14,6 +14,7 @@ class PromotionController extends Controller
         $promotion = Promotion::searchQuery()
             ->sortingQuery()
             ->filterQuery()
+            ->filterDateQuery()
             ->paginationQuery();
         DB::beginTransaction();
         try {
