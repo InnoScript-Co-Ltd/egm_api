@@ -20,6 +20,7 @@ class OrderController extends Controller
             $order = Order::with(['users', 'deliveryAddress'])
                 ->searchQuery()
                 ->sortingQuery()
+                ->filterQuery()
                 ->paginationQuery();
 
             DB::commit();

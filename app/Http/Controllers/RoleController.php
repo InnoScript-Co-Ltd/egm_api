@@ -69,7 +69,7 @@ class RoleController extends Controller
 
             DB::commit();
 
-            return $this->success('role is successfully updated', $role);
+            return $this->success('Role is updated successfully', $role);
         } catch (Exception $e) {
             DB::rollback();
             throw $e;

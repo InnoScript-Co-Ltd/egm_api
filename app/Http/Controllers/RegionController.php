@@ -16,6 +16,7 @@ class RegionController extends Controller
 
             $region = Region::searchQuery()
                 ->sortingQuery()
+                ->filterQuery()
                 ->paginationQuery();
             DB::commit();
 
