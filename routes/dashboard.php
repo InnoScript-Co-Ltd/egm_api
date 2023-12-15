@@ -2,7 +2,6 @@
 
 use App\Enums\PermissionEnum;
 use App\Http\Controllers\PermissionController;
-use App\Http\Controllers\RoleController;
 use App\Http\Controllers\StatusController;
 use Illuminate\Support\Facades\Route;
 
@@ -59,7 +58,7 @@ Route::middleware('jwt')->group(function () {
         Route::post('/', 'RoleController@store')->permission(PermissionEnum::ROLE_STORE->value);
         Route::put('/{id}', 'RoleController@update')->permission(PermissionEnum::ROLE_UPDATE->value);
         Route::get('/{id}', 'RoleController@show')->permission(PermissionEnum::ROLE_SHOW->value);
-        Route::post('/{id}', 'RoleController@removePermission')->permission(PermissionEnum::ROLE_PERMISSION_REMOVE->value);
+        Route::post('/{id}/remove-permission', 'RoleController@removePermission');
     });
 
     Route::group(['prefix' => 'user'], function () {
