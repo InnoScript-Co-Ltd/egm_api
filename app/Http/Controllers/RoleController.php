@@ -2,10 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\RemovePermissionRequest;
 use App\Http\Requests\RoleStoreRequest;
 use App\Http\Requests\RoleUpdateRequest;
-use App\Models\Role;
 use Illuminate\Support\Facades\DB;
+use Spatie\Permission\Models\Permission;
 use Spatie\Permission\Models\Role as SpatieRole;
 
 class RoleController extends Controller
@@ -57,21 +58,14 @@ class RoleController extends Controller
         DB::beginTransaction();
 
         try {
-            $role = Role::with(['permissions'])->findOrFail($id);
+            $role = SpatieRole::findOrFail($id);
+            $currentPermissions = $role->permissions->pluck('name')->toArray();
 
-            $getPermission = $role->toArray()['permissions'];
-
-            $permissions = collect($getPermission)->map(function ($permission) {
-                return $permission['id'];
-            })->toArray();
-
-            $role->update($roleUpdatePayload);
-
-            $spatieRole = SpatieRole::findByName($payload['name']);
-
-            $spatieRole->revokePermissionTo($permissions);
-
-            $spatieRole->syncPermissions($payload['permissions']);
+            if (isset($payload['permissions'])) {
+                $role->revokePermissionTo($currentPermissions);
+                $role->syncPermissions($payload['permissions']);
+                $role->update($roleUpdatePayload);
+            }
 
             DB::commit();
 
@@ -91,6 +85,26 @@ class RoleController extends Controller
             DB::commit();
 
             return $this->success('role detail is successfully retrived', $role);
+        } catch (Exception $e) {
+            DB::rollback();
+            throw $e;
+        }
+    }
+
+    public function removePermission(RemovePermissionRequest $request, $id)
+    {
+        $payload = collect($request->validated());
+
+        DB::beginTransaction();
+
+        try {
+            $role = SpatieRole::where(['id' => $id])->first();
+
+            $permissions = Permission::whereIn('id', $payload['permissions'])->pluck('name')->toArray();
+            $role->revokePermissionTo($permissions);
+            DB::commit();
+
+            return $this->success('Role detail is successfully retrived', $role);
         } catch (Exception $e) {
             DB::rollback();
             throw $e;
