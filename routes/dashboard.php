@@ -55,10 +55,11 @@ Route::middleware('jwt')->group(function () {
     });
 
     Route::group(['prefix' => 'role'], function () {
-        Route::get('/', [RoleController::class, 'index'])->permission(PermissionEnum::PERMISSION_INDEX->value);
-        Route::post('/', [RoleController::class, 'store'])->permission(PermissionEnum::ROLE_STORE->value);
-        Route::put('/{id}', [RoleController::class, 'update'])->permission(PermissionEnum::ROLE_UPDATE->value);
-        Route::get('/{id}', [RoleController::class, 'show'])->permission(PermissionEnum::ROLE_SHOW->value);
+        Route::get('/', 'RoleController@index')->permission(PermissionEnum::PERMISSION_INDEX->value);
+        Route::post('/', 'RoleController@store')->permission(PermissionEnum::ROLE_STORE->value);
+        Route::put('/{id}', 'RoleController@update')->permission(PermissionEnum::ROLE_UPDATE->value);
+        Route::get('/{id}', 'RoleController@show')->permission(PermissionEnum::ROLE_SHOW->value);
+        Route::post('/{id}', 'RoleController@removePermission')->permission(PermissionEnum::ROLE_PERMISSION_REMOVE->value);
     });
 
     Route::group(['prefix' => 'user'], function () {

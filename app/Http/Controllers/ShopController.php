@@ -19,6 +19,7 @@ class ShopController extends Controller
             $shop = Shop::with('region')
                 ->searchQuery()
                 ->sortingQuery()
+                ->filterQuery()
                 ->paginationQuery();
             DB::commit();
 

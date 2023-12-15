@@ -16,6 +16,7 @@ class FaqController extends Controller
 
             $faq = Faq::searchQuery()
                 ->sortingQuery()
+                ->filterQuery()
                 ->paginationQuery();
             DB::commit();
 

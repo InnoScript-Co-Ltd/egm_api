@@ -13,6 +13,7 @@ class PromotionController extends Controller
     {
         $promotion = Promotion::searchQuery()
             ->sortingQuery()
+            ->filterQuery()
             ->paginationQuery();
         DB::beginTransaction();
         try {

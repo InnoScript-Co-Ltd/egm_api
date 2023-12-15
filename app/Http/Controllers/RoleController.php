@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\RoleStoreRequest;
 use App\Http\Requests\RoleUpdateRequest;
+use App\Http\Requests\RoleRemovePermissionRequest;
 use App\Models\Role;
 use Illuminate\Support\Facades\DB;
 use Spatie\Permission\Models\Role as SpatieRole;
@@ -75,7 +76,7 @@ class RoleController extends Controller
 
             DB::commit();
 
-            return $this->success('role is successfully updated', $role);
+            return $this->success('Role is updated successfully', $role);
         } catch (Exception $e) {
             DB::rollback();
             throw $e;
