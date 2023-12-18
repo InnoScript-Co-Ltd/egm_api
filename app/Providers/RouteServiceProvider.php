@@ -19,7 +19,7 @@ class RouteServiceProvider extends ServiceProvider
      */
     public const HOME = '/home';
 
-    protected $namespace = 'App\Http\Controllers';
+    protected $namespace = ['App\Http\Controllers\Dashboard','App\Http\Controllers\Web'];
 
     /**
      * Define your route model bindings, pattern filters, and other route configuration.
@@ -37,12 +37,12 @@ class RouteServiceProvider extends ServiceProvider
         $this->routes(function () {
             Route::middleware('api')
                 ->prefix('api')
-                ->namespace($this->namespace)
+                ->namespace($this->namespace[1])
                 ->group(base_path('routes/api.php'));
 
             Route::middleware('dashboard')
                 ->prefix('dashboard')
-                ->namespace($this->namespace)
+                ->namespace($this->namespace[0])
                 ->group(base_path('routes/dashboard.php'));
 
             Route::middleware('web')
