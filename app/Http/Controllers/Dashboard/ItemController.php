@@ -1,17 +1,20 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Dashboard;
 
-use App\Http\Requests\PromotionStoreRequest;
-use App\Http\Requests\PromotionUpdateRequest;
-use App\Models\Promotion;
+use App\Exports\ExportItem;
+use App\Http\Requests\ItemStoreRequest;
+use App\Http\Requests\ItemUpdateRequest;
+use App\Models\Item;
 use Illuminate\Support\Facades\DB;
+use Maatwebsite\Excel\Facades\Excel;
 
-class PromotionController extends Controller
+class ItemController extends Controller
 {
     public function index()
     {
-        $promotion = Promotion::searchQuery()
+        $item = Item::with(['category'])
+            ->searchQuery()
             ->sortingQuery()
             ->filterQuery()
             ->filterDateQuery()
@@ -21,7 +24,7 @@ class PromotionController extends Controller
 
             DB::commit();
 
-            return $this->success('Promotion list is successfully retrived', $promotion);
+            return $this->success('Item list is successfully retrived', $item);
 
         } catch (Exception $e) {
             DB::rollback();
@@ -29,17 +32,17 @@ class PromotionController extends Controller
         }
     }
 
-    public function store(PromotionStoreRequest $request)
+    public function store(ItemStoreRequest $request)
     {
 
         $payload = collect($request->validated());
         DB::beginTransaction();
         try {
 
-            $promotion = Promotion::create($payload->toArray());
+            $item = Item::create($payload->toArray());
             DB::commit();
 
-            return $this->success('Promotion is created successfully', $promotion);
+            return $this->success('Item is created successfully', $item);
 
         } catch (Exception $e) {
             DB::rollback();
@@ -53,10 +56,10 @@ class PromotionController extends Controller
         DB::beginTransaction();
         try {
 
-            $promotion = Promotion::findOrFail($id);
+            $item = Item::findOrFail($id);
             DB::commit();
 
-            return $this->success('Promotion detail is successfully retrived', $promotion);
+            return $this->success('Item detail is successfully retrived', $item);
 
         } catch (Exception $e) {
             DB::rollback();
@@ -64,40 +67,43 @@ class PromotionController extends Controller
         }
     }
 
-    public function update(PromotionUpdateRequest $request, $id)
+    public function update(ItemUpdateRequest $request, $id)
     {
-
         $payload = collect($request->validated());
         DB::beginTransaction();
         try {
 
-            $promotion = Promotion::findOrFail($id);
-            $promotion->update($payload->toArray());
+            $item = Item::findOrFail($id);
+            $item->update($payload->toArray());
             DB::commit();
 
-            return $this->success('Promotion is updated successfully', $promotion);
+            return $this->success('Item is updated successfully', $item);
 
         } catch (Exception $e) {
             DB::rollback();
             throw $e;
         }
-
     }
 
-    public function destory($id)
+    public function destroy($id)
     {
         DB::beginTransaction();
         try {
 
-            $promotion = Promotion::findOrFail($id);
-            $promotion->delete($id);
+            $item = Item::findOrFail($id);
+            $item->delete($id);
             DB::commit();
 
-            return $this->success('Promotion is deleted successfully', $promotion);
+            return $this->success('Item is deleted successfully', $item);
 
         } catch (Exception $e) {
             DB::rollback();
             throw $e;
         }
+    }
+
+    public function export()
+    {
+        return Excel::download(new ExportItem, 'Items.xlsx');
     }
 }

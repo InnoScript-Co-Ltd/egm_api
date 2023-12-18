@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Dashboard;
 
 use App\Enums\GeneralStatusEnum;
 use App\Enums\OrderStatusEnum;

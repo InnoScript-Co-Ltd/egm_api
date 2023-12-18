@@ -38,7 +38,7 @@ Route::middleware('jwt')->group(function () {
     Route::get('/media', 'FileController@index');
 
     Route::group(['prefix' => 'status'], function () {
-        Route::get('/', [StatusController::class, 'index']);
+        Route::get('/', 'StatusController@index');
     });
 
     Route::group(['prefix' => 'count'], function () {
@@ -49,8 +49,8 @@ Route::middleware('jwt')->group(function () {
     });
 
     Route::group(['prefix' => 'permission'], function () {
-        Route::get('/', [PermissionController::class, 'index'])->permission(PermissionEnum::PERMISSION_INDEX->value);
-        Route::get('/{id}', [PermissionController::class, 'show'])->permission(PermissionEnum::PERMISSION_SHOW->value);
+        Route::get('/', 'PermissionController@index')->permission(PermissionEnum::PERMISSION_INDEX->value);
+        Route::get('/{id}', 'PermissionController@show')->permission(PermissionEnum::PERMISSION_SHOW->value);
     });
 
     Route::group(['prefix' => 'role'], function () {

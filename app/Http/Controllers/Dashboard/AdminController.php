@@ -1,11 +1,12 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Dashboard;
 
 use App\Http\Requests\AdminStoreRequest;
 use App\Http\Requests\AdminUpdateRequest;
 use App\Models\Admin;
 use Illuminate\Support\Facades\DB;
+use Spatie\Permission\Models\Role as SpatieRole;
 
 class AdminController extends Controller
 {
@@ -38,7 +39,6 @@ class AdminController extends Controller
         try {
             $payload['password'] = bcrypt($payload['password']);
             $roleId = $payload['role_id'];
-
             $admin = Admin::create($payload->toArray())->assignRole($roleId);
             DB::commit();
 
@@ -73,7 +73,14 @@ class AdminController extends Controller
         try {
 
             $admin = Admin::findOrFail($id);
-            $admin->update($payload->toArray());
+            $roleId = $payload['role_id'];
+            $role = SpatieRole::findOrFail($roleId);
+            $currentRoleAll = $role->pluck('name')->toArray();
+            $currentRole = $role->toArray()['name'];
+            if($admin->hasRole($currentRoleAll)){
+                $admin->removeRole($currentRoleAll);
+            }
+            $admin->update($payload->toArray())->assignRole($currentRole);
             DB::commit();
 
             return $this->success('Admin is updated successfully', $admin);

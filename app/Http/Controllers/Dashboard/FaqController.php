@@ -1,28 +1,44 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Dashboard;
 
-use App\Http\Requests\PointStoreRequest;
-use App\Http\Requests\PointUpdateRequest;
-use App\Models\Point;
+use App\Http\Requests\FaqStoreRequest;
+use App\Http\Requests\FaqUpdateRequest;
+use App\Models\Faq;
 use Illuminate\Support\Facades\DB;
 
-class PointController extends Controller
+class FaqController extends Controller
 {
     public function index()
     {
         DB::beginTransaction();
-
         try {
-            $points = Point::searchQuery()
+
+            $faq = Faq::searchQuery()
                 ->sortingQuery()
                 ->filterQuery()
                 ->filterDateQuery()
                 ->paginationQuery();
-
             DB::commit();
 
-            return $this->success('Point list is successfully retrived', $points);
+            return $this->success('Faq list is successfully retrived', $faq);
+
+        } catch (Exception $e) {
+            DB::rollback();
+            throw $e;
+        }
+    }
+
+    public function store(FaqStoreRequest $request)
+    {
+        $payload = collect($request->validated());
+        DB::beginTransaction();
+        try {
+
+            $faq = Faq::create($payload->toArray());
+            DB::commit();
+
+            return $this->success('Faq is created successfully', $faq);
 
         } catch (Exception $e) {
             DB::rollback();
@@ -34,10 +50,11 @@ class PointController extends Controller
     {
         DB::beginTransaction();
         try {
-            $point = Point::findOrFail($id);
+
+            $faq = Faq::findOrFail($id);
             DB::commit();
 
-            return $this->success('Point detail is successfully retrived', $point);
+            return $this->success('Faq detail is successfully retrived', $faq);
 
         } catch (Exception $e) {
             DB::rollback();
@@ -45,35 +62,17 @@ class PointController extends Controller
         }
     }
 
-    public function update(PointUpdateRequest $request, $id)
+    public function update(FaqUpdateRequest $request, $id)
     {
         $payload = collect($request->validated());
         DB::beginTransaction();
-
         try {
 
-            $point = Point::findOrFail($id);
-            $point->update($payload->toArray());
+            $faq = Faq::findOrFail($id);
+            $faq->update($payload->toArray());
             DB::commit();
 
-            return $this->success('Point is updated successfully', $point);
-
-        } catch (Exception $e) {
-            DB::rollback();
-            throw $e;
-        }
-    }
-
-    public function store(PointStoreRequest $request)
-    {
-        $payload = collect($request->validated());
-        DB::beginTransaction();
-
-        try {
-            $point = Point::create($payload->toArray());
-            DB::commit();
-
-            return $this->success('Point is created successfully', $point);
+            return $this->success('Faq is updated successfully', $faq);
 
         } catch (Exception $e) {
             DB::rollback();
@@ -84,15 +83,13 @@ class PointController extends Controller
     public function destroy($id)
     {
         DB::beginTransaction();
-
         try {
 
-            $point = Point::findOrFail($id);
-            $point->delete($id);
-
+            $faq = Faq::findOrFail($id);
+            $faq->delete($id);
             DB::commit();
 
-            return $this->success('Point is deleted successfully', $point);
+            return $this->success('Faq is deleted successfully', $faq);
 
         } catch (Exception $e) {
             DB::rollback();

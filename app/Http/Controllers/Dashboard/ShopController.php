@@ -1,27 +1,30 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Dashboard;
 
-use App\Http\Requests\FaqStoreRequest;
-use App\Http\Requests\FaqUpdateRequest;
-use App\Models\Faq;
+use App\Exports\ExportShop;
+use App\Http\Requests\ShopStoreRequest;
+use App\Http\Requests\ShopUpdateRequest;
+use App\Models\Shop;
 use Illuminate\Support\Facades\DB;
+use Maatwebsite\Excel\Facades\Excel;
 
-class FaqController extends Controller
+class ShopController extends Controller
 {
     public function index()
     {
         DB::beginTransaction();
         try {
 
-            $faq = Faq::searchQuery()
+            $shop = Shop::with('region')
+                ->searchQuery()
                 ->sortingQuery()
                 ->filterQuery()
                 ->filterDateQuery()
                 ->paginationQuery();
             DB::commit();
 
-            return $this->success('Faq list is successfully retrived', $faq);
+            return $this->success('Shop list is successfully retrived', $shop);
 
         } catch (Exception $e) {
             DB::rollback();
@@ -29,21 +32,23 @@ class FaqController extends Controller
         }
     }
 
-    public function store(FaqStoreRequest $request)
+    public function store(ShopStoreRequest $request)
     {
+
         $payload = collect($request->validated());
         DB::beginTransaction();
         try {
 
-            $faq = Faq::create($payload->toArray());
+            $shop = Shop::create($payload->toArray());
             DB::commit();
 
-            return $this->success('Faq is created successfully', $faq);
+            return $this->success('Shop is created successfully', $shop);
 
         } catch (Exception $e) {
             DB::rollback();
             throw $e;
         }
+
     }
 
     public function show($id)
@@ -51,10 +56,10 @@ class FaqController extends Controller
         DB::beginTransaction();
         try {
 
-            $faq = Faq::findOrFail($id);
+            $shop = Shop::findOrFail($id);
             DB::commit();
 
-            return $this->success('Faq detail is successfully retrived', $faq);
+            return $this->success('Shop detail is successfully retrived', $shop);
 
         } catch (Exception $e) {
             DB::rollback();
@@ -62,17 +67,17 @@ class FaqController extends Controller
         }
     }
 
-    public function update(FaqUpdateRequest $request, $id)
+    public function update(ShopUpdateRequest $request, $id)
     {
         $payload = collect($request->validated());
         DB::beginTransaction();
         try {
 
-            $faq = Faq::findOrFail($id);
-            $faq->update($payload->toArray());
+            $shop = Shop::findOrFail($id);
+            $shop->update($payload->toArray());
             DB::commit();
 
-            return $this->success('Faq is updated successfully', $faq);
+            return $this->success('Shop is updated successfully', $shop);
 
         } catch (Exception $e) {
             DB::rollback();
@@ -85,15 +90,20 @@ class FaqController extends Controller
         DB::beginTransaction();
         try {
 
-            $faq = Faq::findOrFail($id);
-            $faq->delete($id);
+            $shop = Shop::findOrFail($id);
+            $shop->delete($id);
             DB::commit();
 
-            return $this->success('Faq is deleted successfully', $faq);
+            return $this->success('Shop is deleted successfully', $shop);
 
         } catch (Exception $e) {
             DB::rollback();
             throw $e;
         }
+    }
+
+    public function export()
+    {
+        return Excel::download(new ExportShop, 'Shops.xlsx');
     }
 }

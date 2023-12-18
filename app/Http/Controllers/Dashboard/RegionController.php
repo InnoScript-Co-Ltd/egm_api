@@ -1,30 +1,27 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Dashboard;
 
-use App\Exports\ExportShop;
-use App\Http\Requests\ShopStoreRequest;
-use App\Http\Requests\ShopUpdateRequest;
-use App\Models\Shop;
+use App\Http\Requests\RegionStoreRequest;
+use App\Http\Requests\RegionUpdateRequest;
+use App\Models\Region;
 use Illuminate\Support\Facades\DB;
-use Maatwebsite\Excel\Facades\Excel;
 
-class ShopController extends Controller
+class RegionController extends Controller
 {
     public function index()
     {
         DB::beginTransaction();
         try {
 
-            $shop = Shop::with('region')
-                ->searchQuery()
+            $region = Region::searchQuery()
                 ->sortingQuery()
                 ->filterQuery()
                 ->filterDateQuery()
                 ->paginationQuery();
             DB::commit();
 
-            return $this->success('Shop list is successfully retrived', $shop);
+            return $this->success('Region list is successfully retrived', $region);
 
         } catch (Exception $e) {
             DB::rollback();
@@ -32,23 +29,21 @@ class ShopController extends Controller
         }
     }
 
-    public function store(ShopStoreRequest $request)
+    public function store(RegionStoreRequest $request)
     {
-
         $payload = collect($request->validated());
         DB::beginTransaction();
         try {
 
-            $shop = Shop::create($payload->toArray());
+            $region = Region::create($payload->toArray());
             DB::commit();
 
-            return $this->success('Shop is created successfully', $shop);
+            return $this->success('Region is created successfully', $region);
 
         } catch (Exception $e) {
             DB::rollback();
             throw $e;
         }
-
     }
 
     public function show($id)
@@ -56,10 +51,10 @@ class ShopController extends Controller
         DB::beginTransaction();
         try {
 
-            $shop = Shop::findOrFail($id);
+            $region = Region::findOrFail($id);
             DB::commit();
 
-            return $this->success('Shop detail is successfully retrived', $shop);
+            return $this->success('Region detail is successfully retrived', $region);
 
         } catch (Exception $e) {
             DB::rollback();
@@ -67,17 +62,17 @@ class ShopController extends Controller
         }
     }
 
-    public function update(ShopUpdateRequest $request, $id)
+    public function update(RegionUpdateRequest $request, $id)
     {
         $payload = collect($request->validated());
         DB::beginTransaction();
         try {
 
-            $shop = Shop::findOrFail($id);
-            $shop->update($payload->toArray());
+            $region = Region::findOrFail($id);
+            $region->update($payload->toArray());
             DB::commit();
 
-            return $this->success('Shop is updated successfully', $shop);
+            return $this->success('Region is updated successfully', $region);
 
         } catch (Exception $e) {
             DB::rollback();
@@ -90,20 +85,15 @@ class ShopController extends Controller
         DB::beginTransaction();
         try {
 
-            $shop = Shop::findOrFail($id);
-            $shop->delete($id);
+            $region = Region::findOrFail($id);
+            $region->delete($id);
             DB::commit();
 
-            return $this->success('Shop is deleted successfully', $shop);
+            return $this->success('Region is deleted successfully', $region);
 
         } catch (Exception $e) {
             DB::rollback();
             throw $e;
         }
-    }
-
-    public function export()
-    {
-        return Excel::download(new ExportShop, 'Shops.xlsx');
     }
 }

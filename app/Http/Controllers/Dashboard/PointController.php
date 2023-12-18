@@ -1,44 +1,28 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Dashboard;
 
-use App\Http\Requests\RegionStoreRequest;
-use App\Http\Requests\RegionUpdateRequest;
-use App\Models\Region;
+use App\Http\Requests\PointStoreRequest;
+use App\Http\Requests\PointUpdateRequest;
+use App\Models\Point;
 use Illuminate\Support\Facades\DB;
 
-class RegionController extends Controller
+class PointController extends Controller
 {
     public function index()
     {
         DB::beginTransaction();
-        try {
 
-            $region = Region::searchQuery()
+        try {
+            $points = Point::searchQuery()
                 ->sortingQuery()
                 ->filterQuery()
                 ->filterDateQuery()
                 ->paginationQuery();
+
             DB::commit();
 
-            return $this->success('Region list is successfully retrived', $region);
-
-        } catch (Exception $e) {
-            DB::rollback();
-            throw $e;
-        }
-    }
-
-    public function store(RegionStoreRequest $request)
-    {
-        $payload = collect($request->validated());
-        DB::beginTransaction();
-        try {
-
-            $region = Region::create($payload->toArray());
-            DB::commit();
-
-            return $this->success('Region is created successfully', $region);
+            return $this->success('Point list is successfully retrived', $points);
 
         } catch (Exception $e) {
             DB::rollback();
@@ -50,11 +34,10 @@ class RegionController extends Controller
     {
         DB::beginTransaction();
         try {
-
-            $region = Region::findOrFail($id);
+            $point = Point::findOrFail($id);
             DB::commit();
 
-            return $this->success('Region detail is successfully retrived', $region);
+            return $this->success('Point detail is successfully retrived', $point);
 
         } catch (Exception $e) {
             DB::rollback();
@@ -62,17 +45,35 @@ class RegionController extends Controller
         }
     }
 
-    public function update(RegionUpdateRequest $request, $id)
+    public function update(PointUpdateRequest $request, $id)
     {
         $payload = collect($request->validated());
         DB::beginTransaction();
+
         try {
 
-            $region = Region::findOrFail($id);
-            $region->update($payload->toArray());
+            $point = Point::findOrFail($id);
+            $point->update($payload->toArray());
             DB::commit();
 
-            return $this->success('Region is updated successfully', $region);
+            return $this->success('Point is updated successfully', $point);
+
+        } catch (Exception $e) {
+            DB::rollback();
+            throw $e;
+        }
+    }
+
+    public function store(PointStoreRequest $request)
+    {
+        $payload = collect($request->validated());
+        DB::beginTransaction();
+
+        try {
+            $point = Point::create($payload->toArray());
+            DB::commit();
+
+            return $this->success('Point is created successfully', $point);
 
         } catch (Exception $e) {
             DB::rollback();
@@ -83,13 +84,15 @@ class RegionController extends Controller
     public function destroy($id)
     {
         DB::beginTransaction();
+
         try {
 
-            $region = Region::findOrFail($id);
-            $region->delete($id);
+            $point = Point::findOrFail($id);
+            $point->delete($id);
+
             DB::commit();
 
-            return $this->success('Region is deleted successfully', $region);
+            return $this->success('Point is deleted successfully', $point);
 
         } catch (Exception $e) {
             DB::rollback();
