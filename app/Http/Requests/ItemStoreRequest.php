@@ -3,6 +3,7 @@
 namespace App\Http\Requests;
 
 use App\Models\Category;
+use App\Models\Shop;
 use Illuminate\Foundation\Http\FormRequest;
 
 class ItemStoreRequest extends FormRequest
@@ -24,22 +25,22 @@ class ItemStoreRequest extends FormRequest
     {
 
         $categoryId = implode(',', Category::all()->pluck('id')->toArray());
+        $shopIds = implode(',', Shop::all()->pluck('id')->toArray());
 
         return [
             'category_id' => "in:$categoryId | required",
+            'shop_id' => "required | in:$shopIds",
             'name' => 'string',
-            'image' => [
-                'required',
-                'array',
-                'id' => ['required', 'numeric'],
-                'is_feature' => ['required', 'boolean'],
-            ],
+            'image' => ['required', 'array'],
+            'image.*.id' => ['required'],
+            'image.*.is_feature' => ['nullable', 'boolean'],
             'code' => ['unique:items,code', 'string'],
             'description' => 'string | nullable',
             'content' => 'string | nullable',
-            'price' => 'numeric | nullable',
-            'sell_price' => 'numeric',
+            'price' => 'required | numeric | nullable',
+            'sell_price' => 'required | numeric',
             'out_of_stock' => 'boolean',
+            'instock' => 'required | numeric',
         ];
     }
 }

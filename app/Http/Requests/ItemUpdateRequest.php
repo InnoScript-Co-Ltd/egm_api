@@ -5,6 +5,7 @@ namespace App\Http\Requests;
 use App\Enums\GeneralStatusEnum;
 use App\Helpers\Enum;
 use App\Models\Category;
+use App\Models\Shop;
 use Illuminate\Foundation\Http\FormRequest;
 
 class ItemUpdateRequest extends FormRequest
@@ -27,9 +28,11 @@ class ItemUpdateRequest extends FormRequest
 
         $categoryId = implode(',', Category::all()->pluck('id')->toArray());
         $generalStatusEnum = implode(',', (new Enum(GeneralStatusEnum::class))->values());
+        $shopIds = implode(',', Shop::all()->pluck('id')->toArray());
 
         return [
             'category_id' => "nullable | in:$categoryId",
+            'shop_id' => "nullable | in:$shopIds",
             'name' => 'string',
             'code' => 'string',
             'description' => 'string | nullable',
@@ -38,6 +41,10 @@ class ItemUpdateRequest extends FormRequest
             'sell_price' => 'numeric',
             'out_of_stock' => 'boolean',
             'status' => "nullable | in:$generalStatusEnum",
+            'instock' => 'nullable | numeric',
+            'image' => 'nullable | array',
+            'image.*.id' => ['required'],
+            'image.*.is_feature' => ['nullable', 'boolean'],
         ];
     }
 }
