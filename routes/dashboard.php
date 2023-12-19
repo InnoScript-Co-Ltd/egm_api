@@ -1,8 +1,6 @@
 <?php
 
 use App\Enums\PermissionEnum;
-use App\Http\Controllers\PermissionController;
-use App\Http\Controllers\StatusController;
 use Illuminate\Support\Facades\Route;
 
 /*

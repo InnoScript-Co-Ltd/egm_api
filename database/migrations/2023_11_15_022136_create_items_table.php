@@ -15,6 +15,7 @@ return new class extends Migration
         Schema::create('items', function (Blueprint $table) {
             $table->snowflakeIdAndPrimary();
             $table->snowflakeId('category_id');
+            $table->snowflakeId('shop_id');
             $table->string('name');
             $table->json('image')->nullable()->default(null);
             $table->string('code');
@@ -23,10 +24,12 @@ return new class extends Migration
             $table->float('price', 9, 2)->nullable()->default(null);
             $table->float('sell_price', 9, 2);
             $table->boolean('out_of_stock')->default(false);
+            $table->integer('instock')->default(false);
             $table->string('status')->default(GeneralStatusEnum::DISABLE->value);
             $table->auditColumns();
 
             $table->foreign('category_id')->references('id')->on('categories')->onDelete('cascade');
+            $table->foreign('shop_id')->references('id')->on('shops')->onDelete('cascade');
         });
     }
 

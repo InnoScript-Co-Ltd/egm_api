@@ -77,7 +77,7 @@ class AdminController extends Controller
             $role = SpatieRole::findOrFail($roleId);
             $currentRoleAll = $role->pluck('name')->toArray();
             $currentRole = $role->toArray()['name'];
-            if($admin->hasRole($currentRoleAll)){
+            if ($admin->hasRole($currentRoleAll)) {
                 $admin->removeRole($currentRoleAll);
             }
             $admin->update($payload->toArray())->assignRole($currentRole);

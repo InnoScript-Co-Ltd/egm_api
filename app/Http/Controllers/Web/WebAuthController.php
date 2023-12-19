@@ -2,15 +2,14 @@
 
 namespace App\Http\Controllers\Web;
 
-use Illuminate\Http\Request;
+use App\Enums\UserStatusEnum;
 use App\Http\Requests\WebUserLoginRequest;
 use App\Models\User;
-use App\Enums\UserStatusEnum;
 use Illuminate\Support\Facades\DB;
 
 class WebAuthController extends WebController
 {
-        /**
+    /**
      * APIs for user login
      *
      * @bodyParam username required.
@@ -55,7 +54,7 @@ class WebAuthController extends WebController
         }
     }
 
-     /**
+    /**
      * APIs for user login out
      */
     public function logout()
