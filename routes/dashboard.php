@@ -20,11 +20,6 @@ Route::group(['prefix' => 'auth'], function () {
     Route::post('/login', 'AdminAuthController@login');
 });
 
-Route::get('/export-category', 'CategoryController@export');
-Route::get('/export-user', 'UserController@export');
-Route::get('/export-item', 'ItemController@export');
-Route::get('/export-order', 'OrderController@export');
-Route::get('/export-shop', 'ShopController@export');
 
 Route::middleware('jwt')->group(function () {
 
@@ -32,6 +27,11 @@ Route::middleware('jwt')->group(function () {
     //     Route::post('/logout', [AdminAuthController::class, 'logout']);
     //     Route::post('/refresh', [AdminAuthController::class, 'refresh']);
     // });
+    Route::post('/export-shop', 'ShopController@export');
+    Route::post('/export-order', 'OrderController@export');
+    Route::post('/export-item', 'ItemController@export');
+    Route::post('/export-user', 'UserController@export');
+    Route::post('/export-category', 'CategoryController@export');
 
     Route::get('/media', 'FileController@index');
 
