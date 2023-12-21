@@ -5,6 +5,7 @@ namespace Database\Factories;
 use App\Enums\GeneralStatusEnum;
 use App\Helpers\Enum;
 use App\Models\Category;
+use App\Models\Shop;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -22,11 +23,15 @@ class ItemFactory extends Factory
         $category = Category::all()->pluck('id');
         $categoryId = $category[rand(0, count($category) - 1)];
 
+        $shop = Shop::all()->pluck('id');
+        $shopId = $shop[rand(0, count($shop) - 1)];
+
         $status = (new Enum(GeneralStatusEnum::class))->values();
         $activeStatus = $status[rand(0, count($status) - 1)];
 
         return [
             'category_id' => $categoryId,
+            'shop_id' => $shopId,
             'name' => fake()->name(),
             // "image" => [
             //     "id" => fake()->randomNumber(),
