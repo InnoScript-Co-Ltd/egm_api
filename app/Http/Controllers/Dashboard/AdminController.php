@@ -7,7 +7,6 @@ use App\Http\Requests\AdminUpdateRequest;
 use App\Models\Admin;
 use Illuminate\Support\Facades\DB;
 use Spatie\Permission\Models\Role as SpatieRole;
-use Spatie\Permission\Models\Permission;
 
 class AdminController extends Controller
 {
@@ -74,8 +73,8 @@ class AdminController extends Controller
         try {
 
             $admin = Admin::findOrFail($id);
-            
-            if($payload['role_id'] !== null){
+
+            if ($payload['role_id'] !== null) {
                 $roleId = $payload['role_id'];
                 $role = collect(SpatieRole::findOrFail($roleId))->toArray();
                 $admin->removeRole($role['name']);

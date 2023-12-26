@@ -20,7 +20,6 @@ Route::group(['prefix' => 'auth'], function () {
     Route::post('/login', 'AdminAuthController@login');
 });
 
-
 Route::middleware('jwt')->group(function () {
 
     // Route::group(['prefix' => 'auth'], function () {

@@ -28,13 +28,11 @@ class ItemStoreRequest extends FormRequest
         $shopIds = implode(',', Shop::all()->pluck('id')->toArray());
 
         return [
-            'category_id' => "in:$categoryId | required",
+            'category_id' => "required | in:$categoryId",
             'shop_id' => "required | in:$shopIds",
-            'name' => 'string',
-            'image' => ['required', 'array'],
-            'image.*.id' => ['required'],
-            'image.*.is_feature' => ['nullable', 'boolean'],
-            'code' => ['unique:items,code', 'string'],
+            'name' => 'required | string',
+            'image' => ['array'],
+            'code' => ['required', 'unique:items,code', 'string'],
             'description' => 'string | nullable',
             'content' => 'string | nullable',
             'price' => 'required | numeric | nullable',
