@@ -23,7 +23,8 @@ class Item extends Model
     public $appends = ['category_name', 'shop_name'];
 
     protected $casts = [
-        'images' => 'array',
+        'images' => 'json',
+        'out_of_stock' => 'boolean',
     ];
 
     protected function getCategoryNameAttribute()

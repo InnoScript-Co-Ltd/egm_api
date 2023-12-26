@@ -31,7 +31,7 @@ class ItemStoreRequest extends FormRequest
             'category_id' => "required | in:$categoryId",
             'shop_id' => "required | in:$shopIds",
             'name' => 'required | string',
-            'images' => ['array'],
+            'images' => 'array',
             'code' => ['required', 'unique:items,code', 'string'],
             'description' => 'string | nullable',
             'content' => 'string | nullable',
