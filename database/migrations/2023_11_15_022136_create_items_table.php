@@ -17,7 +17,7 @@ return new class extends Migration
             $table->snowflakeId('category_id');
             $table->snowflakeId('shop_id');
             $table->string('name');
-            $table->json('image')->nullable()->default(null);
+            $table->json('images')->nullable()->default(null);
             $table->string('code');
             $table->longtext('description')->nullable()->default(null);
             $table->longtext('content')->nullable()->default(null);

@@ -3,8 +3,10 @@
 namespace App\Http\Controllers\Dashboard;
 
 use App\Exports\ExportItem;
+use App\Helpers\Snowflake;
 use App\Http\Requests\ItemStoreRequest;
 use App\Http\Requests\ItemUpdateRequest;
+use App\Models\File;
 use App\Models\Item;
 use Illuminate\Support\Facades\DB;
 use Maatwebsite\Excel\Facades\Excel;
@@ -37,13 +39,42 @@ class ItemController extends Controller
 
         $payload = collect($request->validated());
 
+        $files = collect($payload['images'])->map(function ($image) {
+            $image_path = $image->store('images', 'public');
+            $name = explode('/', $image_path)[1];
+            $snowflake = new SnowFlake;
+
+            return [
+                'id' => $snowflake->id(),
+                'name' => $name,
+                'category' => 'ITEM',
+                'size' => $image->getSize(),
+                'type' => $image->getMimeType(),
+            ];
+        });
+
         DB::beginTransaction();
         try {
 
-            $item = Item::create($payload->toArray());
-            DB::commit();
+            $uploadFile = File::insert($files->toArray());
 
-            return $this->success('Item is created successfully', $item);
+            if ($uploadFile === true) {
+                $payload['images'] = $files->map(function ($file) {
+                    return $file['id'];
+                })->toArray();
+
+                $item = Item::create($payload->toArray());
+                DB::commit();
+
+                return $this->success('Item is created successfully', $item);
+
+            } else {
+                DB::commit();
+
+                return $this->validationError('Item is created fialed', [
+                    'images' => ['can not upload image files'],
+                ]);
+            }
 
         } catch (Exception $e) {
             DB::rollback();

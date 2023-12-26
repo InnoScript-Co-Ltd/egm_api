@@ -14,7 +14,7 @@ class Item extends Model
     use BasicAudit,HasFactory,SnowflakeID,SoftDeletes;
 
     protected $fillable = [
-        'category_id', 'shop_id', 'name', 'image', 'code', 'description', 'content', 'price', 'sell_price', 'out_of_stock', 'instock',
+        'category_id', 'shop_id', 'name', 'images', 'code', 'description', 'content', 'price', 'sell_price', 'out_of_stock', 'instock',
         'status',
     ];
 
@@ -23,7 +23,7 @@ class Item extends Model
     public $appends = ['category_name', 'shop_name'];
 
     protected $casts = [
-        'image' => 'array',
+        'images' => 'array',
     ];
 
     protected function getCategoryNameAttribute()
