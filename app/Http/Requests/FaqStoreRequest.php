@@ -22,8 +22,8 @@ class FaqStoreRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'answer' => 'string',
-            'question' => 'string',
+            'answer' => 'required | json',
+            'question' => 'required | json',
         ];
     }
 }

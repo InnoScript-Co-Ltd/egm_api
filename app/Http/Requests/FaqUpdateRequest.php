@@ -26,8 +26,8 @@ class FaqUpdateRequest extends FormRequest
         $generalStatusEnum = implode(',', (new Enum(GeneralStatusEnum::class))->values());
 
         return [
-            'answer' => 'string',
-            'question' => 'string',
+            'answer' => 'json',
+            'question' => 'json',
             'status' => "nullable | in:$generalStatusEnum",
         ];
     }

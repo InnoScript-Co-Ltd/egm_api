@@ -17,4 +17,9 @@ class Faq extends Model
     protected $fillable = [
         'answer', 'question', 'status',
     ];
+
+    protected $casts = [
+        'answer' => 'object',
+        'question' => 'object',
+    ];
 }
