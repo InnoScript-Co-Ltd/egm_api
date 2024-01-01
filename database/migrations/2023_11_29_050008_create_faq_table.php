@@ -14,8 +14,8 @@ return new class extends Migration
     {
         Schema::create('faq', function (Blueprint $table) {
             $table->snowflakeIdAndPrimary();
-            $table->string('answer');
-            $table->string('question');
+            $table->json('answer');
+            $table->json('question');
             $table->string('status')->default(GeneralStatusEnum::DISABLE->value);
             $table->auditColumns();
         });
