@@ -14,8 +14,8 @@ return new class extends Migration
     {
         Schema::create('items', function (Blueprint $table) {
             $table->snowflakeIdAndPrimary();
-            $table->snowflakeId('category_id');
-            $table->snowflakeId('shop_id');
+            $table->snowflakeId('category_id')->nullable()->default(null);
+            $table->snowflakeId('shop_id')->nullable()->default(null);
             $table->string('name');
             $table->json('images')->nullable()->default(null);
             $table->string('code');

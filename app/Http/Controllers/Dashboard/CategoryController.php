@@ -3,12 +3,13 @@
 namespace App\Http\Controllers\Dashboard;
 
 use App\Exports\ExportCategory;
+use App\Imports\ImportCategory;
 use App\Http\Requests\CategoryStoreRequest;
 use App\Http\Requests\CategoryUpdateRequest;
 use App\Models\Category;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Maatwebsite\Excel\Facades\Excel;
+use Symfony\Component\HttpFoundation\Response;
 
 class CategoryController extends Controller
 {
@@ -102,8 +103,14 @@ class CategoryController extends Controller
         }
     }
 
-    public function export(Request $request)
+    public function export()
     {
         return Excel::download(new ExportCategory, 'categories.xlsx');
+    }
+
+    public function import()
+    {
+        Excel::import(new ImportCategory, request()->file('file'));
+        return $this->success('Category is imported successfully');
     }
 }

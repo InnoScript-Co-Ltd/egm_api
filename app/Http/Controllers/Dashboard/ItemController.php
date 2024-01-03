@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Dashboard;
 
 use App\Exports\ExportItem;
+use App\Imports\ImportItem;
 use App\Helpers\Snowflake;
 use App\Http\Requests\ItemStoreRequest;
 use App\Http\Requests\ItemUpdateRequest;
@@ -137,5 +138,11 @@ class ItemController extends Controller
     public function export()
     {
         return Excel::download(new ExportItem, 'Items.xlsx');
+    }
+
+    public function import() 
+    {
+        Excel::import(new ImportItem, request()->file('file'));
+        return $this->success('Item is imported successfully');
     }
 }

@@ -13,19 +13,28 @@ class ExportCategory implements FromCollection, WithHeadings
      */
     public function collection()
     {
-        return Category::select('id', 'title', 'icon', 'level', 'main_category_id', 'description', 'status')->get();
+        return Category::select('id', 'title', 'level', 'description', 'status')->get();
     }
 
     public function headings(): array
     {
         return [
-            'id',
-            'title',
-            'icon',
-            'level',
-            'main_category_id',
-            'description',
-            'status',
+            'Id',
+            'Title',
+            'Level',   
+            'Description',
+            'Status'
+        ];
+    }
+
+    public function map($post) : array
+    {
+        return [
+            $post->id,
+            $post->title,
+            $post->level,
+            $post->status,
+            $post->description
         ];
     }
 }

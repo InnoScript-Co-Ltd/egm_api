@@ -41,11 +41,13 @@ class Category extends Model
 
     protected function getCreatedByAttribute()
     {
-        if (auth('dashboard')->id()) {
+
+        $user = null;
+        if (auth('dashboard')->id() && isset($this->attributes['created_by'])) {
             $user = Admin::where(['id' => $this->attributes['created_by']])->first();
         }
 
-        if (auth('api')->id()) {
+        if (auth('api')->id() && isset($this->attributes['created_by'])) {
             $user = User::where(['id' => $this->attributes['created_by']])->first();
         }
 
@@ -58,11 +60,12 @@ class Category extends Model
 
     protected function getUpdatedByAttribute()
     {
-        if (auth('dashboard')->id()) {
+        $user = null;
+        if (auth('dashboard')->id() && isset($this->attributes['updated_by'])) {
             $user = Admin::where(['id' => $this->attributes['updated_by']])->first();
         }
 
-        if (auth('api')->id()) {
+        if (auth('api')->id() && isset($this->attributes['updated_by'])) {
             $user = User::where(['id' => $this->attributes['updated_by']])->first();
         }
 

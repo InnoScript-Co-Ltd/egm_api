@@ -14,7 +14,7 @@ return new class extends Migration
     {
         Schema::create('categories', function (Blueprint $table) {
             $table->snowflakeIdAndPrimary();
-            $table->string('title')->unique();
+            $table->string('title');
             $table->snowflakeId('icon')->nullable()->default(null);
             $table->integer('level')->default(0);
             $table->snowflakeId('main_category_id')->nullable()->default(null);
