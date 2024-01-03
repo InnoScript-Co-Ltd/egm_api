@@ -29,8 +29,10 @@ Route::middleware('jwt')->group(function () {
     Route::post('/export-shop', 'ShopController@export');
     Route::post('/export-order', 'OrderController@export');
     Route::post('/export-item', 'ItemController@export');
+    Route::post('/import-item', "ItemController@import");
     Route::post('/export-user', 'UserController@export');
     Route::post('/export-category', 'CategoryController@export');
+    Route::post('/import-category', 'CategoryController@import');
 
     Route::get('/media', 'FileController@index');
 

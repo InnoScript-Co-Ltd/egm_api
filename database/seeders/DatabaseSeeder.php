@@ -22,10 +22,10 @@ class DatabaseSeeder extends Seeder
             AdminSeeder::class,
             // PromotionSeeder::class,
             // FaqSeeder::class,
-            // RegionSeeder::class,
-            // ShopSeeder::class,
-            // CategorySeeder::class,
-            // ItemSeeder::class,
+            RegionSeeder::class,
+            ShopSeeder::class,
+            CategorySeeder::class,
+            ItemSeeder::class,
         ]);
     }
 }
