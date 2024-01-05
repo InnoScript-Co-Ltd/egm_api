@@ -29,6 +29,7 @@ class UserStoreRequest extends FormRequest
             'name' => 'required | string | max: 24 | min: 8',
             'email' => 'required | email | unique:users,email',
             'phone' => ['required', 'unique:users,phone', "regex:$mobileRule"],
+            'profile' => 'file',
             'password' => 'required | max: 24 | min: 6',
             'confirm_password' => 'required_with:password|same:password|min:6',
         ];
