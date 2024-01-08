@@ -29,7 +29,7 @@ Route::middleware('jwt')->group(function () {
     Route::post('/export-shop', 'ShopController@export');
     Route::post('/export-order', 'OrderController@export');
     Route::post('/export-item', 'ItemController@export');
-    Route::post('/import-item', "ItemController@import");
+    Route::post('/import-item', 'ItemController@import');
     Route::post('/export-user', 'UserController@export');
     Route::post('/export-category', 'CategoryController@export');
     Route::post('/import-category', 'CategoryController@import');
@@ -64,7 +64,7 @@ Route::middleware('jwt')->group(function () {
         Route::get('/', 'UserController@index')->permission(PermissionEnum::USER_INDEX->value);
         Route::post('/', 'UserController@store')->permission(PermissionEnum::USER_STORE->value);
         Route::get('/{id}', 'UserController@show')->permission(PermissionEnum::USER_SHOW->value);
-        Route::put('/{id}', 'UserController@update')->permission(PermissionEnum::USER_UPDATE->value);
+        Route::post('/{id}', 'UserController@update')->permission(PermissionEnum::USER_UPDATE->value);
         Route::delete('/{id}', 'UserController@destroy')->permission(PermissionEnum::USER_DESTROY->value);
         Route::get('/export', 'UserController@export')->permission(PermissionEnum::USER_EXPORT->value);
     });

@@ -14,7 +14,7 @@ class ExportItem implements FromCollection, WithHeadings, WithMapping
      */
     public function collection()
     {
-        return Item::select('id', 'category_id','shop_id', 'name', 'code', 'description', 'content', 'price', 'sell_price', 'out_of_stock', 'instock', 'status')->get();
+        return Item::select('id', 'category_id', 'shop_id', 'name', 'code', 'description', 'content', 'price', 'sell_price', 'out_of_stock', 'instock', 'status')->get();
     }
 
     public function headings(): array

@@ -6,8 +6,8 @@ use App\Enums\REGXEnum;
 use App\Enums\UserStatusEnum;
 use App\Helpers\Enum;
 use App\Models\Admin;
-use App\Models\Role;
 use App\Models\File;
+use App\Models\Role;
 use Illuminate\Foundation\Http\FormRequest;
 
 class AdminUpdateRequest extends FormRequest
@@ -37,7 +37,7 @@ class AdminUpdateRequest extends FormRequest
         return [
             'id' => 'string',
             'name' => 'string | max: 24 | min: 4',
-            'profile' => "nullable",
+            'profile' => 'nullable',
             'email' => "email | unique:users,email,$userId",
             'phone' => ["unique:users,phone,$userId", "regex:$mobileRule"],
             'role_id' => 'nullable',

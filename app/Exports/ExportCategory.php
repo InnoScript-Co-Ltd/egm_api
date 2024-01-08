@@ -21,20 +21,20 @@ class ExportCategory implements FromCollection, WithHeadings
         return [
             'Id',
             'Title',
-            'Level',   
+            'Level',
             'Description',
-            'Status'
+            'Status',
         ];
     }
 
-    public function map($post) : array
+    public function map($post): array
     {
         return [
             $post->id,
             $post->title,
             $post->level,
             $post->status,
-            $post->description
+            $post->description,
         ];
     }
 }

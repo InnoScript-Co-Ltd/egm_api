@@ -4,12 +4,12 @@ namespace App\Http\Controllers\Dashboard;
 
 use App\Enums\PointLabelEnum;
 use App\Exports\ExportUser;
+use App\Helpers\Snowflake;
 use App\Http\Requests\UserStoreRequest;
 use App\Http\Requests\UserUpdateRequest;
+use App\Models\File;
 use App\Models\Point;
 use App\Models\User;
-use App\Models\File;
-use App\Helpers\Snowflake;
 use Illuminate\Support\Facades\DB;
 use Maatwebsite\Excel\Facades\Excel;
 
@@ -45,7 +45,7 @@ class UserController extends Controller
         $image_path = $files->store('images', 'public');
         $name = explode('/', $image_path)[1];
         $snowflake = new SnowFlake;
-        
+
         $profile = [
             'id' => $snowflake->id(),
             'name' => $name,
@@ -59,24 +59,24 @@ class UserController extends Controller
         try {
 
             $uploadFile = File::create([
-                "name" => $profile['name'],
-                'category' => "ITEM",
+                'name' => $profile['name'],
+                'category' => 'ITEM',
                 'size' => $profile['size'],
                 'type' => $profile['type'],
             ]);
-            
-            if($uploadFile) {
+
+            if ($uploadFile) {
 
                 $payload['profile'] = $uploadFile->toArray()['id'];
 
                 $point = collect(Point::where(['label' => PointLabelEnum::LOGIN_POINT->value])->first());
                 $payload['reward_point'] = $point ? $point['point'] : 0;
-    
+
                 $user = User::create($payload->toArray());
                 DB::commit();
-    
+
                 return $this->success('User is created successfully', $user);
-            }else {
+            } else {
                 DB::commit();
 
                 return $this->validationError('Item is created fialed', [
@@ -109,80 +109,57 @@ class UserController extends Controller
 
     }
 
-    public function update(UserUpdateRequest $request,$id)
+    public function update(UserUpdateRequest $request, $id)
     {
+
         $payload = collect($request->validated());
 
         DB::beginTransaction();
+
         try {
-            /**
-             * Check profile field is file format
-             * **/
-            if($payload->has('profile') && $payload->get('profile') instanceof \Illuminate\Http\UploadedFile){
-                
+            $user = User::findOrFail($id);
+
+            if (isset($payload['profile'])) {
+
+                if ($user->profile) {
+                    $getFile = File::findOrFail($user->profile);
+
+                    if ($getFile) {
+                        $getFile->delete($user->profile);
+                    //  unlink(public_path() . "/". "storage/images/" . $getFile->name);
+                    } else {
+                        return $this->validationError('File is created failed', [
+                            'images' => ['can not find current image'],
+                        ]);
+                    }
+                }
+
                 $files = $payload['profile'];
-        
                 $image_path = $files->store('images', 'public');
                 $name = explode('/', $image_path)[1];
-                $snowflake = new SnowFlake;
-                
-                $profile = [
-                    'id' => $snowflake->id(),
+
+                $profilePayload = [
                     'name' => $name,
-                    'category' => 'ITEM',
+                    'category' => 'USER',
                     'size' => $files->getSize(),
                     'type' => $files->getMimeType(),
                 ];
 
-                $uploadFile = File::create([
-                    "name" => $profile['name'],
-                    'category' => "ITEM",
-                    'size' => $profile['size'],
-                    'type' => $profile['type'],
-                ]);
+                $uploadFile = File::create($profilePayload);
 
-                /**
-                 * Check file is crated
-                 * **/
-
-                if($uploadFile) {
-
-                    $payload['profile'] = $uploadFile->toArray()['id'];
-    
-                    $point = collect(Point::where(['label' => PointLabelEnum::LOGIN_POINT->value])->first());
-                    $payload['reward_point'] = $point ? $point['point'] : 0;
-        
-                    $user = User::findOrFail($id);
-                    $user->update($payload->toArray());
-                    DB::commit();
-        
-                    return $this->success('User is updated successfully', $user);
-                }else {
-                    DB::commit();
-    
-                    return $this->validationError('Item is created fialed', [
+                if (! $uploadFile) {
+                    return $this->validationError('File is created failed', [
                         'images' => ['can not upload image files'],
                     ]);
                 }
 
-            }else {
-
-                /**
-                 * profile field is already have and not changes file 
-                 * **/
-
-                $file = File::findOrFail($payload['profile']);
-        
-                    $point = collect(Point::where(['label' => PointLabelEnum::LOGIN_POINT->value])->first());
-                    $payload['reward_point'] = $point ? $point['point'] : 0;
-                    $payload['profile'] = $file->toArray()['id'];
-                    $user = User::findOrFail($payload->toArray()['id']);
-                    $user->update($payload->toArray());
-                    DB::commit();
-            
-                    return $this->success('User is updated successfully', $user);
-                
+                $payload['profile'] = $uploadFile->id;
             }
+
+            $user->update($payload->toArray());
+            DB::commit();
+
+            return $this->success('User is updated successfully', $user);
 
         } catch (Exception $e) {
             DB::rollback();

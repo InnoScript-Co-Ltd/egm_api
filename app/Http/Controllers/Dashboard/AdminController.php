@@ -2,11 +2,11 @@
 
 namespace App\Http\Controllers\Dashboard;
 
+use App\Helpers\Snowflake;
 use App\Http\Requests\AdminStoreRequest;
 use App\Http\Requests\AdminUpdateRequest;
 use App\Models\Admin;
 use App\Models\File;
-use App\Helpers\Snowflake;
 use Illuminate\Support\Facades\DB;
 use Spatie\Permission\Models\Role as SpatieRole;
 
@@ -41,7 +41,7 @@ class AdminController extends Controller
         $image_path = $files->store('images', 'public');
         $name = explode('/', $image_path)[1];
         $snowflake = new SnowFlake;
-        
+
         $profile = [
             'id' => $snowflake->id(),
             'name' => $name,
@@ -55,14 +55,14 @@ class AdminController extends Controller
         try {
 
             $uploadFile = File::create([
-                "name" => $profile['name'],
-                'category' => "ITEM",
+                'name' => $profile['name'],
+                'category' => 'ITEM',
                 'size' => $profile['size'],
                 'type' => $profile['type'],
             ]);
 
-            if($uploadFile){
-                
+            if ($uploadFile) {
+
                 $payload['profile'] = $uploadFile->toArray()['id'];
                 $payload['password'] = bcrypt($payload['password']);
                 $roleId = $payload['role_id'];
@@ -105,14 +105,14 @@ class AdminController extends Controller
             /**
              * Check profile field is file format
              * **/
-            if($payload->has('profile') && $payload->get('profile') instanceof \Illuminate\Http\UploadedFile){
-                
+            if ($payload->has('profile') && $payload->get('profile') instanceof \Illuminate\Http\UploadedFile) {
+
                 $files = $payload['profile'];
-        
+
                 $image_path = $files->store('images', 'public');
                 $name = explode('/', $image_path)[1];
                 $snowflake = new SnowFlake;
-                
+
                 $profile = [
                     'id' => $snowflake->id(),
                     'name' => $name,
@@ -122,8 +122,8 @@ class AdminController extends Controller
                 ];
 
                 $uploadFile = File::create([
-                    "name" => $profile['name'],
-                    'category' => "ITEM",
+                    'name' => $profile['name'],
+                    'category' => 'ITEM',
                     'size' => $profile['size'],
                     'type' => $profile['type'],
                 ]);
@@ -131,11 +131,10 @@ class AdminController extends Controller
                 /**
                  * Check file is crated
                  * **/
-
-                if($uploadFile) {
+                if ($uploadFile) {
 
                     $payload['profile'] = $uploadFile->toArray()['id'];
-    
+
                     $admin = Admin::findOrFail($payload->toArray()['id']);
 
                     if ($payload['role_id'] !== null) {
@@ -149,22 +148,21 @@ class AdminController extends Controller
                     DB::commit();
 
                     return $this->success('Admin is updated successfully', $admin);
-                }else {
+                } else {
                     DB::commit();
-    
+
                     return $this->validationError('Item is created fialed', [
                         'images' => ['can not upload image files'],
                     ]);
                 }
 
-            }else {
+            } else {
 
                 /**
-                 * profile field is already have and not changes file 
+                 * profile field is already have and not changes file
                  * **/
-
                 $file = File::findOrFail($payload['profile']);
-        
+
                 $admin = Admin::findOrFail($payload->toArray()['id']);
 
                 if ($payload['role_id'] !== null) {
@@ -174,11 +172,11 @@ class AdminController extends Controller
                     $admin->syncRoles($role['name']);
                 }
                 $admin->update($payload->toArray());
-    
+
                 DB::commit();
-    
+
                 return $this->success('Admin is updated successfully', $admin);
-                
+
             }
 
         } catch (Exception $e) {
