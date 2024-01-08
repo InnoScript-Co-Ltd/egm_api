@@ -8,6 +8,8 @@ use App\Http\Requests\UserStoreRequest;
 use App\Http\Requests\UserUpdateRequest;
 use App\Models\Point;
 use App\Models\User;
+use App\Models\File;
+use App\Helpers\Snowflake;
 use Illuminate\Support\Facades\DB;
 use Maatwebsite\Excel\Facades\Excel;
 
@@ -37,17 +39,50 @@ class UserController extends Controller
     {
 
         $payload = collect($request->validated());
+
+        $files = $payload['profile'];
+
+        $image_path = $files->store('images', 'public');
+        $name = explode('/', $image_path)[1];
+        $snowflake = new SnowFlake;
+        
+        $profile = [
+            'id' => $snowflake->id(),
+            'name' => $name,
+            'category' => 'ITEM',
+            'size' => $files->getSize(),
+            'type' => $files->getMimeType(),
+        ];
+
         DB::beginTransaction();
 
         try {
 
-            $point = collect(Point::where(['label' => PointLabelEnum::LOGIN_POINT->value])->first());
-            $payload['reward_point'] = $point ? $point['point'] : 0;
+            $uploadFile = File::create([
+                "name" => $profile['name'],
+                'category' => "ITEM",
+                'size' => $profile['size'],
+                'type' => $profile['type'],
+            ]);
+            
+            if($uploadFile) {
 
-            $user = User::create($payload->toArray());
-            DB::commit();
+                $payload['profile'] = $uploadFile->toArray()['id'];
 
-            return $this->success('User is created successfully', $user);
+                $point = collect(Point::where(['label' => PointLabelEnum::LOGIN_POINT->value])->first());
+                $payload['reward_point'] = $point ? $point['point'] : 0;
+    
+                $user = User::create($payload->toArray());
+                DB::commit();
+    
+                return $this->success('User is created successfully', $user);
+            }else {
+                DB::commit();
+
+                return $this->validationError('Item is created fialed', [
+                    'images' => ['can not upload image files'],
+                ]);
+            }
 
         } catch (Exception $e) {
             DB::rollback();
@@ -74,18 +109,81 @@ class UserController extends Controller
 
     }
 
-    public function update(UserUpdateRequest $request, $id)
+    public function update(UserUpdateRequest $request,)
     {
 
         $payload = collect($request->validated());
+
         DB::beginTransaction();
         try {
+            /**
+             * Check profile field is file format
+             * **/
+            if($payload->has('profile') && $payload->get('profile') instanceof \Illuminate\Http\UploadedFile){
+                
+                $files = $payload['profile'];
+        
+                $image_path = $files->store('images', 'public');
+                $name = explode('/', $image_path)[1];
+                $snowflake = new SnowFlake;
+                
+                $profile = [
+                    'id' => $snowflake->id(),
+                    'name' => $name,
+                    'category' => 'ITEM',
+                    'size' => $files->getSize(),
+                    'type' => $files->getMimeType(),
+                ];
 
-            $user = User::findOrFail($id);
-            $user->update($payload->toArray());
-            DB::commit();
+                $uploadFile = File::create([
+                    "name" => $profile['name'],
+                    'category' => "ITEM",
+                    'size' => $profile['size'],
+                    'type' => $profile['type'],
+                ]);
 
-            return $this->success('User is updated successfully', $user);
+                /**
+                 * Check file is crated
+                 * **/
+
+                if($uploadFile) {
+
+                    $payload['profile'] = $uploadFile->toArray()['id'];
+    
+                    $point = collect(Point::where(['label' => PointLabelEnum::LOGIN_POINT->value])->first());
+                    $payload['reward_point'] = $point ? $point['point'] : 0;
+        
+                    $user = User::findOrFail($payload->toArray()['id']);
+                    $user->update($payload->toArray());
+                    DB::commit();
+        
+                    return $this->success('User is updated successfully', $user);
+                }else {
+                    DB::commit();
+    
+                    return $this->validationError('Item is created fialed', [
+                        'images' => ['can not upload image files'],
+                    ]);
+                }
+
+            }else {
+
+                /**
+                 * profile field is already have and not changes file 
+                 * **/
+
+                $file = File::findOrFail($payload['profile']);
+        
+                    $point = collect(Point::where(['label' => PointLabelEnum::LOGIN_POINT->value])->first());
+                    $payload['reward_point'] = $point ? $point['point'] : 0;
+                    $payload['profile'] = $file->toArray()['id'];
+                    $user = User::findOrFail($payload->toArray()['id']);
+                    $user->update($payload->toArray());
+                    DB::commit();
+            
+                    return $this->success('User is updated successfully', $user);
+                
+            }
 
         } catch (Exception $e) {
             DB::rollback();

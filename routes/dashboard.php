@@ -64,7 +64,7 @@ Route::middleware('jwt')->group(function () {
         Route::get('/', 'UserController@index')->permission(PermissionEnum::USER_INDEX->value);
         Route::post('/', 'UserController@store')->permission(PermissionEnum::USER_STORE->value);
         Route::get('/{id}', 'UserController@show')->permission(PermissionEnum::USER_SHOW->value);
-        Route::put('/{id}', 'UserController@update')->permission(PermissionEnum::USER_UPDATE->value);
+        Route::post('/update', 'UserController@update')->permission(PermissionEnum::USER_UPDATE->value);
         Route::delete('/{id}', 'UserController@destroy')->permission(PermissionEnum::USER_DESTROY->value);
         Route::get('/export', 'UserController@export')->permission(PermissionEnum::USER_EXPORT->value);
     });
@@ -74,7 +74,7 @@ Route::middleware('jwt')->group(function () {
         Route::get('/', 'AdminController@index')->permission(PermissionEnum::ADMIN_INDEX->value);
         Route::post('/', 'AdminController@store')->permission(PermissionEnum::ADMIN_STORE->value);
         Route::get('/{id}', 'AdminController@show')->permission(PermissionEnum::ADMIN_SHOW->value);
-        Route::put('/{id}', 'AdminController@update')->permission(PermissionEnum::ADMIN_UPDATE->value);
+        Route::post('/update', 'AdminController@update')->permission(PermissionEnum::ADMIN_UPDATE->value);
         Route::delete('/{id}', 'AdminController@destroy')->permission(PermissionEnum::ADMIN_DESTROY->value);
 
     });

@@ -5,6 +5,7 @@ namespace App\Http\Requests;
 use App\Enums\REGXEnum;
 use App\Enums\UserStatusEnum;
 use App\Helpers\Enum;
+use App\Models\File;
 use Illuminate\Foundation\Http\FormRequest;
 
 class UserUpdateRequest extends FormRequest
@@ -27,10 +28,12 @@ class UserUpdateRequest extends FormRequest
 
         $mobileRule = REGXEnum::MOBILE_NUMBER->value;
         $userStatusEnum = implode(',', (new Enum(UserStatusEnum::class))->values());
+        $fileIds = implode(',', File::all()->pluck('id')->toArray());
 
         return [
+            'id' => 'string',
             'name' => 'string | max: 24 | min: 8',
-            'profile' => 'nullable',
+            'profile' => "nullable",
             'email' => 'nullable | email',
             'phone' => ['nullable', "regex:$mobileRule"],
             'password' => 'nullable | max: 24 | min: 6',
