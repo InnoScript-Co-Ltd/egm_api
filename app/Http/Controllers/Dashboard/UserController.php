@@ -109,9 +109,8 @@ class UserController extends Controller
 
     }
 
-    public function update(UserUpdateRequest $request,)
+    public function update(UserUpdateRequest $request,$id)
     {
-
         $payload = collect($request->validated());
 
         DB::beginTransaction();
@@ -153,7 +152,7 @@ class UserController extends Controller
                     $point = collect(Point::where(['label' => PointLabelEnum::LOGIN_POINT->value])->first());
                     $payload['reward_point'] = $point ? $point['point'] : 0;
         
-                    $user = User::findOrFail($payload->toArray()['id']);
+                    $user = User::findOrFail($id);
                     $user->update($payload->toArray());
                     DB::commit();
         

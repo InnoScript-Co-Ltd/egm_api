@@ -31,7 +31,6 @@ class UserUpdateRequest extends FormRequest
         $fileIds = implode(',', File::all()->pluck('id')->toArray());
 
         return [
-            'id' => 'string',
             'name' => 'string | max: 24 | min: 8',
             'profile' => "nullable",
             'email' => 'nullable | email',
