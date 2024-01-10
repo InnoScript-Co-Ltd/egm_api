@@ -31,10 +31,10 @@ class UserUpdateRequest extends FormRequest
         $userId = $user->id;
 
         return [
-            'name' => "string | max: 24 | min: 8 | users:exist,$userId",
-            'profile' => 'nullable | file',
+            'name' => "string | max: 24 | min: 8",
+            'profile' => 'nullable',
             'email' => 'nullable | email',
-            'phone' => ['nullable', "regex:$mobileRule", "unique:users,phone,$userId"],
+            'phone' => ['nullable', "regex:$mobileRule"],
             'password' => 'nullable | max: 24 | min: 6',
             'confirm_password' => 'required_with:password|same:password|min:6',
             'status' => "nullable | in:$userStatusEnum",
