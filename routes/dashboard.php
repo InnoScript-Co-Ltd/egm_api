@@ -47,6 +47,14 @@ Route::middleware('jwt')->group(function () {
         Route::get('/', 'DashboardController@count');
     });
 
+    Route::group(['prefix' => 'member'], function () {
+        Route::get('/', 'MemberController@index')->permission(PermissionEnum::MEMBER_INDEX->value);
+        Route::post('/', 'MemberController@store')->permission(PermissionEnum::MEMBER_STORE->value);
+        Route::get('/{id}', 'MemberController@show')->permission(PermissionEnum::MEMBER_SHOW->value);
+        Route::put('/{id}', 'MemberController@update')->permission(PermissionEnum::MEMBER_UPDATE->value);
+        Route::delete('/{id}', 'MemberController@destroy')->permission(PermissionEnum::MEMBER_DESTROY->value);
+    });
+
     Route::group(['prefix' => 'permission'], function () {
         Route::get('/', 'PermissionController@index')->permission(PermissionEnum::PERMISSION_INDEX->value);
         Route::get('/{id}', 'PermissionController@show')->permission(PermissionEnum::PERMISSION_SHOW->value);

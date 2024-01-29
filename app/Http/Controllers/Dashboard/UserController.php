@@ -97,8 +97,7 @@ class UserController extends Controller
         DB::beginTransaction();
         try {
 
-            $user = User::findOrFail($id);
-            DB::commit();
+            $user = User::with(['members'])->findOrFail($id);
 
             return $this->success('User detail is successfully retrived', $user);
 

@@ -62,8 +62,15 @@ class User extends Authenticatable implements JWTSubject
         return $this->hasMany(Order::class, 'id', 'user_id');
     }
 
+    public function members()
+    {
+        return $this->hasMany(Member::class, 'user_id', 'id');
+    }
+
     protected function getCreatedByAttribute()
     {
+        $user = null;
+
         if (auth('dashboard')->id()) {
             $user = Admin::where(['id' => $this->attributes['created_by']])->first();
         }
@@ -81,6 +88,8 @@ class User extends Authenticatable implements JWTSubject
 
     protected function getUpdatedByAttribute()
     {
+        $user = null;
+
         if (auth('dashboard')->id()) {
             $user = Admin::where(['id' => $this->attributes['updated_by']])->first();
         }

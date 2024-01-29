@@ -2,10 +2,9 @@
 
 namespace App\Enums;
 
-enum GeneralStatusEnum: string
+enum MemberDiscountStatus: string
 {
     case ACTIVE = 'ACTIVE';
     case DISABLE = 'DISABLE';
-    case DELETED = 'DELETED';
-    case PENDING = 'PENDING';
+    case PENDING = 'EXPIRED';
 }

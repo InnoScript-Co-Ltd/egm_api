@@ -13,22 +13,22 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::group(['prefix' => 'auth'], function () {
-    Route::post('/login', 'WebAuthController@login');
-    Route::get('/logout', 'WebAuthController@logout');
-    Route::get('/refresh', 'WebAuthController@refresh');
-    Route::post('/resend/{type}', 'UserAuthController@resendVerifiedCode');
-});
+// Route::group(['prefix' => 'auth'], function () {
+//     Route::post('/login', 'WebAuthController@login');
+//     Route::get('/logout', 'WebAuthController@logout');
+//     Route::get('/refresh', 'WebAuthController@refresh');
+//     Route::post('/resend/{type}', 'UserAuthController@resendVerifiedCode');
+// });
 
 Route::middleware('jwt')->group(function () {
 
-    Route::group(['prefix' => 'item'], function () {
-        Route::get('/', 'WebItemController@index');
-    });
+    // Route::group(['prefix' => 'item'], function () {
+    //     Route::get('/', 'WebItemController@index');
+    // });
 
-    Route::group(['prefix' => 'order'], function () {
-        Route::get('/', 'WebOrderController@index');
-    });
+    // Route::group(['prefix' => 'order'], function () {
+    //     Route::get('/', 'WebOrderController@index');
+    // });
 
     // Route::group(['prefix' => 'auth'], function () {
     //     Route::post('/logout', [UserAuthController::class, 'logout']);
