@@ -169,5 +169,13 @@ Route::middleware('jwt')->group(function () {
         Route::delete('/{id}', 'ShopController@destroy')->permission(PermissionEnum::SHOP_DESTROY->value);
     });
 
+    Route::group(['prefix' => 'member-discount'], function () {
+        Route::get('/', 'MemberDiscountController@index')->permission(PermissionEnum::MEMBER_DISCOUNT_INDEX->value);
+        Route::post('/', 'MemberDiscountController@store')->permission(PermissionEnum::MEMBER_DISCOUNT_STORE->value);
+        Route::get('/{id}', 'MemberDiscountController@show')->permission(PermissionEnum::MEMBER_DISCOUNT_SHOW->value);
+        Route::put('/{id}', 'MemberDiscountController@update')->permission(PermissionEnum::MEMBER_DISCOUNT_UPDATE->value);
+        Route::delete('/{id}', 'MemberDiscountController@destroy')->permission(PermissionEnum::MEMBER_DISCOUNT_DESTROY->value);
+    });
+
     Route::post('/file/upload/image', 'FileController@store');
 });
