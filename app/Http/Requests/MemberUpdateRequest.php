@@ -2,7 +2,7 @@
 
 namespace App\Http\Requests;
 
-use App\Enums\GeneralStatusEnum;
+use App\Enums\MemberStatusEnum;
 use App\Helpers\Enum;
 use App\Models\Member;
 use App\Models\User;
@@ -26,7 +26,7 @@ class MemberUpdateRequest extends FormRequest
     public function rules(): array
     {
         $userIds = implode(',', User::all()->pluck('id')->toArray());
-        $generalStatusEnum = implode(',', (new Enum(GeneralStatusEnum::class))->values());
+        $memberStatusEnum = implode(',', (new Enum(MemberStatusEnum::class))->values());
         $member = Member::findOrFail(request('id'));
         $memberIds = implode(',', Member::all()->pluck('id')->toArray());
         $memberId = $member['id'];
@@ -36,7 +36,7 @@ class MemberUpdateRequest extends FormRequest
             'member_id' => "nullable | in:$memberIds, unique:members,member_id,$memberId",
             'amount' => 'nullable | numeric',
             'expired_at' => 'nullable | date_format:Y-m-d',
-            'status' => "nullable | string | in:$generalStatusEnum",
+            'status' => "nullable | string | in:$memberStatusEnum",
         ];
     }
 }

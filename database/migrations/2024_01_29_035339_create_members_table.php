@@ -1,6 +1,6 @@
 <?php
 
-use App\Enums\GeneralStatusEnum;
+use App\Enums\MemberStatusEnum;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -19,7 +19,7 @@ return new class extends Migration
             $table->string('member_id')->unique();
             $table->float('amount', 9, 2)->default(0);
             $table->datetime('expired_at')->nullable();
-            $table->string('status')->default(GeneralStatusEnum::PENDING->value);
+            $table->string('status')->default(MemberStatusEnum::PENDING->value);
             $table->auditColumns();
 
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
