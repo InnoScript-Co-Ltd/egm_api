@@ -22,14 +22,14 @@ class MemberDiscountStoreRequest extends FormRequest
     public function rules(): array
     {
         return [
-            "label" => "required | string | unique:member_discounts,label",
-            "discount_percentage" => "nullable | string",
-            "discount_fix_amount" => "nullable | numeric",
-            "expend_limit" => "nullable | numeric",
-            "is_expend_limit" => "nullable | boolean",
-            "is_fix_amount" => "nullable | boolean",
-            "start_date" => "nullable | datetime",
-            "end_date" => "nullable | datetime",
+            'label' => 'required | string | unique:member_discounts,label',
+            'discount_percentage' => 'nullable | string',
+            'discount_fix_amount' => 'nullable | numeric',
+            'expend_limit' => 'nullable | numeric',
+            'is_expend_limit' => 'nullable | boolean',
+            'is_fix_amount' => 'nullable | boolean',
+            'start_date' => 'nullable | datetime',
+            'end_date' => 'nullable | datetime',
         ];
     }
 }

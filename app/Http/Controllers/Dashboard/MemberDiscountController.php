@@ -2,8 +2,6 @@
 
 namespace App\Http\Controllers\Dashboard;
 
-use App\Http\Controllers\Dashboard\Controller;
-use Illuminate\Http\Request;
 use App\Http\Requests\MemberDiscountStoreRequest;
 use App\Models\MemberDiscount;
 use Illuminate\Support\Facades\DB;

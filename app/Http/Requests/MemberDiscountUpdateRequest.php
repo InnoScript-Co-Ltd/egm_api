@@ -2,9 +2,9 @@
 
 namespace App\Http\Requests;
 
-use Illuminate\Foundation\Http\FormRequest;
-use App\Models\MemberDisocunt;
 use App\Enums\MemberDiscountStatusEnum;
+use App\Models\MemberDisocunt;
+use Illuminate\Foundation\Http\FormRequest;
 
 class MemberDiscountUpdateRequest extends FormRequest
 {
@@ -29,15 +29,15 @@ class MemberDiscountUpdateRequest extends FormRequest
         $memberDiscountStatusEnum = implode(',', (new Enum(MemberDiscountStatusEnum::class))->values());
 
         return [
-            "label" => "required | string | unique:member_discounts,label,$memberDiscountId",
-            "discount_percentage" => "nullable | string",
-            "discount_fix_amount" => "nullable | numeric",
-            "expend_limit" => "nullable | numeric",
-            "is_expend_limit" => "nullable | boolean",
-            "is_fix_amount" => "nullable | boolean",
-            "start_date" => "nullable | datetime",
-            "end_date" => "nullable | datetime",
-            "status" => "nullable | string | in:$memberDiscountStatusEnum"
+            'label' => "required | string | unique:member_discounts,label,$memberDiscountId",
+            'discount_percentage' => 'nullable | string',
+            'discount_fix_amount' => 'nullable | numeric',
+            'expend_limit' => 'nullable | numeric',
+            'is_expend_limit' => 'nullable | boolean',
+            'is_fix_amount' => 'nullable | boolean',
+            'start_date' => 'nullable | datetime',
+            'end_date' => 'nullable | datetime',
+            'status' => "nullable | string | in:$memberDiscountStatusEnum",
         ];
     }
 }
