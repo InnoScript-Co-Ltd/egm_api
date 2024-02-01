@@ -19,11 +19,8 @@ return new class extends Migration
             $table->string('front_background')->nullable()->default(null);
             $table->string('back_background')->nullable()->default(null);
             $table->datetime('expired_at')->nullable()->default(null);
-            $table->string('allowable_discount')->nullable()->default(1);
             $table->string('status')->default(GeneralStatusEnum::PENDING->value);
             $table->auditColumns();
-
-            $table->foreign('discount_id')->references('id')->on('member_discounts')->onDelete('cascade');
         });
     }
 

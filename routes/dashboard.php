@@ -128,7 +128,6 @@ Route::middleware('jwt')->group(function () {
     });
 
     Route::group(['prefix' => 'order'], function () {
-
         Route::get('/', 'OrderController@index')->permission(PermissionEnum::ORDER_INDEX->value);
         Route::post('/', 'OrderController@store')->permission(PermissionEnum::ORDER_STORE->value);
         Route::get('/{id}', 'OrderController@show')->permission(PermissionEnum::ORDER_SHOW->value);
@@ -175,6 +174,14 @@ Route::middleware('jwt')->group(function () {
         Route::get('/{id}', 'MemberDiscountController@show')->permission(PermissionEnum::MEMBER_DISCOUNT_SHOW->value);
         Route::put('/{id}', 'MemberDiscountController@update')->permission(PermissionEnum::MEMBER_DISCOUNT_UPDATE->value);
         Route::delete('/{id}', 'MemberDiscountController@destroy')->permission(PermissionEnum::MEMBER_DISCOUNT_DESTROY->value);
+    });
+
+    Route::group(['prefix' => 'member-card'], function () {
+        Route::get('/', 'MemberCardController@index')->permission(PermissionEnum::MEMBER_CARD_INDEX->value);
+        Route::post('/', 'MemberCardController@store')->permission(PermissionEnum::MEMBER_CARD_STORE->value);
+        Route::get('/{id}', 'MemberCardController@show')->permission(PermissionEnum::MEMBER_CARD_SHOW->value);
+        Route::put('/{id}', 'MemberCardController@update')->permission(PermissionEnum::MEMBER_CARD_UPDATE->value);
+        Route::delete('/{id}', 'MemberCardController@destroy')->permission(PermissionEnum::MEMBER_CARD_DESTROY->value);
     });
 
     Route::post('/file/upload/image', 'FileController@store');

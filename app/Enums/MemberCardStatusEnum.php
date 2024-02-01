@@ -2,7 +2,7 @@
 
 namespace App\Enums;
 
-enum MemberDiscountStatus: string
+enum MemberCardStatusEnum: string
 {
     case ACTIVE = 'ACTIVE';
     case PENDING = 'PENDING';
