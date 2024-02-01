@@ -2,8 +2,9 @@
 
 namespace App\Http\Requests;
 
-use App\Enums\MemberDiscountStatusEnum;
-use App\Models\MemberDisocunt;
+use App\Helpers\Enum;
+use App\Enums\MemberDiscountStatus;
+use App\Models\MemberDiscount;
 use Illuminate\Foundation\Http\FormRequest;
 
 class MemberDiscountUpdateRequest extends FormRequest
@@ -23,10 +24,10 @@ class MemberDiscountUpdateRequest extends FormRequest
      */
     public function rules(): array
     {
-        $memberDiscount = MemberDisocunt::findOrFail(request('id'));
+        $memberDiscount = MemberDiscount::findOrFail(request('id'));
         $memberDiscountId = $memberDiscount->id;
 
-        $memberDiscountStatusEnum = implode(',', (new Enum(MemberDiscountStatusEnum::class))->values());
+        $memberDiscountStatusEnum = implode(',', (new Enum(MemberDiscountStatus::class))->values());
 
         return [
             'label' => "required | string | unique:member_discounts,label,$memberDiscountId",

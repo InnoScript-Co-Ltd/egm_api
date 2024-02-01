@@ -10,6 +10,7 @@ use App\Enums\OrderStatusEnum;
 use App\Enums\PaymentTypeEnum;
 use App\Enums\PointLabelEnum;
 use App\Enums\UserStatusEnum;
+use App\Enums\MemberDiscountStatus;
 use App\Helpers\Enum;
 use Illuminate\Http\Request;
 

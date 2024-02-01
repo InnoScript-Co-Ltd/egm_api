@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Dashboard;
 
 use App\Http\Requests\MemberDiscountStoreRequest;
+use App\Http\Requests\MemberDiscountUpdateRequest;
 use App\Models\MemberDiscount;
 use Illuminate\Support\Facades\DB;
 
