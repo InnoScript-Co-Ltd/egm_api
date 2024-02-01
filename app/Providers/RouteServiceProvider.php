@@ -19,7 +19,7 @@ class RouteServiceProvider extends ServiceProvider
      */
     public const HOME = '/home';
 
-    protected $namespace = ['App\Http\Controllers\Dashboard', 'App\Http\Controllers\Web'];
+    protected $namespace = ['App\Http\Controllers\Dashboard', 'App\Http\Controllers\Web', 'App\Http\Controllers\Merchant'];
 
     /**
      * Define your route model bindings, pattern filters, and other route configuration.
@@ -34,16 +34,25 @@ class RouteServiceProvider extends ServiceProvider
             return Limit::perMinute(60)->by($request->user()?->id ?: $request->ip());
         });
 
+        RateLimiter::for('merchant', function (Request $request) {
+            return Limit::perMinute(60)->by($request->user()?->id ?: $request->ip());
+        });
+
         $this->routes(function () {
+            Route::middleware('dashboard')
+                ->prefix('dashboard')
+                ->namespace($this->namespace[0])
+                ->group(base_path('routes/dashboard.php'));
+
             Route::middleware('api')
                 ->prefix('api')
                 ->namespace($this->namespace[1])
                 ->group(base_path('routes/api.php'));
 
-            Route::middleware('dashboard')
-                ->prefix('dashboard')
-                ->namespace($this->namespace[0])
-                ->group(base_path('routes/dashboard.php'));
+            Route::middleware('merchant')
+                ->prefix('merchant')
+                ->namespace($this->namespace[2])
+                ->group(base_path('routes/merchant.php'));
 
             Route::middleware('web')
                 ->group(base_path('routes/web.php'));

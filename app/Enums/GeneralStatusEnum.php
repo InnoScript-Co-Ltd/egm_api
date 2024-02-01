@@ -7,4 +7,5 @@ enum GeneralStatusEnum: string
     case ACTIVE = 'ACTIVE';
     case DISABLE = 'DISABLE';
     case DELETED = 'DELETED';
+    case PENDING = 'PENDING';
 }

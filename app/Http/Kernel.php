@@ -49,6 +49,12 @@ class Kernel extends HttpKernel
             \Illuminate\Routing\Middleware\ThrottleRequests::class.':dashboard',
             \Illuminate\Routing\Middleware\SubstituteBindings::class,
         ],
+
+        'merchant' => [
+            \Illuminate\Routing\Middleware\ThrottleRequests::class.':merchant',
+            \Illuminate\Routing\Middleware\SubstituteBindings::class,
+            \App\Http\Middleware\MerchantMiddleware::class,
+        ],
     ];
 
     /**
@@ -74,5 +80,6 @@ class Kernel extends HttpKernel
         'role' => \Spatie\Permission\Middleware\RoleMiddleware::class,
         'permission' => \Spatie\Permission\Middleware\PermissionMiddleware::class,
         'role_or_permission' => \Spatie\Permission\Middleware\RoleOrPermissionMiddleware::class,
+        'merchant' => \App\Http\Middleware\MerchantMiddleware::class,
     ];
 }
