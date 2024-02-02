@@ -56,7 +56,7 @@ class FileController extends Controller
         DB::beginTransaction();
         try {
             $file = File::FindOrFail($id);
-            $image = file_get_contents(public_path('storage')."/images/$file->name");
+            $image = file_get_contents(storage_path('app/public')."/images/$file->name");
             DB::commit();
 
             return response($image, 200)->header('Content-Type', $file->type);
