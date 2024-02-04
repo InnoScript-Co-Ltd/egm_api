@@ -26,4 +26,9 @@ class Member extends Model
     {
         return $this->hasOne(User::class, 'id', 'user_id');
     }
+
+    public function membercard()
+    {
+        return $this->hasOne(MemberCard::class, 'id', 'membercard_id');
+    }
 }
