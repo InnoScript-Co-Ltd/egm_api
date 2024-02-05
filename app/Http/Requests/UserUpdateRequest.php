@@ -31,7 +31,7 @@ class UserUpdateRequest extends FormRequest
         $userId = $user->id;
 
         return [
-            'name' => "string | max: 24 | min: 8",
+            'name' => 'string | max: 24 | min: 8',
             'profile' => 'nullable',
             'email' => 'nullable | email',
             'phone' => ['nullable', "regex:$mobileRule"],

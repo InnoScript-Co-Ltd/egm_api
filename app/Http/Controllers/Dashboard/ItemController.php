@@ -56,12 +56,12 @@ class ItemController extends Controller
 
         DB::beginTransaction();
         try {
-            $uploadFile = collect($files->toArray())->map(function ($file){
+            $uploadFile = collect($files->toArray())->map(function ($file) {
                 return File::create($file);
             });
 
             if ($uploadFile) {
-                $fileId = $uploadFile->map(function ($file){
+                $fileId = $uploadFile->map(function ($file) {
                     return $file->id;
                 });
 

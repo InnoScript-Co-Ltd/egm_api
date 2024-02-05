@@ -2,8 +2,8 @@
 
 namespace App\Http\Requests;
 
-use App\Helpers\Enum;
 use App\Enums\MemberDiscountStatus;
+use App\Helpers\Enum;
 use App\Models\MemberDiscount;
 use Illuminate\Foundation\Http\FormRequest;
 

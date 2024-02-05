@@ -1,6 +1,6 @@
 <?php
 
-use App\Enums\GeneralStatusEnum;
+use App\Enums\MembershipOrderStatusEnum;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -24,8 +24,9 @@ return new class extends Migration
             $table->string('email')->nullable()->default(null);
             $table->float('amount', 9, 2);
             $table->float('discount', 9, 2)->default(0);
-            $table->float('total', 9, 2);
-            $table->string('status')->default(GeneralStatusEnum::ACTIVE->value);
+            $table->float('pay_amount', 9, 2);
+            $table->boolean('is_wallet')->default(false);
+            $table->string('status')->default(MembershipOrderStatusEnum::PENDING->value);
             $table->auditColumns();
 
             $table->foreign('member_id')->references('id')->on('members')->onDelete('cascade');

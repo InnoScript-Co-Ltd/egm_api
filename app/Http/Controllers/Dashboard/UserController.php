@@ -10,9 +10,9 @@ use App\Http\Requests\UserUpdateRequest;
 use App\Models\File;
 use App\Models\Point;
 use App\Models\User;
+use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\DB;
 use Maatwebsite\Excel\Facades\Excel;
-use Illuminate\Http\UploadedFile;
 
 class UserController extends Controller
 {
@@ -134,26 +134,26 @@ class UserController extends Controller
                     }
                 }
 
-                if($payload['profile'] instanceof UploadedFile){
+                if ($payload['profile'] instanceof UploadedFile) {
                     $files = $payload['profile'];
                     $image_path = $files->store('images', 'public');
                     $name = explode('/', $image_path)[1];
-    
+
                     $profilePayload = [
                         'name' => $name,
                         'category' => 'USER',
                         'size' => $files->getSize(),
                         'type' => $files->getMimeType(),
                     ];
-    
+
                     $uploadFile = File::create($profilePayload);
-    
+
                     if (! $uploadFile) {
                         return $this->validationError('File is created failed', [
                             'images' => ['can not upload image files'],
                         ]);
                     }
-    
+
                     $payload['profile'] = $uploadFile->id;
                 }
             }
