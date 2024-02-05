@@ -12,7 +12,7 @@ use Illuminate\Support\Facades\DB;
 
 class MembershipOrderController extends Controller
 {
-    public function store(MembershipOrderStoreReqeust $request)
+    public function checkout(MembershipOrderStoreReqeust $request)
     {
         $payload = collect($request->validated());
         DB::beginTransaction();
