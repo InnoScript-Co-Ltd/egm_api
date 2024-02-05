@@ -25,6 +25,6 @@ Route::middleware(['merchant'])->group(function () {
     });
 
     Route::group(['prefix' => 'order'], function () {
-        Route::get('/{id}', 'MembershipOrderController@checkout');
+        Route::post('/checkout', 'MembershipOrderController@checkout');
     });
 });

@@ -16,9 +16,10 @@ class MemberOrder extends Model
 
     protected $fillable = [
         'member_id', 'user_id', 'order_number', 'card_type', 'card_number', 'name', 'phone',
-        'email', 'status', 'amount', 'discount', 'total',
+        'email', 'status', 'amount', 'discount', 'pay_amount', 'is_wallet',
     ];
 
     protected $casts = [
+        'is_wallet' => 'boolean',
     ];
 }

@@ -2,8 +2,8 @@
 
 namespace App\Http\Requests;
 
-use App\Models\User;
 use App\Models\MemberCard;
+use App\Models\User;
 use Illuminate\Foundation\Http\FormRequest;
 
 class MemberStoreRequest extends FormRequest
