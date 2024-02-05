@@ -12,13 +12,47 @@ use Illuminate\Support\Facades\DB;
 
 class MembershipOrderController extends Controller
 {
-    public function checkout(MembershipOrderStoreReqeust $request)
+    public function index()
     {
-        $payload = collect($request->validated());
         DB::beginTransaction();
 
         try {
+            $orders = MemberOrder::searchQuery()
+                ->sortingQuery()
+                ->filterQuery()
+                ->filterDateQuery()
+                ->paginationQuery();
 
+            return $this->success('order list is successfully retrived', $orders);
+        } catch (Exception $e) {
+            DB::rollback();
+            throw $e;
+        }
+    }
+
+    public function show($id)
+    {
+        DB::beginTransaction();
+        try {
+            $order = MemberOrder::findOrFail($id);
+            DB::commit();
+
+            return $this->success('order detail is successfully retrived', $order);
+
+        } catch (Exception $e) {
+            DB::rollback();
+            throw $e;
+        }
+    }
+
+    public function checkout(MembershipOrderStoreReqeust $request)
+    {
+        $payload = collect($request->validated());
+        $payload['status'] = 'CASH';
+
+        DB::beginTransaction();
+
+        try {
             $member = Member::findOrFail($payload['member_id'])->first()->toArray();
 
             if ($member['membercard_id'] === null || $member['user_id'] === null) {
@@ -70,11 +104,11 @@ class MembershipOrderController extends Controller
             if ($payload['is_wallet'] === true && $payload['pay_amount'] < $member['amount']) {
                 $member['amount'] = $member['amount'] - $payload['pay_amount'];
                 $updateMember = Member::findOrFail($member['id'])->update($member);
+                $payload['status'] = 'MEMBER_WALLET';
             } else {
                 return $this->badRequest('insufficient wallet amount', null);
             }
 
-            $payload['status'] = 'SUCCESS';
             $order = MemberOrder::create($payload->toArray());
 
             DB::commit();
