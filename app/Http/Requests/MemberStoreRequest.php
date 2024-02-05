@@ -3,6 +3,7 @@
 namespace App\Http\Requests;
 
 use App\Models\User;
+use App\Models\MemberCard;
 use Illuminate\Foundation\Http\FormRequest;
 
 class MemberStoreRequest extends FormRequest
@@ -23,11 +24,13 @@ class MemberStoreRequest extends FormRequest
     public function rules(): array
     {
         $userIds = implode(',', User::all()->pluck('id')->toArray());
+        $memberCardIds = implode(',', MemberCard::all()->pluck('id')->toArray());
 
         return [
             'user_id' => "nullable | in:$userIds",
+            'membercard_id' => "nullable | in:$memberCardIds",
             'amount' => 'nullable | numeric',
-            'expired_at' => 'nullable | datetime',
+            'expired_at' => 'nullable | date_format:Y-m-d',
         ];
     }
 }

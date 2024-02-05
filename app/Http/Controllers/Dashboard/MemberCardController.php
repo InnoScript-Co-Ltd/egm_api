@@ -19,8 +19,8 @@ class MemberCardController extends Controller
             $file = File::create([
                 'name' => $name,
                 'category' => 'MEMBER_CARD',
-                'size' => $file->getSize(),
-                'type' => $file->getMimeType(),
+                'size' => $payload->getSize(),
+                'type' => $payload->getMimeType(),
             ]);
 
             return $file['id'];
@@ -61,11 +61,11 @@ class MemberCardController extends Controller
 
         try {
             if (isset($payload['front_background'])) {
-                $payload['front_background'] = uploadFile($payload['front_background'], 'MEMBER_CARD_FRONT_BACKGROUND');
+                $payload['front_background'] = $this->uploadFile($payload['front_background'], 'MEMBER_CARD_FRONT_BACKGROUND');
             }
 
             if (isset($payload['back_background'])) {
-                $payload['back_background'] = uploadFile($payload['back_background'], 'MEMBER_CARD_BACK_BACKGROUND');
+                $payload['back_background'] = $this->uploadFile($payload['back_background'], 'MEMBER_CARD_BACK_BACKGROUND');
             }
 
             $memberCard = MemberCard::create($payload->toArray());

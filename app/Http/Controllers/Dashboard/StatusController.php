@@ -10,6 +10,7 @@ use App\Enums\OrderStatusEnum;
 use App\Enums\PaymentTypeEnum;
 use App\Enums\PointLabelEnum;
 use App\Enums\UserStatusEnum;
+use App\Enums\MemberDiscountStatus;
 use App\Helpers\Enum;
 use Illuminate\Http\Request;
 
@@ -32,7 +33,7 @@ class StatusController extends Controller
             'payment_type' => (new Enum(PaymentTypeEnum::class))->values(),
             'point' => (new Enum(PointLabelEnum::class))->values(),
             'member' => (new Enum(MemberStatusEnum::class))->values(),
-            'member_discount' => (new Enum(MemberDiscountStatusEnum::class))->values(),
+            'member_discount' => (new Enum(MemberDiscountStatus::class))->values(),
             'membercard' => (new Enum(MemberCardStatusEnum::class))->values(),
         ];
 
