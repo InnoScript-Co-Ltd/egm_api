@@ -87,26 +87,30 @@ class MembershipOrderController extends Controller
 
             if ($discount['is_fix_amount'] === false) {
                 $payload['discount'] = ($payload['amount'] * $discount['discount_percentage'] / 100);
-            } else {
-                $payload['discount'] = $payload['discount_fix_amount'];
+            }
+
+            if ($discount['is_fix_amount'] === true) {
+                $payload['discount'] = $discount['discount_fix_amount'];
             }
 
             if ($discount['is_expend_limit'] === true && $payload['amount'] < $discount['expend_limit']) {
-                return $this->badRequest('min amount must be '.$discount['expend_limit'], null);
+                $payload['discount'] = 0;
             }
 
-            if ($discount['is_expend_limit'] === false && $discount['is_fix_amount'] === true && $payload['amount'] > $discount['discount_fix_amount']) {
-                return $this->badRequest('min amount must be greather than'.$discount['discount_fix_amount'], null);
+            if ($discount['is_expend_limit'] === false && $discount['is_fix_amount'] === true && $payload['amount'] < $discount['discount_fix_amount']) {
+                $payload['discount'] = 0;
             }
 
             $payload['pay_amount'] = $payload['amount'] - $payload['discount'];
+
+            if ($payload['is_wallet'] === true && $payload['pay_amount'] > $member['amount']) {
+                return $this->badRequest('insufficient wallet amount', null);
+            }
 
             if ($payload['is_wallet'] === true && $payload['pay_amount'] < $member['amount']) {
                 $member['amount'] = $member['amount'] - $payload['pay_amount'];
                 $updateMember = Member::findOrFail($member['id'])->update($member);
                 $payload['status'] = 'MEMBER_WALLET';
-            } else {
-                return $this->badRequest('insufficient wallet amount', null);
             }
 
             $order = MemberOrder::create($payload->toArray());
