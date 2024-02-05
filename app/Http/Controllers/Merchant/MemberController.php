@@ -13,7 +13,8 @@ class MemberController extends Controller
 
         try {
 
-            $members = Member::searchQuery()
+            $members = Member::with(['users', 'membercard'])
+                ->searchQuery()
                 ->sortingQuery()
                 ->filterQuery()
                 ->filterDateQuery()

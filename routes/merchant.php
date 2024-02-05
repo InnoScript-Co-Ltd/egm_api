@@ -20,4 +20,11 @@ Route::middleware(['merchant'])->group(function () {
         Route::get('/{id}', 'MemberController@show');
     });
 
+    Route::group(['prefix' => 'discount'], function () {
+        Route::get('/{id}', 'MemberDiscountController@show');
+    });
+
+    Route::group(['prefix' => 'order'], function () {
+        Route::get('/{id}', 'MembershipOrderController@checkout');
+    });
 });
