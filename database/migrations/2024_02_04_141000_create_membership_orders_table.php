@@ -26,7 +26,7 @@ return new class extends Migration
             $table->float('discount', 9, 2)->default(0);
             $table->float('pay_amount', 9, 2);
             $table->boolean('is_wallet')->default(false);
-            $table->string('status')->default(MembershipOrderStatusEnum::PENDING->value);
+            $table->string('status')->default(MembershipOrderStatusEnum::CASH->value);
             $table->auditColumns();
 
             $table->foreign('member_id')->references('id')->on('members')->onDelete('cascade');
