@@ -184,5 +184,10 @@ Route::middleware('jwt')->group(function () {
         Route::delete('/{id}', 'MemberCardController@destroy')->permission(PermissionEnum::MEMBER_CARD_DESTROY->value);
     });
 
+    Route::group(['prefix' => "member-order"], function () {
+        Route::get('/', 'MembershipOrderController@index')->permission(PermissionEnum::MEMBER_ORDER_INDEX->value);
+        Route::get('/{id}', 'MembershipOrderController@show')->permission(PermissionEnum::MEMBER_ORDER_SHOW->value);
+    });
+
     Route::post('/file/upload/image', 'FileController@store');
 });

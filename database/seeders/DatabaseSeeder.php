@@ -30,6 +30,7 @@ class DatabaseSeeder extends Seeder
             MemberCardSeeder::class,
             FaqSeeder::class,
             MemberSeeder::class,
+            MemberOrderSeeder::class,
         ]);
     }
 }
