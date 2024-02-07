@@ -4,6 +4,8 @@ namespace App\Models;
 
 use App\Traits\BasicAudit;
 use App\Traits\SnowflakeID;
+use App\Models\User;
+use App\Models\Member;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -22,4 +24,16 @@ class MemberOrder extends Model
     protected $casts = [
         'is_wallet' => 'boolean',
     ];
+
+    public $appends = ['user_name'];
+
+    protected function getUserNameAttribute()
+    {
+        $user = User::where(['id' => $this->attributes['user_id']])->first();
+        if ($user) {
+            return $user->name;
+        } else {
+            return null;
+        }
+    }
 }
