@@ -29,4 +29,8 @@ Route::middleware(['merchant'])->group(function () {
         Route::get('/', 'MembershipOrderController@index');
         Route::get('/{id}', 'MembershipOrderController@show');
     });
+
+    Route::group(['prefix' => 'count'], function () {
+        Route::get('/', 'DashboardController@count');
+    });
 });
