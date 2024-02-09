@@ -5,20 +5,20 @@ namespace App\Http\Controllers\Merchant;
 use App\Models\MemberOrder;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Carbon;
 
 class DashboardController extends Controller
 {
-    public function count () 
+    public function count ($date) 
     {
-        $today = Carbon::today();
 
-        $orderCount = MemberOrder::whereDate('created_at', $today);
+        $orderCount = MemberOrder::whereDate('created_at', $date);
         $orderTotalAmount = $orderCount->get()->sum('amount');
+        $orderTotalPayAmount = $orderCount->get()->sum('pay_amount');
         $orderTotalDiscount = $orderCount->get()->sum('discount');
 
         $count = [
             "order" => $orderCount->count(),
+            "pay_amount" => $orderTotalPayAmount,
             "amount" => $orderTotalAmount,
             "discount" => $orderTotalDiscount
         ];

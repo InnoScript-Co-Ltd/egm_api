@@ -31,6 +31,6 @@ Route::middleware(['merchant'])->group(function () {
     });
 
     Route::group(['prefix' => 'count'], function () {
-        Route::get('/', 'DashboardController@count');
+        Route::get('/{date}', 'DashboardController@count');
     });
 });
