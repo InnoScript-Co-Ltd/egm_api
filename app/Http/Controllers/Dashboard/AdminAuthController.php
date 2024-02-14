@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Dashboard;
 use App\Enums\AdminStatusEnum;
 use App\Http\Requests\AdminLoginRequest;
 use App\Models\Admin;
+use Exception;
 use Illuminate\Support\Facades\DB;
 
 class AdminAuthController extends Controller

@@ -39,5 +39,4 @@ class MembershipOrderController extends Controller
             throw $e;
         }
     }
-
 }

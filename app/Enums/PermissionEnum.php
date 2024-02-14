@@ -103,6 +103,7 @@ enum PermissionEnum: string
     case ROLE_INDEX = 'ROLE_INDEX';
     case ROLE_DESTROY = 'ROLE_DESTROY';
     case ROLE_PERMISSION_REMOVE = 'ROLE_PERMISSION_REMOVE';
+    case ROLE_ASSIGN = 'ROLE_ASSIGN';
 
     /** Member */
     case MEMBER_STORE = 'MEMBER_STORE';

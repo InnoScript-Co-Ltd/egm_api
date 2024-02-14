@@ -2,11 +2,10 @@
 
 namespace App\Http\Requests;
 
-use App\Models\Permission;
 use App\Models\Role;
 use Illuminate\Foundation\Http\FormRequest;
 
-class RoleUpdateRequest extends FormRequest
+class AssignRoleRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -23,18 +22,10 @@ class RoleUpdateRequest extends FormRequest
      */
     public function rules(): array
     {
-        $role = Role::findOrFail(request('id'));
-        $roleId = $role->id;
-
-        $permissions = Permission::all()->pluck('id');
+        $roles = implode(',', Role::all()->pluck('name')->toArray());
 
         return [
-            'name' => "string | unique:roles,name,$roleId",
-            'description' => 'string | nullable',
-            'permissions' => 'array | nullable',
-            'permissions*' => "required | numeric | in:$permissions",
-            'is_merchant' => 'nullable | boolean',
+            'role' => "required | in:$roles",
         ];
-
     }
 }

@@ -8,6 +8,7 @@ use App\Models\MemberCard;
 use App\Models\MemberDiscount;
 use App\Models\MemberOrder;
 use App\Models\User;
+use Exception;
 use Illuminate\Support\Facades\DB;
 
 class MembershipOrderController extends Controller

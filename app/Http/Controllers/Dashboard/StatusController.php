@@ -6,8 +6,8 @@ use App\Enums\AdminStatusEnum;
 use App\Enums\GeneralStatusEnum;
 use App\Enums\MemberCardStatusEnum;
 use App\Enums\MemberDiscountStatus;
-use App\Enums\MemberStatusEnum;
 use App\Enums\MembershipOrderStatusEnum;
+use App\Enums\MemberStatusEnum;
 use App\Enums\OrderStatusEnum;
 use App\Enums\PaymentTypeEnum;
 use App\Enums\PointLabelEnum;
@@ -36,7 +36,7 @@ class StatusController extends Controller
             'member' => (new Enum(MemberStatusEnum::class))->values(),
             'member_discount' => (new Enum(MemberDiscountStatus::class))->values(),
             'membercard' => (new Enum(MemberCardStatusEnum::class))->values(),
-            'memberOrder' => (new Enum(MembershipOrderStatusEnum::class))->values()
+            'memberOrder' => (new Enum(MembershipOrderStatusEnum::class))->values(),
         ];
 
         $statusTypes = collect($allowableStatus)->filter(function ($value, $index) use ($requestStatus) {

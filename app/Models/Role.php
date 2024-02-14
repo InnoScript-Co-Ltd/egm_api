@@ -10,7 +10,7 @@ class Role extends SpatieRole
     use HasFactory;
 
     protected $fillable = [
-        'name', 'description', 'permissions',
+        'name', 'description', 'permissions', 'is_merchant',
     ];
 
     protected $hidden = [
@@ -19,5 +19,6 @@ class Role extends SpatieRole
 
     protected $casts = [
         'permissions' => 'array',
+        'is_merchant' => 'boolean',
     ];
 }

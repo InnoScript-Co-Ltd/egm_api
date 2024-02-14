@@ -2,10 +2,13 @@
 
 namespace App\Http\Controllers\Dashboard;
 
+use App\Http\Requests\AssignRoleRequest;
 use App\Http\Requests\RemovePermissionRequest;
 use App\Http\Requests\RoleStoreRequest;
 use App\Http\Requests\RoleUpdateRequest;
+use App\Models\Admin;
 use App\Models\Role;
+use Exception;
 use Illuminate\Support\Facades\DB;
 use Spatie\Permission\Models\Permission;
 use Spatie\Permission\Models\Role as SpatieRole;
@@ -56,23 +59,25 @@ class RoleController extends Controller
         $roleUpdatePayload = [
             'name' => $payload['name'],
             'description' => $payload['description'],
+            'is_merchant' => $payload['is_merchant'],
         ];
 
         DB::beginTransaction();
 
         try {
-            $role = SpatieRole::findOrFail($id);
-            $currentPermissions = $role->permissions->pluck('name')->toArray();
+            $spatieRole = SpatieRole::with(['permissions'])->findOrFail($id);
+
+            $currentPermissions = $spatieRole->permissions->pluck('name')->toArray();
 
             if (isset($payload['permissions'])) {
-                $role->revokePermissionTo($currentPermissions);
-                $role->syncPermissions($payload['permissions']);
-                $role->update($roleUpdatePayload);
+                $spatieRole->revokePermissionTo($currentPermissions);
+                $spatieRole->syncPermissions($payload['permissions']);
+                $spatieRole->update($roleUpdatePayload);
             }
 
             DB::commit();
 
-            return $this->success('Role is updated successfully', $role);
+            return $this->success('Role is updated successfully', $spatieRole);
         } catch (Exception $e) {
             DB::rollback();
             throw $e;
@@ -88,6 +93,23 @@ class RoleController extends Controller
             DB::commit();
 
             return $this->success('role detail is successfully retrived', $role);
+        } catch (Exception $e) {
+            DB::rollback();
+            throw $e;
+        }
+    }
+
+    public function assignRole(AssignRoleRequest $request, $id)
+    {
+        $payload = collect($request->validated());
+        DB::beginTransaction();
+
+        try {
+            $admin = Admin::findOrFail($id);
+            $admin->assignRole($payload['role']);
+            DB::commit();
+
+            return $this->success('role detail is successfully retrived', $admin);
         } catch (Exception $e) {
             DB::rollback();
             throw $e;
