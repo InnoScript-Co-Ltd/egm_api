@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Merchant;
 
+use App\Http\Controllers\Dashboard\Controller;
 use App\Http\Requests\MerchantDeviceStoreRequest;
 use App\Models\Device;
 use Exception;

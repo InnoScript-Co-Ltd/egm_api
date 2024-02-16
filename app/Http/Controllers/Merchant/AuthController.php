@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Merchant;
 
+use App\Http\Controllers\Dashboard\Controller;
 use App\Http\Requests\MerchantLoginRequest;
 use App\Models\Admin;
 use App\Models\Role;
