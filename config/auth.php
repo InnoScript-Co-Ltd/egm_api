@@ -48,6 +48,10 @@ return [
             'driver' => 'jwt',
             'provider' => 'admins',
         ],
+        'merchant' => [
+            'driver' => 'jwt',
+            'provider' => 'admins',
+        ],
     ],
 
     /*
@@ -73,6 +77,10 @@ return [
             'model' => App\Models\User::class,
         ],
         'admins' => [
+            'driver' => 'eloquent',
+            'model' => App\Models\Admin::class,
+        ],
+        'merchant' => [
             'driver' => 'eloquent',
             'model' => App\Models\Admin::class,
         ],
@@ -110,6 +118,12 @@ return [
             'throttle' => 60,
         ],
         'dashboard' => [
+            'provider' => 'admins',
+            'table' => 'password_reset_tokens',
+            'expire' => 60,
+            'throttle' => 60,
+        ],
+        'merchant' => [
             'provider' => 'admins',
             'table' => 'password_reset_tokens',
             'expire' => 60,

@@ -65,7 +65,7 @@ Route::middleware('jwt')->group(function () {
         Route::post('/', 'RoleController@store')->permission(PermissionEnum::ROLE_STORE->value);
         Route::put('/{id}', 'RoleController@update')->permission(PermissionEnum::ROLE_UPDATE->value);
         Route::get('/{id}', 'RoleController@show')->permission(PermissionEnum::ROLE_SHOW->value);
-        Route::post('/{id}/remove-permission', 'RoleController@removePermission');
+        Route::post('/{id}/assign-role', 'RoleController@assignRole')->permission(PermissionEnum::ROLE_ASSIGN->value);
     });
 
     Route::group(['prefix' => 'user'], function () {
@@ -184,7 +184,7 @@ Route::middleware('jwt')->group(function () {
         Route::delete('/{id}', 'MemberCardController@destroy')->permission(PermissionEnum::MEMBER_CARD_DESTROY->value);
     });
 
-    Route::group(['prefix' => "member-order"], function () {
+    Route::group(['prefix' => 'member-order'], function () {
         Route::get('/', 'MembershipOrderController@index')->permission(PermissionEnum::MEMBER_ORDER_INDEX->value);
         Route::get('/{id}', 'MembershipOrderController@show')->permission(PermissionEnum::MEMBER_ORDER_SHOW->value);
     });

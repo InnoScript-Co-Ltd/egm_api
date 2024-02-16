@@ -2,12 +2,14 @@
 
 namespace App\Http\Controllers\Merchant;
 
+use App\Http\Controllers\Dashboard\Controller;
 use App\Http\Requests\MembershipOrderStoreReqeust;
 use App\Models\Member;
 use App\Models\MemberCard;
 use App\Models\MemberDiscount;
 use App\Models\MemberOrder;
 use App\Models\User;
+use Exception;
 use Illuminate\Support\Facades\DB;
 
 class MembershipOrderController extends Controller

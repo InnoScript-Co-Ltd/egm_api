@@ -2,13 +2,12 @@
 
 namespace App\Http\Controllers\Merchant;
 
+use App\Http\Controllers\Dashboard\Controller;
 use App\Models\MemberOrder;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
 
 class DashboardController extends Controller
 {
-    public function count ($date) 
+    public function count($date)
     {
 
         $orderCount = MemberOrder::whereDate('created_at', $date);
@@ -17,10 +16,10 @@ class DashboardController extends Controller
         $orderTotalDiscount = $orderCount->get()->sum('discount');
 
         $count = [
-            "order" => $orderCount->count(),
-            "pay_amount" => $orderTotalPayAmount,
-            "amount" => $orderTotalAmount,
-            "discount" => $orderTotalDiscount
+            'order' => $orderCount->count(),
+            'pay_amount' => $orderTotalPayAmount,
+            'amount' => $orderTotalAmount,
+            'discount' => $orderTotalDiscount,
         ];
 
         return $this->success('Order count is successfully retrived', $count);

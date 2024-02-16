@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers\Merchant;
 
+use App\Http\Controllers\Dashboard\Controller;
 use App\Models\MemberDiscount;
+use Exception;
 use Illuminate\Support\Facades\DB;
 
 class MemberDiscountController extends Controller

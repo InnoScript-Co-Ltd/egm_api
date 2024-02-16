@@ -15,6 +15,11 @@ use Illuminate\Support\Facades\Route;
 
 Route::middleware(['merchant'])->group(function () {
 
+    Route::group(['prefix' => 'auth'], function () {
+        Route::post('/login', 'AuthController@login');
+        Route::get('/roles', 'AuthController@activeRoles');
+    });
+
     Route::group(['prefix' => 'member'], function () {
         Route::get('/', 'MemberController@index');
         Route::get('/{id}', 'MemberController@show');
@@ -32,5 +37,9 @@ Route::middleware(['merchant'])->group(function () {
 
     Route::group(['prefix' => 'count'], function () {
         Route::get('/{date}', 'DashboardController@count');
+    });
+
+    Route::group(['prefix' => 'device'], function () {
+        Route::post('/', 'DeviceController@store');
     });
 });

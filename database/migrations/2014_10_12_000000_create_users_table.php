@@ -24,10 +24,12 @@ return new class extends Migration
             $table->json('cart_items')->nullable()->default(null);
             $table->timestamp('email_verified_at')->nullable()->default(null);
             $table->timestamp('phone_verified_at')->nullable()->default(null);
+            $table->boolean('is_facebook')->nullable()->default(null);
+            $table->boolean('is_google')->nullable()->default(null);
+            $table->longText('social_token')->nullable()->default(null);
             $table->string('status')->default(UserStatusEnum::PENDING->value);
             $table->rememberToken();
             $table->auditColumns();
-
         });
     }
 

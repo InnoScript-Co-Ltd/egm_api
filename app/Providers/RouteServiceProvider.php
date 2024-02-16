@@ -19,8 +19,6 @@ class RouteServiceProvider extends ServiceProvider
      */
     public const HOME = '/home';
 
-    protected $namespace = ['App\Http\Controllers\Dashboard', 'App\Http\Controllers\Web', 'App\Http\Controllers\Merchant'];
-
     /**
      * Define your route model bindings, pattern filters, and other route configuration.
      */
@@ -41,17 +39,17 @@ class RouteServiceProvider extends ServiceProvider
         $this->routes(function () {
             Route::middleware('dashboard')
                 ->prefix('dashboard')
-                ->namespace($this->namespace[0])
+                ->namespace('App\Http\Controllers\Dashboard')
                 ->group(base_path('routes/dashboard.php'));
 
             Route::middleware('api')
                 ->prefix('api')
-                ->namespace($this->namespace[1])
+                ->namespace('App\Http\Controllers\Client')
                 ->group(base_path('routes/api.php'));
 
             Route::middleware('merchant')
                 ->prefix('merchant')
-                ->namespace($this->namespace[2])
+                ->namespace('App\Http\Controllers\Merchant')
                 ->group(base_path('routes/merchant.php'));
 
             Route::middleware('web')

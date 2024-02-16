@@ -10,6 +10,8 @@ trait BasicAudit
 
         if (auth('dashboard')->id()) {
             $userId = auth('dashboard')->id();
+        } elseif (auth('merchant')->id()) {
+            $userId = auth('merchant')->id();
         } elseif (auth('api')->id()) {
             $userId = auth('api')->id();
         } else {

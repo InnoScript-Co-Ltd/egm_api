@@ -7,6 +7,7 @@ use App\Http\Requests\AdminStoreRequest;
 use App\Http\Requests\AdminUpdateRequest;
 use App\Models\Admin;
 use App\Models\File;
+use Exception;
 use Illuminate\Support\Facades\DB;
 use Spatie\Permission\Models\Role as SpatieRole;
 
