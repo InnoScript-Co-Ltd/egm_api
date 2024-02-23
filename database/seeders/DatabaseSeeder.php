@@ -19,7 +19,7 @@ class DatabaseSeeder extends Seeder
             // UserSeeder::class,
             // DeliveryAddressSeeder::class,
             // OrderSeeder::class,
-            // AdminSeeder::class,
+            AdminSeeder::class,
             // PromotionSeeder::class,
             // FaqSeeder::class,
             // RegionSeeder::class,
