@@ -28,7 +28,7 @@ class MembershipOrderStoreReqeust extends FormRequest
 
         return [
             'member_id' => "required | in:$members",
-            'order_number' => 'required | string',
+            'order_number' => 'required | string | unique:order_number',
             'amount' => 'required | numeric',
             'is_wallet' => 'required | boolean',
         ];
