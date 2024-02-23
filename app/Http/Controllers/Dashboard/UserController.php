@@ -2,14 +2,12 @@
 
 namespace App\Http\Controllers\Dashboard;
 
-use App\Enums\PointLabelEnum;
 use App\Exports\ExportUser;
-use App\Helpers\Snowflake;
 use App\Http\Requests\UserStoreRequest;
 use App\Http\Requests\UserUpdateRequest;
 use App\Models\File;
-use App\Models\Point;
 use App\Models\User;
+use Exception;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\DB;
 use Maatwebsite\Excel\Facades\Excel;
@@ -38,53 +36,14 @@ class UserController extends Controller
 
     public function store(UserStoreRequest $request)
     {
-
         $payload = collect($request->validated());
-
-        $files = $payload['profile'];
-
-        $image_path = $files->store('images', 'public');
-        $name = explode('/', $image_path)[1];
-        $snowflake = new SnowFlake;
-
-        $profile = [
-            'id' => $snowflake->id(),
-            'name' => $name,
-            'category' => 'ITEM',
-            'size' => $files->getSize(),
-            'type' => $files->getMimeType(),
-        ];
-
         DB::beginTransaction();
 
         try {
+            $user = User::create($payload->toArray());
+            DB::commit();
 
-            $uploadFile = File::create([
-                'name' => $profile['name'],
-                'category' => 'ITEM',
-                'size' => $profile['size'],
-                'type' => $profile['type'],
-            ]);
-
-            if ($uploadFile) {
-
-                $payload['profile'] = $uploadFile->toArray()['id'];
-
-                $point = collect(Point::where(['label' => PointLabelEnum::LOGIN_POINT->value])->first());
-                $payload['reward_point'] = $point ? $point['point'] : 0;
-
-                $user = User::create($payload->toArray());
-                DB::commit();
-
-                return $this->success('User is created successfully', $user);
-            } else {
-                DB::commit();
-
-                return $this->validationError('Item is created fialed', [
-                    'images' => ['can not upload image files'],
-                ]);
-            }
-
+            return $this->success('User is created successfully', $user);
         } catch (Exception $e) {
             DB::rollback();
             throw $e;
@@ -94,31 +53,24 @@ class UserController extends Controller
 
     public function show($id)
     {
-
         DB::beginTransaction();
         try {
-
             $user = User::with(['members'])->findOrFail($id);
 
             return $this->success('User detail is successfully retrived', $user);
-
         } catch (Exception $e) {
             DB::rollback();
             throw $e;
         }
-
     }
 
     public function update(UserUpdateRequest $request, $id)
     {
-
         $payload = collect($request->validated());
-
         DB::beginTransaction();
-
         try {
-            $user = User::findOrFail($id);
 
+            $user = User::findOrFail($id);
             if (isset($payload['profile'])) {
 
                 if ($user->profile) {

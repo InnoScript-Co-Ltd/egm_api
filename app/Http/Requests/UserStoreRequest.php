@@ -29,9 +29,10 @@ class UserStoreRequest extends FormRequest
             'name' => 'required | string | max: 24 | min: 8',
             'email' => 'required | email | unique:users,email',
             'phone' => ['required', 'unique:users,phone', "regex:$mobileRule"],
-            'profile' => 'file',
-            'password' => 'required | max: 24 | min: 6',
-            'confirm_password' => 'required_with:password|same:password|min:6',
+            'occupation' => 'nullable | string',
+            'position' => 'nullable | string',
+            'address' => 'nullable | string',
+            'dob' => 'nullable | date',
         ];
 
     }
@@ -43,10 +44,8 @@ class UserStoreRequest extends FormRequest
             'name.string' => 'Please enter your name using letters only in the name field.',
             'name.max' => 'Please keep your input within 24 letter.',
             'email.required' => 'Please provide your email address.',
-            'password.required' => 'Please provide your password.',
-            'password.max' => 'Please keep your input within 24 letter.',
-            'password.min' => 'Please password field at least 6 letter.',
             'phone.regex' => 'Please provide your phone number will start only 9xxxxxxx.',
+            'dpb.date' => 'invalid date format',
         ];
     }
 }

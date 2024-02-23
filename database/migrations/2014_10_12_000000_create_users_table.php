@@ -16,11 +16,13 @@ return new class extends Migration
             $table->snowflakeIdAndPrimary();
             $table->string('name');
             $table->snowflakeId('profile')->nullable()->default(null);
-            $table->integer('reward_point')->default(0);
-            $table->json('coupons')->nullable()->default(null);
             $table->string('phone')->unique()->nullable()->default(null);
             $table->string('email')->unique()->nullable()->default(null);
-            $table->string('password');
+            $table->date('dob')->nullable()->default(null);
+            $table->string('occupation')->nullable()->default(null);
+            $table->string('position')->nullable()->default(null);
+            $table->string('address')->nullable()->default(null);
+            $table->string('password')->nullable()->default(null);
             $table->json('cart_items')->nullable()->default(null);
             $table->timestamp('email_verified_at')->nullable()->default(null);
             $table->timestamp('phone_verified_at')->nullable()->default(null);

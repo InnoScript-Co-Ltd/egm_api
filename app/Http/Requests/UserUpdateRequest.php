@@ -32,11 +32,13 @@ class UserUpdateRequest extends FormRequest
 
         return [
             'name' => 'string | max: 24 | min: 8',
-            'profile' => 'nullable',
-            'email' => 'nullable | email',
-            'phone' => ['nullable', "regex:$mobileRule"],
-            'password' => 'nullable | max: 24 | min: 6',
-            'confirm_password' => 'required_with:password|same:password|min:6',
+            'profile' => 'nullable | file:image',
+            'email' => "nullable | email | unique:users,email,$userId",
+            'phone' => ['nullable', "regex:$mobileRule", "unique:users,phone,$userId"],
+            'occupation' => 'nullable | string',
+            'position' => 'nullable | string',
+            'address' => 'nullable | string',
+            'dob' => 'nullable | date',
             'status' => "nullable | in:$userStatusEnum",
         ];
     }
@@ -46,9 +48,8 @@ class UserUpdateRequest extends FormRequest
         return [
             'name.string' => 'Please enter your name using letters only in the name field.',
             'name.max' => 'Please keep your input within 24 letter.',
-            'password.max' => 'Please keep your input within 24 letter.',
-            'password.min' => 'Please password field at least 6 letter.',
             'phone.regex' => 'Please provide your phone number will start only 9xxxxxxx.',
+            'dob.date' => 'Invalid date format',
         ];
     }
 }
