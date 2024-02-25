@@ -32,7 +32,7 @@ class UserUpdateRequest extends FormRequest
 
         return [
             'name' => 'string | max: 24 | min: 8',
-            'profile' => 'nullable | file:image',
+            'profile' => 'nullable | image:mimes:jpeg,png,jpg,gif|max:2048',
             'email' => "nullable | email | unique:users,email,$userId",
             'phone' => ['nullable', "regex:$mobileRule", "unique:users,phone,$userId"],
             'occupation' => 'nullable | string',

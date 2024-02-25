@@ -26,7 +26,7 @@ class User extends Authenticatable implements JWTSubject
      * @var array<int, string>
      */
     protected $fillable = [
-        'name', 'profile', 'reward_point', 'coupons', 'email', 'phone', 'password', 'status', 'email_verified_at', 'phone_verified_at',
+        'name', 'email', 'phone', 'password', 'status', 'email_verified_at', 'phone_verified_at',
     ];
 
     protected $appends = ['created_by', 'updated_by'];
@@ -51,6 +51,16 @@ class User extends Authenticatable implements JWTSubject
         'phone_verified_at' => 'datetime',
         'password' => 'hashed',
     ];
+
+    public function images()
+    {
+        return $this->morphMany(Image::class, 'imageable');
+    }
+
+    public function image()
+    {
+        return $this->morphOne(Image::class, 'imageable');
+    }
 
     public function deliveryAddress()
     {
