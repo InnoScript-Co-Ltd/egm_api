@@ -26,7 +26,8 @@ class User extends Authenticatable implements JWTSubject
      * @var array<int, string>
      */
     protected $fillable = [
-        'name', 'email', 'phone', 'password', 'status', 'email_verified_at', 'phone_verified_at',
+        'name', 'email', 'phone', 'gender', 'dob', 'occupation', 'position', 'address',
+        'password', 'status', 'email_verified_at', 'phone_verified_at',
     ];
 
     protected $appends = ['created_by', 'updated_by'];
@@ -50,6 +51,7 @@ class User extends Authenticatable implements JWTSubject
         'email_verified_at' => 'datetime',
         'phone_verified_at' => 'datetime',
         'password' => 'hashed',
+        'dob' => 'date',
     ];
 
     public function images()

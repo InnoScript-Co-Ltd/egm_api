@@ -35,6 +35,7 @@ class UserUpdateRequest extends FormRequest
             'profile' => 'nullable | image:mimes:jpeg,png,jpg,gif|max:2048',
             'email' => "nullable | email | unique:users,email,$userId",
             'phone' => ['nullable', "regex:$mobileRule", "unique:users,phone,$userId"],
+            'gender' => 'nullable | string',
             'occupation' => 'nullable | string',
             'position' => 'nullable | string',
             'address' => 'nullable | string',
