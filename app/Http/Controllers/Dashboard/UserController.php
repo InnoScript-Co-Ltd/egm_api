@@ -43,7 +43,7 @@ class UserController extends Controller
 
     public function show($id)
     {
-        $user = User::with(['members'])->findOrFail($id);
+        $user = User::with(['members', 'image'])->findOrFail($id);
 
         return $this->success('User detail is successfully retrived', $user);
     }

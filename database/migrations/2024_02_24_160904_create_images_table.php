@@ -17,6 +17,7 @@ return new class extends Migration
             $table->morphs('imageable');
             $table->string('status')->default('ACTIVE');
             $table->timestamps();
+            $table->timestamp('deleted_at')->nullable();
         });
     }
 

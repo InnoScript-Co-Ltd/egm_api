@@ -54,10 +54,10 @@ class User extends Authenticatable implements JWTSubject
         'dob' => 'date',
     ];
 
-    public function images()
-    {
-        return $this->morphMany(Image::class, 'imageable');
-    }
+    // public function images()
+    // {
+    //     return $this->morphMany(Image::class, 'imageable');
+    // }
 
     public function image()
     {
