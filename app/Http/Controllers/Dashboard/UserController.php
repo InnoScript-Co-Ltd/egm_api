@@ -5,7 +5,6 @@ namespace App\Http\Controllers\Dashboard;
 use App\Exports\ExportUser;
 use App\Http\Requests\UserStoreRequest;
 use App\Http\Requests\UserUpdateRequest;
-use App\Models\Image;
 use App\Models\User;
 use Exception;
 use Illuminate\Support\Facades\DB;
@@ -54,14 +53,15 @@ class UserController extends Controller
         DB::beginTransaction();
 
         try {
-
             $user = User::findOrFail($id);
 
             if (isset($payload['profile'])) {
-                $profile = new Image;
                 $imagePath = $payload['profile']->store('images', 'public');
-                $profile->image = explode('/', $imagePath)[1];
-                $user->image()->save($profile);
+                $profileImage = explode('/', $imagePath)[1];
+                $user->image()->updateOrCreate(['imageable_id' => $user->id], [
+                    'image' => $profileImage,
+                    'imageable_id' => $user->id,
+                ]);
             }
 
             $user->update($payload->toArray());
