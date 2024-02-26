@@ -14,7 +14,7 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/media/{id}', 'FileController@show');
+Route::get('/image/{name}', 'ImageController@show');
 
 Route::group(['prefix' => 'auth'], function () {
     Route::post('/login', 'AdminAuthController@login');
