@@ -23,13 +23,13 @@ class MemberDiscountStoreRequest extends FormRequest
     {
         return [
             'label' => 'required | string | unique:member_discounts,label',
-            'discount_percentage' => 'nullable | string',
+            'start_date' => 'required | date',
+            'end_date' => 'required | date',
+            'discount_percentage' => 'nullable | numeric',
             'discount_fix_amount' => 'nullable | numeric',
             'expend_limit' => 'nullable | numeric',
             'is_expend_limit' => 'nullable | boolean',
             'is_fix_amount' => 'nullable | boolean',
-            'start_date' => 'nullable | date_format:Y-m-d',
-            'end_date' => 'nullable | date_format:Y-m-d',
         ];
     }
 }

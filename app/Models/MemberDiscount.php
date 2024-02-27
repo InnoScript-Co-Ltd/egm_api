@@ -22,7 +22,7 @@ class MemberDiscount extends Model
     protected $casts = [
         'is_expend_limit' => 'boolean',
         'is_fix_amount' => 'boolean',
-        'start_date' => 'datetime',
-        'end_date' => 'datetime',
+        'start_date' => 'date',
+        'end_date' => 'date',
     ];
 }

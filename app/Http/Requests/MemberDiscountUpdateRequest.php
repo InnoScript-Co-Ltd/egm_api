@@ -31,13 +31,13 @@ class MemberDiscountUpdateRequest extends FormRequest
 
         return [
             'label' => "required | string | unique:member_discounts,label,$memberDiscountId",
-            'discount_percentage' => 'nullable | string',
+            'discount_percentage' => 'nullable | numeric',
             'discount_fix_amount' => 'nullable | numeric',
             'expend_limit' => 'nullable | numeric',
             'is_expend_limit' => 'nullable | boolean',
             'is_fix_amount' => 'nullable | boolean',
-            'start_date' => 'nullable | date_format:Y-m-d',
-            'end_date' => 'nullable | date_format:Y-m-d',
+            'start_date' => 'nullable | date',
+            'end_date' => 'nullable | date',
             'status' => "nullable | string | in:$memberDiscountStatusEnum",
         ];
     }
