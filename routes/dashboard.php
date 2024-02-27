@@ -180,7 +180,7 @@ Route::middleware('jwt')->group(function () {
         Route::get('/', 'MemberCardController@index')->permission(PermissionEnum::MEMBER_CARD_INDEX->value);
         Route::post('/', 'MemberCardController@store')->permission(PermissionEnum::MEMBER_CARD_STORE->value);
         Route::get('/{id}', 'MemberCardController@show')->permission(PermissionEnum::MEMBER_CARD_SHOW->value);
-        Route::put('/{id}', 'MemberCardController@update')->permission(PermissionEnum::MEMBER_CARD_UPDATE->value);
+        Route::post('/{id}', 'MemberCardController@update')->permission(PermissionEnum::MEMBER_CARD_UPDATE->value);
         Route::delete('/{id}', 'MemberCardController@destroy')->permission(PermissionEnum::MEMBER_CARD_DESTROY->value);
     });
 
