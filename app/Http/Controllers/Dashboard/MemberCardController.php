@@ -98,17 +98,18 @@ class MemberCardController extends Controller
     public function update(MemberCardUpdateRequest $request, $id)
     {
         $payload = collect($request->validated());
+
         DB::beginTransaction();
         try {
 
             $memberCard = MemberCard::findOrFail($id);
 
-            if (isset($payload['front_background'])) {
-                $payload['front_background'] = uploadFile($payload['front_background'], 'MEMBER_CARD_FRONT_BACKGROUND');
+            if ($request->hasFile('front_background') && $request->file('front_background')->isValid()) {
+                $payload['front_background'] = $this->uploadFile($request->file('front_background'), 'MEMBER_CARD_FRONT_BACKGROUND');
             }
-
-            if (isset($payload['back_background'])) {
-                $payload['back_background'] = uploadFile($payload['back_background'], 'MEMBER_CARD_BACK_BACKGROUND');
+    
+            if ($request->hasFile('back_background') && $request->file('back_background')->isValid()) {
+                $payload['back_background'] = $this->uploadFile($request->file('back_background'), 'MEMBER_CARD_BACK_BACKGROUND');
             }
 
             $memberCard->update($payload->toArray());

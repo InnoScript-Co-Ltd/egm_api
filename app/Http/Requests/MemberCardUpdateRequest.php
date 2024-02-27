@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests;
 
+use App\Helpers\Enum;
 use App\Enums\MemberCardStatusEnum;
 use App\Models\MemberCard;
 use App\Models\MemberDiscount;
@@ -26,15 +27,14 @@ class MemberCardUpdateRequest extends FormRequest
     {
         $memberDiscounts = implode(',', MemberDiscount::all()->pluck('id')->toArray());
         $memberCard = MemberCard::find(request('id'));
-        $memberCardId = $membercard->id;
-
+        $memberCardId = $memberCard->id;
         $memberCardStatusEnum = implode(',', (new Enum(MemberCardStatusEnum::class))->values());
 
         return [
-            'label' => "required | string | unique:membercards,label,$memberCardId",
+            'label' => "nullable | string",
             'discount_id' => "nullable | in:$memberDiscounts",
-            'front_background' => 'nullable | string',
-            'back_background' => 'nullable | string',
+            'front_background' => 'nullable',
+            'back_background' => 'nullable',
             'expired_at' => 'nullable | date_format:Y-m-d',
             'status' => "nullable | string | in:$memberCardStatusEnum",
         ];
