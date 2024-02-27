@@ -107,7 +107,7 @@ class MemberCardController extends Controller
             if ($request->hasFile('front_background') && $request->file('front_background')->isValid()) {
                 $payload['front_background'] = $this->uploadFile($request->file('front_background'), 'MEMBER_CARD_FRONT_BACKGROUND');
             }
-    
+
             if ($request->hasFile('back_background') && $request->file('back_background')->isValid()) {
                 $payload['back_background'] = $this->uploadFile($request->file('back_background'), 'MEMBER_CARD_BACK_BACKGROUND');
             }

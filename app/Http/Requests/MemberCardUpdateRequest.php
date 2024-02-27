@@ -2,8 +2,8 @@
 
 namespace App\Http\Requests;
 
-use App\Helpers\Enum;
 use App\Enums\MemberCardStatusEnum;
+use App\Helpers\Enum;
 use App\Models\MemberCard;
 use App\Models\MemberDiscount;
 use Illuminate\Foundation\Http\FormRequest;
@@ -31,7 +31,7 @@ class MemberCardUpdateRequest extends FormRequest
         $memberCardStatusEnum = implode(',', (new Enum(MemberCardStatusEnum::class))->values());
 
         return [
-            'label' => "nullable | string",
+            'label' => 'nullable | string',
             'discount_id' => "nullable | in:$memberDiscounts",
             'front_background' => 'nullable',
             'back_background' => 'nullable',

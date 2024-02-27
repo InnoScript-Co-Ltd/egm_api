@@ -66,6 +66,7 @@ Route::middleware('jwt')->group(function () {
         Route::put('/{id}', 'RoleController@update')->permission(PermissionEnum::ROLE_UPDATE->value);
         Route::get('/{id}', 'RoleController@show')->permission(PermissionEnum::ROLE_SHOW->value);
         Route::post('/{id}/assign-role', 'RoleController@assignRole')->permission(PermissionEnum::ROLE_ASSIGN->value);
+        Route::put('/{id}/remove-permission', 'RoleController@removePermission')->permission(PermissionEnum::ROLE_PERMISSION_REMOVE->value);
     });
 
     Route::group(['prefix' => 'user'], function () {
