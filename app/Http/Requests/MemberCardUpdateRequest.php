@@ -31,11 +31,9 @@ class MemberCardUpdateRequest extends FormRequest
         $memberCardStatusEnum = implode(',', (new Enum(MemberCardStatusEnum::class))->values());
 
         return [
-            'label' => 'nullable | string',
+            'label' => "nullable | string | unique:membercards,label,$memberCardId",
             'discount_id' => "nullable | in:$memberDiscounts",
-            'front_background' => 'nullable',
-            'back_background' => 'nullable',
-            'expired_at' => 'nullable | date_format:Y-m-d',
+            'expired_at' => 'nullable | date',
             'status' => "nullable | string | in:$memberCardStatusEnum",
         ];
     }

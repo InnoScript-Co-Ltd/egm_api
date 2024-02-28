@@ -26,10 +26,8 @@ class MemberCardStoreRequest extends FormRequest
 
         return [
             'label' => 'required | string | unique:membercards,label',
-            'discount_id' => "nullable | in:$memberDiscounts",
-            'front_background' => 'nullable | file',
-            'back_background' => 'nullable | file',
-            'expired_at' => 'nullable | date_format:Y-m-d',
+            'discount_id' => "required | in:$memberDiscounts",
+            'expired_at' => 'required | date',
         ];
     }
 }
