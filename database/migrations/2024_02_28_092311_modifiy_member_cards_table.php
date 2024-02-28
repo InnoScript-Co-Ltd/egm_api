@@ -13,8 +13,8 @@ return new class extends Migration
     {
         Schema::table('membercards', function (Blueprint $table) {
             $table->date('expired_at')->nullable()->change();
-            $table->date('front_background')->remove();
-            $table->date('back_background')->remove();
+            $table->dropColumn('front_background');
+            $table->dropColumn('back_background');
         });
     }
 
@@ -25,8 +25,8 @@ return new class extends Migration
     {
         Schema::table('membercards', function (Blueprint $table) {
             $table->date('expired_at')->nullable()->change();
-            $table->date('front_background')->remove();
-            $table->date('back_background')->remove();
+            $table->string('front_background')->nullable()->default(null);
+            $table->string('back_background')->nullable()->default(null);
         });
     }
 };
