@@ -13,7 +13,7 @@ class MemberCard extends Model
     use BasicAudit,HasFactory,SnowflakeID,SoftDeletes;
 
     protected $fillable = [
-        'label', 'discount_id', 'front_background', 'back_background', 'expired_at', 'status',
+        'label', 'discount_id', 'description', 'expired_at', 'status',
     ];
 
     protected $table = 'membercards';
@@ -21,7 +21,7 @@ class MemberCard extends Model
     public $appends = ['discount_name'];
 
     protected $casts = [
-        'expired_at' => 'datetime',
+        'expired_at' => 'date',
     ];
 
     protected function getDiscountNameAttribute()

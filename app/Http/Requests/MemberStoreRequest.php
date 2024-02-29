@@ -27,10 +27,11 @@ class MemberStoreRequest extends FormRequest
         $memberCardIds = implode(',', MemberCard::all()->pluck('id')->toArray());
 
         return [
-            'user_id' => "nullable | in:$userIds",
-            'membercard_id' => "nullable | in:$memberCardIds",
+            'user_id' => "required | in:$userIds",
+            'membercard_id' => "required | in:$memberCardIds",
+            'member_id' => 'required | unique:members,member_id',
             'amount' => 'nullable | numeric',
-            'expired_at' => 'nullable | date_format:Y-m-d',
+            'expired_at' => 'nullable | date',
         ];
     }
 }

@@ -38,6 +38,7 @@ class MemberDiscountUpdateRequest extends FormRequest
             'is_fix_amount' => 'nullable | boolean',
             'start_date' => 'nullable | date',
             'end_date' => 'nullable | date',
+            'description' => 'nullable | string',
             'status' => "nullable | string | in:$memberDiscountStatusEnum",
         ];
     }

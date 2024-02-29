@@ -48,6 +48,7 @@ Route::middleware('jwt')->group(function () {
     });
 
     Route::group(['prefix' => 'member'], function () {
+        Route::get('/next', 'MemberController@nextMemberId')->permission(PermissionEnum::MEMBER_ID_NEXT->value);
         Route::get('/', 'MemberController@index')->permission(PermissionEnum::MEMBER_INDEX->value);
         Route::post('/', 'MemberController@store')->permission(PermissionEnum::MEMBER_STORE->value);
         Route::get('/{id}', 'MemberController@show')->permission(PermissionEnum::MEMBER_SHOW->value);

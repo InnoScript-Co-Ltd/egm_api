@@ -20,8 +20,9 @@ return new class extends Migration
             $table->float('expend_limit', 9, 2)->nullable()->default(null);
             $table->boolean('is_expend_limit')->nullable()->default(false);
             $table->boolean('is_fix_amount')->nullable()->default(false);
-            $table->datetime('start_date')->nullable()->default(null);
-            $table->datetime('end_date')->nullable()->default(null);
+            $table->date('start_date');
+            $table->date('end_date');
+            $table->longText('description')->nullable()->default(null);
             $table->string('status')->default(MemberDiscountStatus::PENDING->value);
             $table->auditColumns();
         });

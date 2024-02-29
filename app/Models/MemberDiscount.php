@@ -16,7 +16,7 @@ class MemberDiscount extends Model
 
     protected $fillable = [
         'label', 'discount_percentage', 'discount_fix_amount', 'expend_limit', 'is_expend_limit', 'is_fix_amount', 'start_date',
-        'end_date', 'status',
+        'end_date', 'description', 'status',
     ];
 
     protected $casts = [

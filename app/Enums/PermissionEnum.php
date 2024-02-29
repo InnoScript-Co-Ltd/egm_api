@@ -108,6 +108,7 @@ enum PermissionEnum: string
     /** Member */
     case MEMBER_STORE = 'MEMBER_STORE';
     case MEMBER_SHOW = 'MEMBER_SHOW';
+    case MEMBER_ID_NEXT = 'MEMBER_ID_NEXT';
     case MEMBER_INDEX = 'MEMBER_INDEX';
     case MEMBER_DESTROY = 'MEMBER_DESTROY';
     case MEMBER_UPDATE = 'MEMBER_UPDATE';

@@ -33,9 +33,10 @@ class MemberUpdateRequest extends FormRequest
 
         return [
             'user_id' => "nullable | in:$userIds",
-            'member_id' => "nullable | in:$memberIds, unique:members,member_id,$memberId",
+            'member_id' => "nullable | in:$memberIds,unique:members,member_id,$memberId",
             'amount' => 'nullable | numeric',
-            'expired_at' => 'nullable | date_format:Y-m-d',
+            'expired_at' => 'nullable | date',
+            'description' => 'nullable | string',
             'status' => "nullable | string | in:$memberStatusEnum",
         ];
     }

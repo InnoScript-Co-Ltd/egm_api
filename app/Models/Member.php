@@ -15,11 +15,11 @@ class Member extends Model
     protected $table = 'members';
 
     protected $fillable = [
-        'user_id', 'member_id', 'membercard_id', 'amount', 'expired_at', 'status',
+        'user_id', 'member_id', 'membercard_id', 'amount', 'expired_at', 'description', 'status',
     ];
 
     protected $casts = [
-        'expired_at' => 'datetime',
+        'expired_at' => 'date',
     ];
 
     public $appends = ['user_name', 'membercard_name'];
