@@ -34,6 +34,7 @@ class MemberCardUpdateRequest extends FormRequest
             'label' => "nullable | string | unique:membercards,label,$memberCardId",
             'discount_id' => "nullable | in:$memberDiscounts",
             'expired_at' => 'nullable | date',
+            'description' => 'nullable | string',
             'status' => "nullable | string | in:$memberCardStatusEnum",
         ];
     }

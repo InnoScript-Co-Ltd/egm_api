@@ -16,9 +16,8 @@ return new class extends Migration
             $table->snowflakeIdAndPrimary();
             $table->string('label')->unique();
             $table->snowflakeId('discount_id')->nullable()->default(null);
-            $table->string('front_background')->nullable()->default(null);
-            $table->string('back_background')->nullable()->default(null);
-            $table->datetime('expired_at')->nullable()->default(null);
+            $table->date('expired_at');
+            $table->longText('description')->nullable()->default(null);
             $table->string('status')->default(GeneralStatusEnum::PENDING->value);
             $table->auditColumns();
         });

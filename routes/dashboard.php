@@ -48,6 +48,7 @@ Route::middleware('jwt')->group(function () {
     });
 
     Route::group(['prefix' => 'member'], function () {
+        Route::get('/next', 'MemberController@nextMemberId')->permission(PermissionEnum::MEMBER_ID_NEXT->value);
         Route::get('/', 'MemberController@index')->permission(PermissionEnum::MEMBER_INDEX->value);
         Route::post('/', 'MemberController@store')->permission(PermissionEnum::MEMBER_STORE->value);
         Route::get('/{id}', 'MemberController@show')->permission(PermissionEnum::MEMBER_SHOW->value);
@@ -181,7 +182,7 @@ Route::middleware('jwt')->group(function () {
         Route::get('/', 'MemberCardController@index')->permission(PermissionEnum::MEMBER_CARD_INDEX->value);
         Route::post('/', 'MemberCardController@store')->permission(PermissionEnum::MEMBER_CARD_STORE->value);
         Route::get('/{id}', 'MemberCardController@show')->permission(PermissionEnum::MEMBER_CARD_SHOW->value);
-        Route::post('/{id}', 'MemberCardController@update')->permission(PermissionEnum::MEMBER_CARD_UPDATE->value);
+        Route::put('/{id}', 'MemberCardController@update')->permission(PermissionEnum::MEMBER_CARD_UPDATE->value);
         Route::delete('/{id}', 'MemberCardController@destroy')->permission(PermissionEnum::MEMBER_CARD_DESTROY->value);
     });
 

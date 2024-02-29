@@ -14,11 +14,12 @@ return new class extends Migration
     {
         Schema::create('members', function (Blueprint $table) {
             $table->snowflakeIdAndPrimary();
-            $table->snowflakeId('user_id')->nullable();
-            $table->snowflakeId('membercard_id')->nullable()->default(null);
+            $table->snowflakeId('user_id');
+            $table->snowflakeId('membercard_id');
             $table->string('member_id')->unique();
             $table->float('amount', 9, 2)->default(0);
-            $table->datetime('expired_at')->nullable();
+            $table->date('expired_at');
+            $table->longText('description')->nullable()->default(null);
             $table->string('status')->default(MemberStatusEnum::PENDING->value);
             $table->auditColumns();
 
