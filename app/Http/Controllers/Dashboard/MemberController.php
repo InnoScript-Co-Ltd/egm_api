@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Dashboard;
 use App\Http\Requests\MemberStoreRequest;
 use App\Http\Requests\MemberUpdateRequest;
 use App\Models\Member;
+use App\Models\MemberDiscount;
 use Exception;
 use Illuminate\Support\Facades\DB;
 
@@ -15,12 +16,11 @@ class MemberController extends Controller
         DB::beginTransaction();
 
         try {
-            $getMemberId = Member::pluck('member_id')->toArray();
-
+            $getMemberId = Member::orderBy('member_id', 'ASC')->pluck('member_id')->toArray();
             $nextMember = '000001';
 
             if (count($getMemberId) > 0) {
-                $lastMember = $getMemberId[count($getMemberId)];
+                $lastMember = $getMemberId[count($getMemberId) - 1];
                 $nextMember = (int) $lastMember + 1;
                 $insertZero = '';
 
@@ -84,7 +84,14 @@ class MemberController extends Controller
         DB::beginTransaction();
         try {
 
-            $member = Member::findOrFail($id);
+            $member = Member::with(['user', 'membercards'])->findOrFail($id);
+
+            $member['membercards'] = $member['membercards']->map(function ($membercard) {
+                $membercard['discounts'] = MemberDiscount::where(['id' => $membercard['discount_id']])->get();
+
+                return $membercard;
+            });
+
             DB::commit();
 
             return $this->success('member detail is successfully retrived', $member);

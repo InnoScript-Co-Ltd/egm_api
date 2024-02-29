@@ -22,35 +22,35 @@ class Member extends Model
         'expired_at' => 'date',
     ];
 
-    public $appends = ['user_name', 'membercard_name'];
+    // public $appends = ['user_name', 'membercard_name'];
 
-    protected function getUserNameAttribute()
-    {
-        $user = User::where(['id' => $this->attributes['user_id']])->first();
-        if ($user) {
-            return $user->name;
-        } else {
-            return null;
-        }
-    }
+    // protected function getUserNameAttribute()
+    // {
+    //     $user = User::where(['id' => $this->attributes['user_id']])->first();
+    //     if ($user) {
+    //         return $user->name;
+    //     } else {
+    //         return null;
+    //     }
+    // }
 
-    protected function getMembercardNameAttribute()
-    {
-        $memberCard = MemberCard::where(['id' => $this->attributes['membercard_id']])->first();
-        if ($memberCard) {
-            return $memberCard->label;
-        } else {
-            return null;
-        }
-    }
+    // protected function getMembercardNameAttribute()
+    // {
+    //     $memberCard = MemberCard::where(['id' => $this->attributes['membercard_id']])->first();
+    //     if ($memberCard) {
+    //         return $memberCard->label;
+    //     } else {
+    //         return null;
+    //     }
+    // }
 
-    public function users()
+    public function user()
     {
         return $this->hasOne(User::class, 'id', 'user_id');
     }
 
-    public function membercard()
+    public function membercards()
     {
-        return $this->hasOne(MemberCard::class, 'id', 'membercard_id');
+        return $this->hasMany(MemberCard::class, 'id', 'membercard_id');
     }
 }

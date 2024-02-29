@@ -54,7 +54,7 @@ class MemberCardController extends Controller
         DB::beginTransaction();
         try {
 
-            $memberCard = MemberCard::findOrFail($id);
+            $memberCard = MemberCard::with(['discounts'])->findOrFail($id);
             DB::commit();
 
             return $this->success('member card detail is successfully retrived', $memberCard);
@@ -72,7 +72,7 @@ class MemberCardController extends Controller
         DB::beginTransaction();
         try {
 
-            $memberCard = MemberCard::findOrFail($id);
+            $memberCard = MemberCard::flushEventListenersfindOrFail($id);
             $memberCard->update($payload->toArray());
             DB::commit();
 
