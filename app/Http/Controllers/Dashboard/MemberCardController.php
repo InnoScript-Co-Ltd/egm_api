@@ -72,7 +72,7 @@ class MemberCardController extends Controller
         DB::beginTransaction();
         try {
 
-            $memberCard = MemberCard::flushEventListenersfindOrFail($id);
+            $memberCard = MemberCard::findOrFail($id);
             $memberCard->update($payload->toArray());
             DB::commit();
 
