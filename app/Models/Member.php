@@ -22,27 +22,27 @@ class Member extends Model
         'expired_at' => 'date',
     ];
 
-    // public $appends = ['user_name', 'membercard_name'];
+    public $appends = ['user_name', 'membercard_name'];
 
-    // protected function getUserNameAttribute()
-    // {
-    //     $user = User::where(['id' => $this->attributes['user_id']])->first();
-    //     if ($user) {
-    //         return $user->name;
-    //     } else {
-    //         return null;
-    //     }
-    // }
+    protected function getUserNameAttribute()
+    {
+        $user = User::where(['id' => $this->attributes['user_id']])->first();
+        if ($user) {
+            return $user->name;
+        } else {
+            return null;
+        }
+    }
 
-    // protected function getMembercardNameAttribute()
-    // {
-    //     $memberCard = MemberCard::where(['id' => $this->attributes['membercard_id']])->first();
-    //     if ($memberCard) {
-    //         return $memberCard->label;
-    //     } else {
-    //         return null;
-    //     }
-    // }
+    protected function getMembercardNameAttribute()
+    {
+        $memberCard = MemberCard::where(['id' => $this->attributes['membercard_id']])->first();
+        if ($memberCard) {
+            return $memberCard->label;
+        } else {
+            return null;
+        }
+    }
 
     public function user()
     {
