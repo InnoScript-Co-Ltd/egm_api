@@ -15,7 +15,7 @@ class MemberOrder extends Model
     protected $table = 'membership_orders';
 
     protected $fillable = [
-        'member_id', 'user_id', 'order_number', 'card_type', 'card_number', 'name', 'phone',
+        'member_id', 'user_id', 'membercard_id', 'order_number', 'card_label', 'card_number', 'name', 'phone',
         'email', 'status', 'amount', 'discount', 'pay_amount', 'is_wallet',
     ];
 

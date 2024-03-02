@@ -50,7 +50,6 @@ class MembershipOrderController extends Controller
     public function checkout(MembershipOrderStoreReqeust $request)
     {
         $payload = collect($request->validated());
-        $payload['status'] = 'CASH';
 
         DB::beginTransaction();
 
@@ -58,23 +57,23 @@ class MembershipOrderController extends Controller
             $member = Member::findOrFail($payload['member_id'])->first()->toArray();
 
             if ($member['membercard_id'] === null || $member['user_id'] === null) {
-                return $this->badRequest('Membership card is not registered', null);
+                return $this->badRequest('Membership card is not registered');
             }
 
             if ($member['status'] !== 'ACTIVE') {
-                return $this->badRequest('Membership status is '.$member['status'], null);
+                return $this->badRequest('Membership status is '.$member['status']);
             }
 
             $user = User::findOrFail($member['user_id'])->first()->toArray();
 
             if ($user['status'] !== 'ACTIVE') {
-                return $this->badRequest('Membership user is '.$user['status'], null);
+                return $this->badRequest('Membership user is '.$user['status']);
             }
 
             $memberCard = MemberCard::findOrFail($member['membercard_id'])->first()->toArray();
 
             if ($memberCard['status'] !== 'ACTIVE') {
-                return $this->badRequest('Membercard is '.$memberCard['status'], null);
+                return $this->badRequest('Membercard is '.$memberCard['status']);
             }
 
             $discount = MemberDiscount::findOrFail($memberCard['discount_id'])->first()->toArray();
@@ -84,8 +83,9 @@ class MembershipOrderController extends Controller
             $payload['phone'] = $user['phone'] ? $user['phone'] : null;
             $payload['email'] = $user['email'] ? $user['email'] : null;
             $payload['name'] = $user['name'];
-            $payload['card_type'] = $memberCard['label'];
+            $payload['card_label'] = $memberCard['label'];
             $payload['card_number'] = $member['member_id'];
+            $payload['membercard_id'] = $member['membercard_id'];
 
             if ($discount['is_fix_amount'] === false) {
                 $payload['discount'] = ($payload['amount'] * $discount['discount_percentage'] / 100);
@@ -99,19 +99,19 @@ class MembershipOrderController extends Controller
                 $payload['discount'] = 0;
             }
 
-            if ($discount['is_expend_limit'] === false && $discount['is_fix_amount'] === true && $payload['amount'] < $discount['discount_fix_amount']) {
+            if ($discount['is_expend_limit'] === false && $discount['is_fix_amount'] === true && $payload['amount'] <= $discount['discount_fix_amount']) {
                 $payload['discount'] = 0;
             }
 
             $payload['pay_amount'] = $payload['amount'] - $payload['discount'];
 
             if ($payload['is_wallet'] === true && $payload['pay_amount'] > $member['amount']) {
-                return $this->badRequest('insufficient wallet amount', null);
+                return $this->badRequest('insufficient wallet amount');
             }
 
             if ($payload['is_wallet'] === true && $payload['pay_amount'] < $member['amount']) {
                 $member['amount'] = $member['amount'] - $payload['pay_amount'];
-                $updateMember = Member::findOrFail($member['id'])->update($member);
+                // $updateMember = Member::findOrFail($member['id'])->update($member);
                 $payload['status'] = 'MEMBER_WALLET';
             }
 

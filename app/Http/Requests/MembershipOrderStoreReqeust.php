@@ -3,7 +3,6 @@
 namespace App\Http\Requests;
 
 use App\Models\Member;
-use App\Models\User;
 use Illuminate\Foundation\Http\FormRequest;
 
 class MembershipOrderStoreReqeust extends FormRequest
@@ -24,13 +23,13 @@ class MembershipOrderStoreReqeust extends FormRequest
     public function rules(): array
     {
         $members = implode(',', Member::all()->pluck('id')->toArray());
-        $users = implode(',', User::all()->pluck('id')->toArray());
 
         return [
             'member_id' => "required | in:$members",
-            'order_number' => 'required | string | unique:order_number',
+            'order_number' => 'required | string | unique:membership_orders,order_number',
             'amount' => 'required | numeric',
             'is_wallet' => 'required | boolean',
+            'status' => 'required | string',
         ];
     }
 }

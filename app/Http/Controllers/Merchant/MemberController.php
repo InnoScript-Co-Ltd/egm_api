@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Merchant;
 
 use App\Http\Controllers\Dashboard\Controller;
 use App\Models\Member;
+use Exception;
 use Illuminate\Support\Facades\DB;
 
 class MemberController extends Controller

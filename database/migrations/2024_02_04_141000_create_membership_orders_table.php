@@ -16,8 +16,9 @@ return new class extends Migration
             $table->snowflakeIdAndPrimary();
             $table->snowflakeId('member_id');
             $table->snowflakeId('user_id');
+            $table->snowflakeId('membercard_id');
             $table->string('order_number');
-            $table->string('card_type');
+            $table->string('card_label');
             $table->string('card_number');
             $table->string('name');
             $table->string('phone')->nullable()->default(null);
@@ -31,6 +32,7 @@ return new class extends Migration
 
             $table->foreign('member_id')->references('id')->on('members')->onDelete('cascade');
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
+            $table->foreign('membercard_id')->references('id')->on('membercards')->onDelete('cascade');
         });
     }
 
