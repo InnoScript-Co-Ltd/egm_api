@@ -15,7 +15,7 @@ class MemberController extends Controller
 
         try {
 
-            $members = Member::with(['users', 'membercard'])
+            $members = Member::with(['user', 'membercards'])
                 ->searchQuery()
                 ->sortingQuery()
                 ->filterQuery()
@@ -37,7 +37,7 @@ class MemberController extends Controller
         DB::beginTransaction();
         try {
 
-            $member = Member::with(['users'])->findOrFail($id);
+            $member = Member::with(['user', 'membercards'])->findOrFail($id);
             DB::commit();
 
             return $this->success('member detail is successfully retrived', $member);

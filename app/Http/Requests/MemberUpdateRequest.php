@@ -28,12 +28,11 @@ class MemberUpdateRequest extends FormRequest
         $userIds = implode(',', User::all()->pluck('id')->toArray());
         $memberStatusEnum = implode(',', (new Enum(MemberStatusEnum::class))->values());
         $member = Member::findOrFail(request('id'));
-        $memberIds = implode(',', Member::all()->pluck('id')->toArray());
         $memberId = $member['id'];
 
         return [
             'user_id' => "nullable | in:$userIds",
-            'member_id' => "nullable | in:$memberIds,unique:members,member_id,$memberId",
+            'member_id' => "nullable | unique:members,member_id,$memberId",
             'amount' => 'nullable | numeric',
             'expired_at' => 'nullable | date',
             'description' => 'nullable | string',
