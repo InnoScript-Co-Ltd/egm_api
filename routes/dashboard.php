@@ -84,7 +84,7 @@ Route::middleware('jwt')->group(function () {
         Route::get('/', 'AdminController@index')->permission(PermissionEnum::ADMIN_INDEX->value);
         Route::post('/', 'AdminController@store')->permission(PermissionEnum::ADMIN_STORE->value);
         Route::get('/{id}', 'AdminController@show')->permission(PermissionEnum::ADMIN_SHOW->value);
-        Route::post('/update', 'AdminController@update')->permission(PermissionEnum::ADMIN_UPDATE->value);
+        Route::post('/{id}', 'AdminController@update')->permission(PermissionEnum::ADMIN_UPDATE->value);
         Route::delete('/{id}', 'AdminController@destroy')->permission(PermissionEnum::ADMIN_DESTROY->value);
 
     });
