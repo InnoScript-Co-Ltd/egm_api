@@ -24,7 +24,8 @@ class Admin extends Authenticatable implements JWTSubject
     protected $appends = ['created_by', 'updated_by', 'rnp'];
 
     protected $fillable = [
-        'name', 'email', 'phone', 'role_id', 'password', 'status', 'email_verified_at', 'phone_verified_at',
+        'name', 'email', 'phone', 'role_id', 'dob', 'address', 'position', 'department', 'nrc', 'join_date', 'leave_date',
+        'salary', 'password', 'status', 'email_verified_at', 'phone_verified_at',
     ];
 
     protected $hidden = [
@@ -38,6 +39,9 @@ class Admin extends Authenticatable implements JWTSubject
      */
     protected $casts = [
         'password' => 'hashed',
+        'join_date' => 'date',
+        'leave_date' => 'date',
+        'dob' => 'date',
     ];
 
     public function image()
