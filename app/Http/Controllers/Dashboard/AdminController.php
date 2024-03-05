@@ -37,42 +37,15 @@ class AdminController extends Controller
     public function store(AdminStoreRequest $request)
     {
         $payload = collect($request->validated());
-        $files = $payload['profile'];
-
-        $image_path = $files->store('images', 'public');
-        $name = explode('/', $image_path)[1];
-        $snowflake = new SnowFlake;
-
-        $profile = [
-            'id' => $snowflake->id(),
-            'name' => $name,
-            'category' => 'ITEM',
-            'size' => $files->getSize(),
-            'type' => $files->getMimeType(),
-        ];
-
-        DB::beginTransaction();
 
         try {
 
-            $uploadFile = File::create([
-                'name' => $profile['name'],
-                'category' => 'ITEM',
-                'size' => $profile['size'],
-                'type' => $profile['type'],
-            ]);
-
-            if ($uploadFile) {
-
-                $payload['profile'] = $uploadFile->toArray()['id'];
-                $payload['password'] = bcrypt($payload['password']);
-                $roleId = $payload['role_id'];
-                $roleName = SpatieRole::findOrFail($roleId[0]);
-                $admin = Admin::create($payload->toArray())->assignRole($roleName->toArray()['name']);
-                DB::commit();
-
-            }
-
+            $payload['password'] = bcrypt($payload['password']);
+            $roleId = $payload['role_id'];
+            $roleName = SpatieRole::findOrFail($roleId[0]);
+            $admin = Admin::create($payload->toArray())->assignRole($roleName->toArray()['name']);
+            DB::commit();
+    
             return $this->success('Admin is created successfully', $admin);
 
         } catch (Exception $e) {
@@ -120,7 +93,6 @@ class AdminController extends Controller
                         $admin->removeRole($role['name']);
                         $admin->syncRoles($role['name']);
                 }
-
 
                 $admin->update($payload->toArray());
 
