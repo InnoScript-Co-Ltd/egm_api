@@ -24,12 +24,17 @@ class Admin extends Authenticatable implements JWTSubject
     protected $appends = ['created_by', 'updated_by', 'rnp'];
 
     protected $fillable = [
-        'name', 'profile', 'email', 'phone', 'password', 'status', 'email_verified_at', 'phone_verified_at',
+        'name', 'email', 'phone', 'password', 'status', 'email_verified_at', 'phone_verified_at',
     ];
 
     protected $hidden = [
         'password', 'roles',
     ];
+
+    public function image()
+    {
+        return $this->morphOne(Image::class, 'imageable');
+    }
 
     protected function getCreatedByAttribute()
     {

@@ -85,7 +85,7 @@ class AdminController extends Controller
     {
         DB::beginTransaction();
         try {
-            $admin = Admin::findOrFail($id);
+            $admin = Admin::with(['image'])->findOrFail($id);
             DB::commit();
 
             return $this->success('Admin detail is successfully retrived', $admin);
@@ -96,89 +96,32 @@ class AdminController extends Controller
         }
     }
 
-    public function update(AdminUpdateRequest $request)
+    public function update(AdminUpdateRequest $request, $id)
     {
 
         $payload = collect($request->validated());
         DB::beginTransaction();
         try {
 
-            /**
-             * Check profile field is file format
-             * **/
-            if ($payload->has('profile') && $payload->get('profile') instanceof \Illuminate\Http\UploadedFile) {
+                $admin = Admin::findOrFail($id);
 
-                $files = $payload['profile'];
-
-                $image_path = $files->store('images', 'public');
-                $name = explode('/', $image_path)[1];
-                $snowflake = new SnowFlake;
-
-                $profile = [
-                    'id' => $snowflake->id(),
-                    'name' => $name,
-                    'category' => 'ITEM',
-                    'size' => $files->getSize(),
-                    'type' => $files->getMimeType(),
-                ];
-
-                $uploadFile = File::create([
-                    'name' => $profile['name'],
-                    'category' => 'ITEM',
-                    'size' => $profile['size'],
-                    'type' => $profile['type'],
-                ]);
-
-                /**
-                 * Check file is crated
-                 * **/
-                if ($uploadFile) {
-
-                    $payload['profile'] = $uploadFile->toArray()['id'];
-
-                    $admin = Admin::findOrFail($payload->toArray()['id']);
-
-                    if ($payload['role_id'] !== null) {
-                        $roleId = $payload['role_id'];
-                        $role = collect(SpatieRole::findOrFail($roleId))->toArray();
-                        $admin->removeRole($role['name']);
-                        $admin->syncRoles($role['name']);
-                    }
-                    $admin->update($payload->toArray());
-
-                    DB::commit();
-
-                    return $this->success('Admin is updated successfully', $admin);
-                } else {
-                    DB::commit();
-
-                    return $this->validationError('Item is created fialed', [
-                        'images' => ['can not upload image files'],
+                if (isset($payload['profile'])) {
+                    $imagePath = $payload['profile']->store('images', 'public');
+                    $profileImage = explode('/', $imagePath)[1];
+                    $admin->image()->updateOrCreate(['imageable_id' => $admin->id], [
+                        'image' => $profileImage,
+                        'imageable_id' => $admin->id,
                     ]);
                 }
 
-            } else {
 
-                /**
-                 * profile field is already have and not changes file
-                 * **/
-                $file = File::findOrFail($payload['profile']);
-
-                $admin = Admin::findOrFail($payload->toArray()['id']);
-
-                if ($payload['role_id'] !== null) {
-                    $roleId = $payload['role_id'];
-                    $role = collect(SpatieRole::findOrFail($roleId))->toArray();
-                    $admin->removeRole($role['name']);
-                    $admin->syncRoles($role['name']);
-                }
                 $admin->update($payload->toArray());
 
                 DB::commit();
 
                 return $this->success('Admin is updated successfully', $admin);
 
-            }
+            
 
         } catch (Exception $e) {
             DB::rollback();
