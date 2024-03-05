@@ -58,7 +58,7 @@ class AdminController extends Controller
     {
         DB::beginTransaction();
         try {
-            $admin = Admin::findOrFail($id);
+            $admin = Admin::with(['image'])->findOrFail($id);
             DB::commit();
 
             return $this->success('Admin detail is successfully retrived', $admin);
