@@ -114,7 +114,6 @@ class AdminController extends Controller
                     ]);
                 }
 
-
                 $admin->update($payload->toArray());
 
                 DB::commit();

@@ -31,6 +31,15 @@ class Admin extends Authenticatable implements JWTSubject
         'password', 'roles',
     ];
 
+    /**
+     * The attributes that should be cast.
+     *
+     * @var array<string, string>
+     */
+    protected $casts = [
+        'password' => 'hashed',
+    ];
+
     public function image()
     {
         return $this->morphOne(Image::class, 'imageable');
