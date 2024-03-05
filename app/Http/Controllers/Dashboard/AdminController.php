@@ -2,11 +2,9 @@
 
 namespace App\Http\Controllers\Dashboard;
 
-use App\Helpers\Snowflake;
 use App\Http\Requests\AdminStoreRequest;
 use App\Http\Requests\AdminUpdateRequest;
 use App\Models\Admin;
-use App\Models\File;
 use Exception;
 use Illuminate\Support\Facades\DB;
 use Spatie\Permission\Models\Role as SpatieRole;
@@ -39,13 +37,11 @@ class AdminController extends Controller
         $payload = collect($request->validated());
 
         try {
-
-            $payload['password'] = bcrypt($payload['password']);
             $roleId = $payload['role_id'];
             $roleName = SpatieRole::findOrFail($roleId[0]);
             $admin = Admin::create($payload->toArray())->assignRole($roleName->toArray()['name']);
             DB::commit();
-    
+
             return $this->success('Admin is created successfully', $admin);
 
         } catch (Exception $e) {
@@ -76,31 +72,29 @@ class AdminController extends Controller
         DB::beginTransaction();
         try {
 
-                $admin = Admin::findOrFail($id);
+            $admin = Admin::findOrFail($id);
 
-                if (isset($payload['profile'])) {
-                    $imagePath = $payload['profile']->store('images', 'public');
-                    $profileImage = explode('/', $imagePath)[1];
-                    $admin->image()->updateOrCreate(['imageable_id' => $admin->id], [
-                        'image' => $profileImage,
-                        'imageable_id' => $admin->id,
-                    ]);
-                }
+            if (isset($payload['profile'])) {
+                $imagePath = $payload['profile']->store('images', 'public');
+                $profileImage = explode('/', $imagePath)[1];
+                $admin->image()->updateOrCreate(['imageable_id' => $admin->id], [
+                    'image' => $profileImage,
+                    'imageable_id' => $admin->id,
+                ]);
+            }
 
-                if ($payload['role_id'] !== null) {
-                        $roleId = $payload['role_id'];
-                        $role = collect(SpatieRole::findOrFail($roleId))->toArray();
-                        $admin->removeRole($role['name']);
-                        $admin->syncRoles($role['name']);
-                }
+            if ($payload['role_id'] !== null) {
+                $roleId = $payload['role_id'];
+                $role = collect(SpatieRole::findOrFail($roleId))->toArray();
+                $admin->removeRole($role['name']);
+                $admin->syncRoles($role['name']);
+            }
 
-                $admin->update($payload->toArray());
+            $admin->update($payload->toArray());
 
-                DB::commit();
+            DB::commit();
 
-                return $this->success('Admin is updated successfully', $admin);
-
-            
+            return $this->success('Admin is updated successfully', $admin);
 
         } catch (Exception $e) {
             DB::rollback();
