@@ -85,7 +85,7 @@ class AdminController extends Controller
     {
         DB::beginTransaction();
         try {
-            $admin = Admin::with(['image'])->findOrFail($id);
+            $admin = Admin::findOrFail($id);
             DB::commit();
 
             return $this->success('Admin detail is successfully retrived', $admin);
@@ -113,6 +113,14 @@ class AdminController extends Controller
                         'imageable_id' => $admin->id,
                     ]);
                 }
+
+                if ($payload['role_id'] !== null) {
+                        $roleId = $payload['role_id'];
+                        $role = collect(SpatieRole::findOrFail($roleId))->toArray();
+                        $admin->removeRole($role['name']);
+                        $admin->syncRoles($role['name']);
+                }
+
 
                 $admin->update($payload->toArray());
 
