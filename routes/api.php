@@ -17,6 +17,10 @@ Route::group(['prefix' => 'auth'], function () {
     Route::post('/login', 'ClientAuthController@login');
 });
 
+Route::group(['prefix' => 'register'], function () {
+    Route::post('/', 'ClientRegisterController@store');
+});
+
 // Route::middleware('jwt')->group(function () {
 
 //     // Route::group(['prefix' => 'item'], function () {
