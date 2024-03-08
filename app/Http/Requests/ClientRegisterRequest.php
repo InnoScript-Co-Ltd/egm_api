@@ -26,7 +26,7 @@ class ClientRegisterRequest extends FormRequest
 
         return [
             'name' => 'required | string',
-            'email' => 'required | email | unique:users,email',
+            'email' => 'required | email',
             'phone' => ['required', 'unique:users,phone', "regex:$mobileRule"],
             'password' => 'required | confirmed',
             'client_type' => 'required | string',
