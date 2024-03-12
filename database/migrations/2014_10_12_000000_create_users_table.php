@@ -29,6 +29,8 @@ return new class extends Migration
             $table->boolean('is_facebook')->nullable()->default(null);
             $table->boolean('is_google')->nullable()->default(null);
             $table->longText('social_token')->nullable()->default(null);
+            $table->string('email_code')->nullable()->default(null);
+            $table->string('client_type');
             $table->string('status')->default(UserStatusEnum::PENDING->value);
             $table->rememberToken();
             $table->auditColumns();
