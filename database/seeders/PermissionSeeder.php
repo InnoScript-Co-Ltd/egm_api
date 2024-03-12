@@ -23,7 +23,7 @@ class PermissionSeeder extends Seeder
 
         try {
             Permission::insert($permissions->toArray());
-        } catch (Exception $e) {
+        } catch (\Exception $e) {
             throw $e;
         }
     }
