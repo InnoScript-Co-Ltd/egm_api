@@ -12,7 +12,7 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::connection('gsc_export')->create('users', function (Blueprint $table) {
+        Schema::connection('mpe')->create('mpe_users', function (Blueprint $table) {
             $table->snowflakeIdAndPrimary();
             $table->string('name');
             $table->string('phone')->unique()->nullable()->default(null);
@@ -29,8 +29,6 @@ return new class extends Migration
             $table->boolean('is_facebook')->nullable()->default(null);
             $table->boolean('is_google')->nullable()->default(null);
             $table->longText('social_token')->nullable()->default(null);
-            $table->string('email_code')->nullable()->default(null);
-            $table->string('client_type');
             $table->string('status')->default(UserStatusEnum::PENDING->value);
             $table->rememberToken();
             $table->auditColumns();
@@ -42,6 +40,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('users');
+        Schema::dropIfExists('mpe_users');
     }
 };
