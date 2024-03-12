@@ -22,6 +22,8 @@ class User extends Authenticatable implements JWTSubject
 
     protected $table = 'users';
 
+    protected $connection = 'gsc_export';
+
     /**
      * The attributes that are mass assignable.
      *

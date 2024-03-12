@@ -26,6 +26,8 @@ class Admin extends Authenticatable implements JWTSubject
 
     protected $table = 'admins';
 
+    protected $connection = 'gsc_export';
+
     protected $guard = 'dashboard';
 
     protected $appends = ['created_by', 'updated_by', 'rnp'];
