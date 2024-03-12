@@ -191,5 +191,12 @@ Route::middleware('jwt')->group(function () {
         Route::get('/{id}', 'MembershipOrderController@show')->permission(PermissionEnum::MEMBER_ORDER_SHOW->value);
     });
 
+    Route::group(['prefix' => 'mpe'], function () {
+        Route::group(['prefix' => 'category'], function () {
+            Route::get('/', 'MPECategoryController@index');
+        });
+    });
+
     Route::post('/file/upload/image', 'FileController@store');
+
 });

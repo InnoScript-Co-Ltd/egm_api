@@ -18,4 +18,6 @@ class Permission extends SpatiePermission
         'updated_at',
         'guard_name',
     ];
+
+    protected $connection = 'gsc_export';
 }

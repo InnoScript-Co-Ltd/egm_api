@@ -21,4 +21,6 @@ class Role extends SpatieRole
         'permissions' => 'array',
         'is_merchant' => 'boolean',
     ];
+
+    protected $connection = 'gsc_export';
 }

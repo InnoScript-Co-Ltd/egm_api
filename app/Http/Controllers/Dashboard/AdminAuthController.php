@@ -20,7 +20,7 @@ class AdminAuthController extends Controller
     {
         $payload = collect($request->validated());
 
-        DB::beginTransaction();
+        DB::connection('gsc_export')->beginTransaction();
 
         try {
             $admin = Admin::where(['email' => $payload['email']])->first();
