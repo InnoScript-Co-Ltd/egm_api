@@ -36,7 +36,16 @@ class RouteServiceProvider extends ServiceProvider
             return Limit::perMinute(60)->by($request->user()?->id ?: $request->ip());
         });
 
+        RateLimiter::for('mpe', function (Request $request) {
+            return Limit::perMinute(60)->by($request->user()?->id ?: $request->ip());
+        });
+
         $this->routes(function () {
+            Route::middleware('mpe')
+                ->prefix('mpe')
+                ->namespace('App\Http\Controller\MPE')
+                ->group(base_path('routes/mpe.php'));
+
             Route::middleware('dashboard')
                 ->prefix('dashboard')
                 ->namespace('App\Http\Controllers\Dashboard')
