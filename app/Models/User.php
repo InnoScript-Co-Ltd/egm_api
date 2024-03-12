@@ -18,6 +18,8 @@ class User extends Authenticatable implements JWTSubject
 {
     use BasicAudit, HasApiTokens, HasFactory, HasPermissions, HasRoles, Notifiable, SnowflakeID, SoftDeletes;
 
+    protected $connection = 'gsc_export';
+
     protected $table = 'users';
 
     /**

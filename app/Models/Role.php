@@ -9,6 +9,8 @@ class Role extends SpatieRole
 {
     use HasFactory;
 
+    protected $connection = 'gsc_export';
+
     protected $fillable = [
         'name', 'description', 'permissions', 'is_merchant',
     ];
