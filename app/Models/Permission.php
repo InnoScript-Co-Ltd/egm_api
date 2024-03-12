@@ -9,6 +9,8 @@ class Permission extends SpatiePermission
 {
     use HasFactory;
 
+    protected $connection = 'gsc_export';
+
     protected $fillable = [
         'name', 'description',
     ];

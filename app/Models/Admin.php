@@ -15,7 +15,14 @@ use Tymon\JWTAuth\Contracts\JWTSubject;
 
 class Admin extends Authenticatable implements JWTSubject
 {
-    use BasicAudit, HasApiTokens, HasFactory,  HasPermissions, HasRoles, Notifiable, SnowflakeID, SoftDeletes;
+    use BasicAudit, HasApiTokens, HasFactory, HasPermissions, HasRoles, Notifiable, SnowflakeID, SoftDeletes;
+
+    protected $connection;
+
+    public function __construct()
+    {
+        $this->connection = env('GSCEXPORT_DATABASE');
+    }
 
     protected $table = 'admins';
 
@@ -26,12 +33,27 @@ class Admin extends Authenticatable implements JWTSubject
     protected $appends = ['created_by', 'updated_by', 'rnp'];
 
     protected $fillable = [
-        'name', 'email', 'phone', 'role_id', 'dob', 'address', 'position', 'department', 'nrc', 'join_date', 'leave_date',
-        'salary', 'password', 'status', 'email_verified_at', 'phone_verified_at',
+        'name',
+        'email',
+        'phone',
+        'role_id',
+        'dob',
+        'address',
+        'position',
+        'department',
+        'nrc',
+        'join_date',
+        'leave_date',
+        'salary',
+        'password',
+        'status',
+        'email_verified_at',
+        'phone_verified_at',
     ];
 
     protected $hidden = [
-        'password', 'roles',
+        'password',
+        'roles',
     ];
 
     /**
