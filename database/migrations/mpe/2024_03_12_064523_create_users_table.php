@@ -12,7 +12,7 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::connection('mpe')->create('mpe_users', function (Blueprint $table) {
+        Schema::connection('mpe')->create('users', function (Blueprint $table) {
             $table->snowflakeIdAndPrimary();
             $table->string('name');
             $table->string('phone')->unique()->nullable()->default(null);
@@ -40,6 +40,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('mpe_users');
+        Schema::connection('mpe')->dropIfExists('users');
     }
 };
