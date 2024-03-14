@@ -8,11 +8,13 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
-class MPECategory extends Model
+class MPEUnit extends Model
 {
     use BasicAudit,HasFactory,SnowflakeID,SoftDeletes;
 
-    protected $table = 'mpe_categories';
+    protected $table = "mpe_units";
 
-    protected $fillable = ['name', 'status'];
+    protected $fillable = [
+        "name", "status"
+    ];  
 }
