@@ -194,7 +194,28 @@ Route::middleware('jwt')->group(function () {
     Route::group(['prefix' => 'mpe'], function () {
         Route::group(['prefix' => 'category'], function () {
             Route::get('/', 'MPECategoryController@index');
+            Route::post('/', 'MPECategoryController@store');
+            Route::get('/{id}', 'MPECategoryController@show');
+            Route::put('/{id}', 'MPECategoryController@update');
+            Route::delete('/{id}', 'MPECategoryController@destory');
         });
+
+        Route::group(['prefix' => 'units'], function () {
+            Route::get('/', 'MPEUnitController@index');
+            Route::post('/', 'MPEUnitController@store');
+            Route::get('/{id}', 'MPEUnitController@show');
+            Route::put('/{id}', 'MPEUnitController@update');
+            Route::delete('/{id}', 'MPEUnitController@destory');
+        });
+
+        Route::group(['prefix' => 'item'], function () {
+            Route::get('/', 'MPEItemController@index');
+            Route::post('/', 'MPEItemController@store');
+            Route::get('/{id}', 'MPEItemController@show');
+            Route::put('/{id}', 'MPEItemController@update');
+            Route::delete('/{id}', 'MPEItemController@destory');
+        });
+
     });
 
     Route::post('/file/upload/image', 'FileController@store');
