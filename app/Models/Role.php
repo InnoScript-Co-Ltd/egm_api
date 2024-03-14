@@ -9,7 +9,12 @@ class Role extends SpatieRole
 {
     use HasFactory;
 
-    protected $connection = 'gsc_export';
+    protected $connection;
+
+    public function __construct()
+    {
+        $this->connection = env('GSCEXPORT_DATABASE');
+    }
 
     protected $fillable = [
         'name', 'description', 'permissions', 'is_merchant',
@@ -23,6 +28,4 @@ class Role extends SpatieRole
         'permissions' => 'array',
         'is_merchant' => 'boolean',
     ];
-
-    protected $connection = 'gsc_export';
 }

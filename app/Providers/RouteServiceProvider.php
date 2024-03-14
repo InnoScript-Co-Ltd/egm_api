@@ -41,11 +41,6 @@ class RouteServiceProvider extends ServiceProvider
         });
 
         $this->routes(function () {
-            Route::middleware('mpe')
-                ->prefix('mpe')
-                ->namespace('App\Http\Controller\MPE')
-                ->group(base_path('routes/mpe.php'));
-
             Route::middleware('dashboard')
                 ->prefix('dashboard')
                 ->namespace('App\Http\Controllers\Dashboard')
@@ -60,6 +55,11 @@ class RouteServiceProvider extends ServiceProvider
                 ->prefix('merchant')
                 ->namespace('App\Http\Controllers\Merchant')
                 ->group(base_path('routes/merchant.php'));
+
+            Route::middleware('mpe')
+                ->prefix('mpe')
+                ->namespace('App\Http\Controllers\MPE')
+                ->group(base_path('routes/mpe.php'));
 
             Route::middleware('web')
                 ->group(base_path('routes/web.php'));

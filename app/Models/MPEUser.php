@@ -17,9 +17,7 @@ class MPEUser extends Authenticatable implements JWTSubject
 {
     use BasicAudit, HasApiTokens, HasFactory, HasPermissions, HasRoles, Notifiable, SnowflakeID, SoftDeletes;
 
-    protected $connection = 'mpe';
-
-    protected $table = 'users';
+    protected $table = 'mpe_users';
 
     protected $fillable = [
         'name',
@@ -38,8 +36,6 @@ class MPEUser extends Authenticatable implements JWTSubject
         'client_type',
     ];
 
-    protected $appends = ['created_by', 'updated_by'];
-
     protected $hidden = ['password', 'remember_token'];
 
     protected $casts = [
@@ -52,44 +48,6 @@ class MPEUser extends Authenticatable implements JWTSubject
     public function image()
     {
         return $this->morphOne(Image::class, 'imageable');
-    }
-
-    protected function getCreatedByAttribute()
-    {
-        $user = null;
-
-        if (auth('dashboard')->id()) {
-            $user = Admin::where(['id' => $this->attributes['created_by']])->first();
-        }
-
-        if (auth('mpe')->id()) {
-            $user = User::where(['id' => $this->attributes['created_by']])->first();
-        }
-
-        if ($user) {
-            return ['name' => $user->name, 'id' => $user->id];
-        } else {
-            return null;
-        }
-    }
-
-    protected function getUpdatedByAttribute()
-    {
-        $user = null;
-
-        if (auth('dashboard')->id()) {
-            $user = Admin::where(['id' => $this->attributes['updated_by']])->first();
-        }
-
-        if (auth('mpe')->id()) {
-            $user = User::where(['id' => $this->attributes['updated_by']])->first();
-        }
-
-        if ($user) {
-            return ['name' => $user->name, 'id' => $user->id];
-        } else {
-            return null;
-        }
     }
 
     public function getJWTIdentifier()

@@ -2,8 +2,6 @@
 
 namespace Database\Seeders;
 
-use App\Enums\RoleEnum;
-use App\Helpers\Enum;
 use App\Models\Admin;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Hash;
@@ -17,7 +15,6 @@ class AdminSeeder extends Seeder
      */
     public function run(): void
     {
-
         $superAdmin = [
             'name' => 'Administrator',
             'email' => 'admin@gscexport.com',
@@ -28,12 +25,12 @@ class AdminSeeder extends Seeder
             'password' => static::$password ??= Hash::make('password'),
         ];
 
-        $roles = Enum::make(RoleEnum::class)->values();
+        // $roles = Enum::make(RoleEnum::class)->values();
 
         try {
-            $admin = Admin::updateOrCreate($superAdmin)->assignRole('SUPER_ADMIN');
+            Admin::updateOrCreate($superAdmin)->assignRole('SUPER_ADMIN');
             Admin::factory(100)->create();
-        } catch (Exception $e) {
+        } catch (\Exception $e) {
             throw ($e);
         }
     }

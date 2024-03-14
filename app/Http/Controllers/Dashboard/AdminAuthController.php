@@ -10,16 +10,6 @@ use Illuminate\Support\Facades\DB;
 
 class AdminAuthController extends Controller
 {
-    protected $dbs;
-
-    public function __construct()
-    {
-        $this->dbs = [
-            'gscexport' => env('GSCEXPORT_DATABASE'),
-            'mpe' => env('MPE_DATABASE'),
-        ];
-    }
-
     /**
      * APIs for user login
      *
@@ -30,7 +20,7 @@ class AdminAuthController extends Controller
     {
         $payload = collect($request->validated());
 
-        DB::connection($this->dbs['gscexport'])->beginTransaction();
+        DB::beginTransaction();
 
         try {
             $admin = Admin::where(['email' => $payload['email']])->first();

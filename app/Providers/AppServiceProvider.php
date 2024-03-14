@@ -35,9 +35,9 @@ class AppServiceProvider extends ServiceProvider
         Blueprint::macro('snowflakeIdAndPrimary', fn ($column = 'id') => $this->snowflakeId($column)->primary());
 
         Blueprint::macro('auditColumns', function () {
-            $this->snowflakeId('created_by')->nullable();
-            $this->snowflakeId('updated_by')->nullable();
-            $this->snowflakeId('deleted_by')->nullable();
+            // $this->snowflakeId('created_by')->nullable();
+            // $this->snowflakeId('updated_by')->nullable();
+            // $this->snowflakeId('deleted_by')->nullable();
             $this->timestamps();
             $this->softDeletes();
 

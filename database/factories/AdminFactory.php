@@ -4,6 +4,7 @@ namespace Database\Factories;
 
 use App\Enums\AdminStatusEnum;
 use App\Helpers\Enum;
+use App\Helpers\Snowflake;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Facades\Hash;
 
@@ -24,8 +25,10 @@ class AdminFactory extends Factory
         $adminStatus = (new Enum(AdminStatusEnum::class))->values();
         $status = $adminStatus[rand(0, count($adminStatus) - 1)];
         $verified_at = $status === 'PENDING' ? null : now();
+        $snowflake = new Snowflake();
 
         return [
+            'id' => $snowflake->next(),
             'name' => fake()->name(),
             'email' => fake()->unique()->safeEmail(),
             'email_verified_at' => $verified_at,
