@@ -14,6 +14,8 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::middleware(['mpe'])->group(function () {
+    Route::post('/register', 'MPEUserController@register');
+
     Route::group(['prefix' => 'auth'], function () {
         Route::post('/login', 'MPEUserController@login');
     });

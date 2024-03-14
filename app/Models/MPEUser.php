@@ -17,9 +17,7 @@ class MPEUser extends Authenticatable implements JWTSubject
 {
     use BasicAudit, HasApiTokens, HasFactory, HasPermissions, HasRoles, Notifiable, SnowflakeID, SoftDeletes;
 
-    protected $connection = 'mpe';
-
-    protected $table = 'users';
+    protected $table = 'mpe_users';
 
     protected $fillable = [
         'name',
@@ -37,8 +35,6 @@ class MPEUser extends Authenticatable implements JWTSubject
         'email_code',
         'client_type',
     ];
-
-    protected $appends = ['created_by', 'updated_by'];
 
     protected $hidden = ['password', 'remember_token'];
 
