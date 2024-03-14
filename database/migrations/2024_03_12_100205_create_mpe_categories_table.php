@@ -12,7 +12,7 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::connection('mpe')->create('categories', function (Blueprint $table) {
+        Schema::create('mpe_categories', function (Blueprint $table) {
             $table->snowflakeIdAndPrimary();
             $table->string('name');
             $table->string('status')->default(GeneralStatusEnum::PENDING->value);
@@ -25,6 +25,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::connection('mpe')->dropIfExists('categories');
+        Schema::dropIfExists('mpe_categories');
     }
 };

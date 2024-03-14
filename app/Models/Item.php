@@ -2,17 +2,11 @@
 
 namespace App\Models;
 
-use App\Traits\BasicAudit;
-use App\Traits\SnowflakeID;
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Item extends Model
 {
-    use BasicAudit,HasFactory,SnowflakeID,SoftDeletes;
-
     protected $fillable = [
         'category_id', 'shop_id', 'name', 'images', 'code', 'description', 'content', 'price', 'sell_price', 'out_of_stock', 'instock',
         'status',

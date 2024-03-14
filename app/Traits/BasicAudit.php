@@ -8,31 +8,31 @@ trait BasicAudit
     {
         $self = new static();
 
-        if (auth('dashboard')->id()) {
-            $userId = auth('dashboard')->id();
-        } elseif (auth('merchant')->id()) {
-            $userId = auth('merchant')->id();
-        } elseif (auth('api')->id()) {
-            $userId = auth('api')->id();
-        } else {
-            $userId = null;
-        }
+        // if (auth('dashboard')->id()) {
+        //     $userId = auth('dashboard')->id();
+        // } elseif (auth('merchant')->id()) {
+        //     $userId = auth('merchant')->id();
+        // } elseif (auth('api')->id()) {
+        //     $userId = auth('api')->id();
+        // } else {
+        //     $userId = null;
+        // }
 
-        static::creating(function ($model) use ($userId) {
-            $model->created_by = $userId;
-            $model->updated_by = $userId;
-        });
+        // static::creating(function ($model) use ($userId) {
+        //     $model->created_by = $userId;
+        //     $model->updated_by = $userId;
+        // });
 
-        static::updating(function ($model) use ($userId) {
-            $model->updated_by = $userId;
-        });
+        // static::updating(function ($model) use ($userId) {
+        //     $model->updated_by = $userId;
+        // });
 
-        static::deleting(function ($model) use ($self, $userId) {
-            if ($self->isSoftDeleteEnabled()) {
-                $model->deleted_by = $userId;
-                $model->save();
-            }
-        });
+        // static::deleting(function ($model) use ($self, $userId) {
+        //     if ($self->isSoftDeleteEnabled()) {
+        //         $model->deleted_by = $userId;
+        //         $model->save();
+        //     }
+        // });
     }
 
     public function isSoftDeleteEnabled()

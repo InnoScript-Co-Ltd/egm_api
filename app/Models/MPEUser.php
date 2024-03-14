@@ -54,44 +54,6 @@ class MPEUser extends Authenticatable implements JWTSubject
         return $this->morphOne(Image::class, 'imageable');
     }
 
-    protected function getCreatedByAttribute()
-    {
-        $user = null;
-
-        if (auth('dashboard')->id()) {
-            $user = Admin::where(['id' => $this->attributes['created_by']])->first();
-        }
-
-        if (auth('mpe')->id()) {
-            $user = User::where(['id' => $this->attributes['created_by']])->first();
-        }
-
-        if ($user) {
-            return ['name' => $user->name, 'id' => $user->id];
-        } else {
-            return null;
-        }
-    }
-
-    protected function getUpdatedByAttribute()
-    {
-        $user = null;
-
-        if (auth('dashboard')->id()) {
-            $user = Admin::where(['id' => $this->attributes['updated_by']])->first();
-        }
-
-        if (auth('mpe')->id()) {
-            $user = User::where(['id' => $this->attributes['updated_by']])->first();
-        }
-
-        if ($user) {
-            return ['name' => $user->name, 'id' => $user->id];
-        } else {
-            return null;
-        }
-    }
-
     public function getJWTIdentifier()
     {
         return $this->getKey();

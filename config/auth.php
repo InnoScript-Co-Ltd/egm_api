@@ -134,7 +134,7 @@ return [
             'throttle' => 60,
         ],
         'mpe' => [
-            'provider' => 'users',
+            'provider' => 'mpe_users',
             'table' => 'password_reset_tokens',
             'expire' => 60,
             'throttle' => 60,
@@ -153,5 +153,4 @@ return [
     */
 
     'password_timeout' => 10800,
-
 ];

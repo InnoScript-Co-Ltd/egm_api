@@ -9,7 +9,12 @@ class Permission extends SpatiePermission
 {
     use HasFactory;
 
-    protected $connection = 'gsc_export';
+    protected $connection;
+
+    public function __construct()
+    {
+        $this->connection = env('GSCEXPORT_DATABASE');
+    }
 
     protected $fillable = [
         'name', 'description',
@@ -20,6 +25,4 @@ class Permission extends SpatiePermission
         'updated_at',
         'guard_name',
     ];
-
-    protected $connection = 'gsc_export';
 }

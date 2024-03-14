@@ -55,6 +55,12 @@ class Kernel extends HttpKernel
             \Illuminate\Routing\Middleware\SubstituteBindings::class,
             \App\Http\Middleware\MerchantMiddleware::class,
         ],
+
+        'mpe' => [
+            \Illuminate\Routing\Middleware\ThrottleRequests::class.':mpe',
+            \Illuminate\Routing\Middleware\SubstituteBindings::class,
+            \App\Http\Middleware\MPEMiddleware::class,
+        ],
     ];
 
     /**
@@ -81,5 +87,6 @@ class Kernel extends HttpKernel
         'permission' => \Spatie\Permission\Middleware\PermissionMiddleware::class,
         'role_or_permission' => \Spatie\Permission\Middleware\RoleOrPermissionMiddleware::class,
         'merchant' => \App\Http\Middleware\MerchantMiddleware::class,
+        'mpe' => \App\Http\Middleware\MPEMiddleware::class,
     ];
 }
