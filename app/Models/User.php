@@ -30,8 +30,6 @@ class User extends Authenticatable implements JWTSubject
         'password', 'status', 'email_verified_at', 'phone_verified_at', 'email_code', 'client_type',
     ];
 
-    protected $appends = ['created_by', 'updated_by'];
-
     /**
      * The attributes that should be hidden for serialization.
      *
