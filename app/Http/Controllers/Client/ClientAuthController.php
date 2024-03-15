@@ -15,7 +15,7 @@ class ClientAuthController extends Controller
     {
         $auth = auth('api');
 
-        return $this->success('Admin successfully signed in', [
+        return $this->success('user is successfully signed in', [
             'access_token' => $token,
             'token_type' => 'bearer',
             'expires_in' => auth('api')->factory()->getTTL() * 60,
