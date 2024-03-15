@@ -27,14 +27,14 @@ class MPEItemStoreRequest extends FormRequest
         $mpeUnitId = implode(',', MPEUnit::all()->pluck('id')->toArray());
 
         return [
-            "category_id" => "required|in:$mpeCategoryId",
-            "unit_id" => "required|in:$mpeUnitId",
-            "name" => "required|string",
-            "unit" => "required|integer",
-            "sell_price" => 'required | numeric',
-            "discount_price" => "required|numeric",
-            "is_discount" => "required|boolean",
-            "is_promotion" => "required|boolean",
+            'category_id' => "required|in:$mpeCategoryId",
+            'unit_id' => "required|in:$mpeUnitId",
+            'name' => 'required|string',
+            'unit' => 'required|integer',
+            'sell_price' => 'required | numeric',
+            'discount_price' => 'required|numeric',
+            'is_discount' => 'required|boolean',
+            'is_promotion' => 'required|boolean',
         ];
     }
 }

@@ -8,6 +8,7 @@ use App\Http\Requests\UserLoginRequest;
 use App\Mail\VerifiedCode as MailVerifiedCode;
 use App\Models\User;
 use App\Models\VerifiedCode;
+use Exception;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Mail;
 
@@ -57,9 +58,6 @@ class UserAuthController extends Controller
         }
     }
 
-    /**
-     * APIs for user login out
-     */
     public function logout()
     {
         DB::beginTransaction();

@@ -14,9 +14,16 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::middleware(['mpe'])->group(function () {
-    Route::post('/register', 'MPEUserController@register');
+    Route::post('/register', 'MPEAuthController@register');
+    Route::post('/login', 'MPEAuthController@login');
 
     Route::group(['prefix' => 'auth'], function () {
-        Route::post('/login', 'MPEUserController@login');
+        Route::post('/email-verify', 'MPEAuthController@emailVerify');
+        Route::post('/resend', 'MPEAuthController@resendEmailVerifyCode');
+        Route::post('/reset-password', 'MPEAuthController@resetPassword');
+    });
+
+    Route::middleware(['jwt'])->group(function () {
+
     });
 });

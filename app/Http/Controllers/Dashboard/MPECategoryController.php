@@ -2,9 +2,9 @@
 
 namespace App\Http\Controllers\Dashboard;
 
-use App\Models\MPECategory;
 use App\Http\Requests\MPECategoryStoreRequest;
 use App\Http\Requests\MPECategoryUpdateRequest;
+use App\Models\MPECategory;
 use Illuminate\Support\Facades\DB;
 
 class MPECategoryController extends Controller
@@ -94,6 +94,4 @@ class MPECategoryController extends Controller
             throw $e;
         }
     }
-
-
 }

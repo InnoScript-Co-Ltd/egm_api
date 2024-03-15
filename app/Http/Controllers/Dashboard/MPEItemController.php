@@ -2,10 +2,9 @@
 
 namespace App\Http\Controllers\Dashboard;
 
-use App\Models\MPEItem;
 use App\Http\Requests\MPEItemStoreRequest;
 use App\Http\Requests\MPEItemUpdateRequest;
-use Illuminate\Http\Request;
+use App\Models\MPEItem;
 use Illuminate\Support\Facades\DB;
 
 class MPEItemController extends Controller
@@ -84,7 +83,7 @@ class MPEItemController extends Controller
         DB::beginTransaction();
         try {
 
-            $item= MPEItem::findOrFail($id);
+            $item = MPEItem::findOrFail($id);
             $item->delete($id);
             DB::commit();
 
