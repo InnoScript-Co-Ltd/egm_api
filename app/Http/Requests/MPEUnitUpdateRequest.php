@@ -26,8 +26,8 @@ class MPEUnitUpdateRequest extends FormRequest
         $generalStatusEnum = implode(',', (new Enum(GeneralStatusEnum::class))->values());
 
         return [
-            "name" => "nullable|string",
-            "status" => "nullable|in:$generalStatusEnum"
+            'name' => 'nullable|string',
+            'status' => "nullable|in:$generalStatusEnum",
         ];
     }
 }

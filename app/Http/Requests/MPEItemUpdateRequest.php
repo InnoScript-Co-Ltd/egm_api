@@ -30,15 +30,15 @@ class MPEItemUpdateRequest extends FormRequest
         $generalStatusEnum = implode(',', (new Enum(GeneralStatusEnum::class))->values());
 
         return [
-            "category_id" => "nullable|in:$mpeCategoryId",
-            "unit_id" => "nullable|in:$mpeUnitId",
-            "name" => "nullable|string",
-            "unit" => "nullable|integer",
-            "sell_price" => 'nullable | numeric',
-            "discount_price" => "nullable|numeric",
-            "is_discount" => "nullable|boolean",
-            "is_promotion" => "nullable|boolean",
-            "status" => "nullable|in:$generalStatusEnum"
+            'category_id' => "nullable|in:$mpeCategoryId",
+            'unit_id' => "nullable|in:$mpeUnitId",
+            'name' => 'nullable|string',
+            'unit' => 'nullable|integer',
+            'sell_price' => 'nullable | numeric',
+            'discount_price' => 'nullable|numeric',
+            'is_discount' => 'nullable|boolean',
+            'is_promotion' => 'nullable|boolean',
+            'status' => "nullable|in:$generalStatusEnum",
         ];
     }
 }

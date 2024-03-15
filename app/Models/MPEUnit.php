@@ -12,9 +12,9 @@ class MPEUnit extends Model
 {
     use BasicAudit,HasFactory,SnowflakeID,SoftDeletes;
 
-    protected $table = "mpe_units";
+    protected $table = 'mpe_units';
 
     protected $fillable = [
-        "name", "status"
-    ];  
+        'name', 'status',
+    ];
 }

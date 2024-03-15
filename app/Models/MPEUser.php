@@ -32,8 +32,8 @@ class MPEUser extends Authenticatable implements JWTSubject
         'status',
         'email_verified_at',
         'phone_verified_at',
-        'email_code',
-        'client_type',
+        'email_verify_code',
+        'email_expired_at',
     ];
 
     protected $hidden = ['password', 'remember_token'];
@@ -41,6 +41,7 @@ class MPEUser extends Authenticatable implements JWTSubject
     protected $casts = [
         'email_verified_at' => 'datetime',
         'phone_verified_at' => 'datetime',
+        'email_expired_at' => 'datetime',
         'password' => 'hashed',
         'dob' => 'date',
     ];
