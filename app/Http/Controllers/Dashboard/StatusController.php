@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Dashboard;
 
 use App\Enums\AdminStatusEnum;
+use App\Enums\AppTypeEnum;
 use App\Enums\GeneralStatusEnum;
 use App\Enums\MemberCardStatusEnum;
 use App\Enums\MemberDiscountStatus;
@@ -37,6 +38,7 @@ class StatusController extends Controller
             'member_discount' => (new Enum(MemberDiscountStatus::class))->values(),
             'membercard' => (new Enum(MemberCardStatusEnum::class))->values(),
             'memberOrder' => (new Enum(MembershipOrderStatusEnum::class))->values(),
+            'apptype' => (new Enum(AppTypeEnum::class))->values(),
         ];
 
         $statusTypes = collect($allowableStatus)->filter(function ($value, $index) use ($requestStatus) {
