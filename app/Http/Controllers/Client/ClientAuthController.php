@@ -5,7 +5,7 @@ namespace App\Http\Controllers\Client;
 use App\Enums\UserStatusEnum;
 use App\Http\Controllers\Dashboard\Controller;
 use App\Http\Requests\ClientLoginRequest;
-use App\Http\Requests\ClientRegisterRequest;
+use App\Http\Requests\UserClientRegisterRequest;
 use App\Http\Requests\EamilVerifyRequest;
 use App\Http\Requests\EmailVerifyCodeResendRequest;
 use App\Http\Requests\ResetPasswordRequest;
@@ -62,7 +62,7 @@ class ClientAuthController extends Controller
         }
     }
 
-    public function register(ClientRegisterRequest $request)
+    public function register(UserClientRegisterRequest $request)
     {
         $payload = collect($request->validated());
 
