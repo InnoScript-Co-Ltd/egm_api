@@ -5,15 +5,15 @@ namespace App\Http\Controllers\Client;
 use App\Enums\UserStatusEnum;
 use App\Http\Controllers\Dashboard\Controller;
 use App\Http\Requests\ClientLoginRequest;
-use App\Http\Requests\UserClientRegisterRequest;
 use App\Http\Requests\EamilVerifyRequest;
 use App\Http\Requests\EmailVerifyCodeResendRequest;
 use App\Http\Requests\ResetPasswordRequest;
-use App\Models\User;
+use App\Http\Requests\UserClientRegisterRequest;
 use App\Mail\EmailVerifyCode;
+use App\Models\User;
+use Carbon\Carbon;
 use Exception;
 use Illuminate\Support\Facades\DB;
-use Carbon\Carbon;
 use Mail;
 
 class ClientAuthController extends Controller
@@ -39,7 +39,7 @@ class ClientAuthController extends Controller
         try {
             $user = User::where(['email' => $payload['email']])->first();
 
-            if (!$user) {
+            if (! $user) {
                 return $this->badRequest('Account does not found');
             }
 

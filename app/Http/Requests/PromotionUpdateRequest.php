@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests;
 
+use App\Enums\AppTypeEnum;
 use App\Enums\GeneralStatusEnum;
 use App\Helpers\Enum;
 use Illuminate\Foundation\Http\FormRequest;
@@ -24,22 +25,15 @@ class PromotionUpdateRequest extends FormRequest
     public function rules(): array
     {
         $generalStatusEnum = implode(',', (new Enum(GeneralStatusEnum::class))->values());
+        $appTypes = implode(',', (new Enum(AppTypeEnum::class))->values());
 
         return [
-            'title' => 'string | nullable',
-            'image' => 'numeric | nullable',
-            'url' => 'string | nullable',
-            'status' => "in:$generalStatusEnum | nullable",
-        ];
-    }
-
-    public function messages()
-    {
-        return [
-            'title.required' => 'Please enter your promotion title',
-            'title.stirng' => 'Please enter title using letters only in the title field.',
-            'image.required' => 'Please enter your promotion image',
-            'url.string' => 'Please check your promotion url must be string',
+            'title' => 'nullable | string',
+            'image' => 'nullable | image:mimes:jpeg,png,jpg,gif|max:2048',
+            'app_type' => "nullable | string | in:$appTypes",
+            'start_date' => 'nullable | date',
+            'end_date' => 'nullable | date',
+            'status' => "nullable | string | in:$generalStatusEnum",
         ];
     }
 }

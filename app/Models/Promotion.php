@@ -12,9 +12,19 @@ class Promotion extends Model
 {
     use BasicAudit,HasFactory,SnowflakeID,SoftDeletes;
 
+    public $table = 'promotions';
+
     protected $fillable = [
-        'title', 'image', 'url', 'status',
+        'title', 'app_type', 'start_date', 'end_date', 'status',
     ];
 
-    public $table = 'promotions';
+    protected $casts = [
+        'start_date' => 'date',
+        'end_date' => 'date',
+    ];
+
+    public function image()
+    {
+        return $this->morphOne(Image::class, 'imageable');
+    }
 }
