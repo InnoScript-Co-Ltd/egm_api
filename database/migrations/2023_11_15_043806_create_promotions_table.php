@@ -15,9 +15,10 @@ return new class extends Migration
         Schema::create('promotions', function (Blueprint $table) {
             $table->snowflakeIdAndPrimary();
             $table->string('title');
-            $table->string('image');
-            $table->string('url');
-            $table->string('status')->default(GeneralStatusEnum::DISABLE->value);
+            $table->string('app_type');
+            $table->date('start_date')->nullable();
+            $table->date('end_date')->nullable();
+            $table->string('status')->default(GeneralStatusEnum::PENDING->value);
             $table->auditColumns();
         });
     }

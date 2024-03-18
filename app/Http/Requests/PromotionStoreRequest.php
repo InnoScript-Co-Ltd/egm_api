@@ -2,6 +2,8 @@
 
 namespace App\Http\Requests;
 
+use App\Enums\AppTypeEnum;
+use App\Helpers\Enum;
 use Illuminate\Foundation\Http\FormRequest;
 
 class PromotionStoreRequest extends FormRequest
@@ -21,20 +23,14 @@ class PromotionStoreRequest extends FormRequest
      */
     public function rules(): array
     {
-        return [
-            'title' => 'string | required',
-            'image' => 'numeric | required',
-            'url' => 'string',
-        ];
-    }
+        $appTypes = implode(',', (new Enum(AppTypeEnum::class))->values());
 
-    public function messages()
-    {
         return [
-            'title.required' => 'Please enter your promotion title',
-            'title.stirng' => 'Please enter title using letters only in the title field.',
-            'image.required' => 'Please enter your promotion image',
-            'url.string' => 'Please check your promotion url must be string',
+            'title' => 'required | string',
+            'image' => 'required | image:mimes:jpeg,png,jpg,gif|max:2048',
+            'app_type' => "required | string | in:$appTypes",
+            'start_date' => 'required | date',
+            'end_date' => 'required | date',
         ];
     }
 }

@@ -110,13 +110,11 @@ Route::middleware('jwt')->group(function () {
     });
 
     Route::group(['prefix' => 'promotion'], function () {
-
         Route::get('/', 'PromotionController@index')->permission(PermissionEnum::PROMOTION_INDEX->value);
         Route::post('/', 'PromotionController@store')->permission(PermissionEnum::PROMOTION_STORE->value);
         Route::get('/{id}', 'PromotionController@show')->permission(PermissionEnum::PROMOTION_SHOW->value);
-        Route::put('/{id}', 'PromotionController@update')->permission(PermissionEnum::PROMOTION_UPDATE->value);
+        Route::post('/{id}', 'PromotionController@update')->permission(PermissionEnum::PROMOTION_UPDATE->value);
         Route::delete('/{id}', 'PromotionController@destory')->permission(PermissionEnum::PROMOTION_DESTROY->value);
-
     });
 
     Route::group(['prefix' => 'delivery-address'], function () {
