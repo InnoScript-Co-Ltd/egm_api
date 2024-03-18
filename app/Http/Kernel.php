@@ -42,6 +42,7 @@ class Kernel extends HttpKernel
             // \Laravel\Sanctum\Http\Middleware\EnsureFrontendRequestsAreStateful::class,
             \Illuminate\Routing\Middleware\ThrottleRequests::class.':api',
             \Illuminate\Routing\Middleware\SubstituteBindings::class,
+            \App\Http\Middleware\ApiMiddleware::class,
         ],
 
         'dashboard' => [
@@ -88,5 +89,6 @@ class Kernel extends HttpKernel
         'role_or_permission' => \Spatie\Permission\Middleware\RoleOrPermissionMiddleware::class,
         'merchant' => \App\Http\Middleware\MerchantMiddleware::class,
         'mpe' => \App\Http\Middleware\MPEMiddleware::class,
+        'api' => \App\Http\Middleware\ApiMiddleware::class,
     ];
 }

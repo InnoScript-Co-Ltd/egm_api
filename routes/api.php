@@ -13,12 +13,17 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::group(['prefix' => 'auth'], function () {
-    Route::post('/login', 'ClientAuthController@login');
-});
+Route::middleware(['api'])->group(function () {
 
-Route::group(['prefix' => 'register'], function () {
-    Route::post('/', 'ClientRegisterController@store');
+    Route::post('/login', 'ClientAuthController@login');
+    Route::post('/register', 'ClientAuthController@register');
+
+    Route::group(['prefix' => 'auth'], function () {
+        Route::post('/email-verify', 'ClientAuthController@emailVerify');
+        Route::post('/resend', 'ClientAuthController@resendEmailVerifyCode');
+        Route::post('/reset-password', 'ClientAuthController@resetPassword');
+    });
+
 });
 
 // Route::middleware('jwt')->group(function () {
