@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers\MPE;
 
-use App\Enums\UserStatusEnum;
 use App\Http\Controllers\Dashboard\Controller;
 use App\Http\Requests\EamilVerifyRequest;
 use App\Http\Requests\EmailVerifyCodeResendRequest;
@@ -31,8 +30,8 @@ class MPEAuthController extends Controller
                 return $this->badRequest('Account does not found');
             }
 
-            if ($user->status !== UserStatusEnum::ACTIVE->value) {
-                return $this->badRequest('Account is not active');
+            if ($user['status'] === 'PENDING') {
+                return $this->badRequest('Account is not verified');
             }
 
             $token = auth()->guard('mpe')->attempt($payload->toArray());
@@ -186,8 +185,8 @@ class MPEAuthController extends Controller
         return $this->success('User successfully signed in', [
             'access_token' => $token,
             'token_type' => 'bearer',
-            'expires_in' => auth('dashboard')->factory()->getTTL() * 60,
-            'user' => auth('dashboard')->user(),
+            'expires_in' => auth('mpe')->factory()->getTTL() * 60,
+            'user' => auth('mpe')->user(),
         ]);
     }
 }
