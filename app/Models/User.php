@@ -10,13 +10,11 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
-use Spatie\Permission\Traits\HasPermissions;
-use Spatie\Permission\Traits\HasRoles;
 use Tymon\JWTAuth\Contracts\JWTSubject;
 
 class User extends Authenticatable implements JWTSubject
 {
-    use BasicAudit, HasApiTokens, HasFactory, HasPermissions, HasRoles, Notifiable, SnowflakeID, SoftDeletes;
+    use BasicAudit, HasApiTokens, HasFactory, Notifiable, SnowflakeID, SoftDeletes;
 
     protected $table = 'users';
 
@@ -27,7 +25,7 @@ class User extends Authenticatable implements JWTSubject
      */
     protected $fillable = [
         'name', 'email', 'phone', 'gender', 'dob', 'occupation', 'position', 'address',
-        'password', 'status', 'email_verified_at', 'phone_verified_at', 'email_code', 'client_type',
+        'password', 'status', 'email_verified_at', 'phone_verified_at', 'email_verify_code', 'email_expired_at', 'client_type',
     ];
 
     /**
@@ -48,6 +46,7 @@ class User extends Authenticatable implements JWTSubject
     protected $casts = [
         'email_verified_at' => 'datetime',
         'phone_verified_at' => 'datetime',
+        'email_expired_at' => 'datetime',
         'password' => 'hashed',
         'dob' => 'date',
     ];
