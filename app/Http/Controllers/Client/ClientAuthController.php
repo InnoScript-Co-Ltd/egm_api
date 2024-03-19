@@ -138,16 +138,21 @@ class ClientAuthController extends Controller
         try {
             $user = User::where(['email' => $payload['email']])->first();
 
-            $updatePayload['email_verify_code'] = rand(100000, 999999);
-            $updatePayload['email_expired_at'] = Carbon::now()->addMinutes(5);
-            $updatePayload['user_id'] = $user->id;
-            $updatePayload['email'] = $user->email;
-            $user->update($updatePayload);
+            if($user !== null){
+                $updatePayload['email_verify_code'] = rand(100000, 999999);
+                $updatePayload['email_expired_at'] = Carbon::now()->addMinutes(5);
+                $updatePayload['user_id'] = $user->id;
+                $updatePayload['email'] = $user->email;
+                $user->update($updatePayload);
+    
+                Mail::to($payload['email'])->send(new EmailVerifyCode($updatePayload['email_verify_code']));
+                DB::commit();
+    
+                return $this->success('email verify code is resend successfully', $updatePayload);
+            }
 
-            Mail::to($payload['email'])->send(new EmailVerifyCode($updatePayload['email_verify_code']));
-            DB::commit();
+            return $this->badRequest('Your email could not be found');
 
-            return $this->success('email verify code is resend successfully', $updatePayload);
         } catch (Exception $e) {
             DB::rollBack();
             throw $e;
