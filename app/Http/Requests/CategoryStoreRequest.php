@@ -2,7 +2,8 @@
 
 namespace App\Http\Requests;
 
-use App\Models\Category;
+use App\Enums\AppTypeEnum;
+use App\Helpers\Enum;
 use Illuminate\Foundation\Http\FormRequest;
 
 class CategoryStoreRequest extends FormRequest
@@ -22,15 +23,13 @@ class CategoryStoreRequest extends FormRequest
      */
     public function rules(): array
     {
-
-        $categoryId = implode(',', Category::all()->pluck('id')->toArray());
+        $appTypes = implode(',', (new Enum(AppTypeEnum::class))->values());
 
         return [
-            'title' => 'string | required | unique:categories,title',
-            'level' => 'numeric | nullable',
-            'icon' => 'numeric | nullable',
-            'main_category_id' => "nullable | in:$categoryId",
-            'description' => 'string | nullable',
+            'name' => 'required | string | unique:categories,name',
+            'icon' => 'nullable | image:mimes:jpeg,png,jpg,gif|max:2048',
+            'description' => 'nullable | string',
+            'app_type' => "required | string | in:$appTypes",
         ];
     }
 }

@@ -94,7 +94,7 @@ Route::middleware('jwt')->group(function () {
         Route::get('/', 'CategoryController@index')->permission(PermissionEnum::CATEGORY_INDEX->value);
         Route::post('/', 'CategoryController@store')->permission(PermissionEnum::CATEGORY_STORE->value);
         Route::get('/{id}', 'CategoryController@show')->permission(PermissionEnum::CATEGORY_SHOW->value);
-        Route::put('/{id}', 'CategoryController@update')->permission(PermissionEnum::CATEGORY_UPDATE->value);
+        Route::post('/{id}', 'CategoryController@update')->permission(PermissionEnum::CATEGORY_UPDATE->value);
         Route::delete('/{id}', 'CategoryController@destroy')->permission(PermissionEnum::CATEGORY_DESTROY->value);
 
     });
