@@ -15,12 +15,11 @@ class Category extends Model
     public $table = 'categories';
 
     protected $fillable = [
-        'title', 'description', 'app_type', 'status'
+        'name', 'description', 'app_type', 'status',
     ];
 
     public function icon()
     {
         return $this->morphOne(Image::class, 'imageable');
     }
-
 }

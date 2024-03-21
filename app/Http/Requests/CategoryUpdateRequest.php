@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests;
 
+use App\Enums\AppTypeEnum;
 use App\Enums\GeneralStatusEnum;
 use App\Helpers\Enum;
 use App\Models\Category;
@@ -25,19 +26,16 @@ class CategoryUpdateRequest extends FormRequest
     public function rules(): array
     {
 
-        $categoryIds = implode(',', Category::all()->pluck('id')->toArray());
-        $generalStatusEnum = implode(',', (new Enum(GeneralStatusEnum::class))->values());
-
-        $category = Category::FindOrFail(request('id'));
-        $categoryId = $category->id;
+        $categoryId = Category::findOrFail(request('id'))->id;
+        $generalStatus = implode(',', (new Enum(GeneralStatusEnum::class))->values());
+        $appTypes = implode(',', (new Enum(AppTypeEnum::class))->values());
 
         return [
-            'title' => "nullable | string | unique:categories,title,$categoryId",
-            'level' => 'nullable | numeric',
-            'icon' => 'nullable | numeric',
-            'category_id' => "nullable | in:$categoryIds",
+            'name' => "nullable | string | unique:categories,name,$categoryId",
+            'icon' => 'nullable | image:mimes:jpeg,png,jpg,gif|max:2048',
+            'app_type' => "nullable | string | in:$appTypes",
             'description' => 'nullable | string',
-            'status' => "nullable | in:$generalStatusEnum",
+            'status' => "nullable | string | in:$generalStatus",
         ];
     }
 }

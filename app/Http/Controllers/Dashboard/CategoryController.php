@@ -7,6 +7,7 @@ use App\Http\Requests\CategoryStoreRequest;
 use App\Http\Requests\CategoryUpdateRequest;
 use App\Imports\ImportCategory;
 use App\Models\Category;
+use Exception;
 use Illuminate\Support\Facades\DB;
 use Maatwebsite\Excel\Facades\Excel;
 
@@ -17,7 +18,8 @@ class CategoryController extends Controller
         DB::beginTransaction();
 
         try {
-            $category = Category::searchQuery()
+            $category = Category::with(['icon'])
+                ->searchQuery()
                 ->sortingQuery()
                 ->filterQuery()
                 ->filterDateQuery()
@@ -39,9 +41,20 @@ class CategoryController extends Controller
         try {
 
             $category = Category::create($payload->toArray());
+
+            if (isset($payload['icon'])) {
+                $imagePath = $payload['icon']->store('images', 'public');
+                $iconImage = explode('/', $imagePath)[1];
+                $category->icon()->updateOrCreate(['imageable_id' => $category->id], [
+                    'image' => $iconImage,
+                    'imageable_id' => $category->id,
+                ]);
+                $category['icon'] = $iconImage;
+            }
+
             DB::commit();
 
-            return $this->success('Category is created successfully', $category);
+            return $this->success('New category is created successfully', $category);
 
         } catch (Exception $e) {
             DB::rollback();
@@ -55,7 +68,7 @@ class CategoryController extends Controller
         DB::beginTransaction();
         try {
 
-            $category = Category::findOrFail($id);
+            $category = Category::with(['icon'])->findOrFail($id);
             DB::commit();
 
             return $this->success('Category detail is successfully retrived', $category);
@@ -75,6 +88,17 @@ class CategoryController extends Controller
 
             $category = Category::findOrFail($id);
             $category->update($payload->toArray());
+
+            if (isset($payload['icon'])) {
+                $imagePath = $payload['icon']->store('images', 'public');
+                $iconImage = explode('/', $imagePath)[1];
+                $category->icon()->updateOrCreate(['imageable_id' => $category->id], [
+                    'image' => $iconImage,
+                    'imageable_id' => $category->id,
+                ]);
+                $category['icon'] = $iconImage;
+            }
+
             DB::commit();
 
             return $this->success('Category is updated successfully', $category);
