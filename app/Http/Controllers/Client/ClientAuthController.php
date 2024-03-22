@@ -20,13 +20,14 @@ class ClientAuthController extends Controller
 {
     protected function createNewToken($token)
     {
-        $auth = auth('api');
+        $id = auth('api')->user()->id;
+        $user = User::with(['profile'])->findOrFail($id);
 
         return $this->success('User is successfully signed in', [
             'access_token' => $token,
             'token_type' => 'bearer',
             'expires_in' => auth()->guard('api')->factory()->getTTL() * 60,
-            'user' => $auth->user(),
+            'user' => $user,
         ]);
     }
 
