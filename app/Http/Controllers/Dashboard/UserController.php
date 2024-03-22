@@ -14,7 +14,8 @@ class UserController extends Controller
 {
     public function index()
     {
-        $user = User::searchQuery()
+        $user = User::with(['profile'])
+            ->searchQuery()
             ->sortingQuery()
             ->filterQuery()
             ->filterDateQuery()
@@ -42,7 +43,7 @@ class UserController extends Controller
 
     public function show($id)
     {
-        $user = User::with(['members', 'image'])->findOrFail($id);
+        $user = User::with(['members', 'profile'])->findOrFail($id);
 
         return $this->success('User detail is successfully retrived', $user);
     }
@@ -58,7 +59,7 @@ class UserController extends Controller
             if (isset($payload['profile'])) {
                 $imagePath = $payload['profile']->store('images', 'public');
                 $profileImage = explode('/', $imagePath)[1];
-                $user->image()->updateOrCreate(['imageable_id' => $user->id], [
+                $user->profile()->updateOrCreate(['imageable_id' => $user->id], [
                     'image' => $profileImage,
                     'imageable_id' => $user->id,
                 ]);

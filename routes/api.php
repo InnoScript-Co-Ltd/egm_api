@@ -24,6 +24,10 @@ Route::middleware(['api'])->group(function () {
         Route::post('/reset-password', 'ClientAuthController@resetPassword');
     });
 
+    Route::middleware('jwt')->group(function () {
+        Route::post('/{id}', 'ClientUserController@update'); 
+    });
+
 });
 
 // Route::middleware('jwt')->group(function () {
