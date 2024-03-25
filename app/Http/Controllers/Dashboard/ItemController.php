@@ -105,7 +105,7 @@ class ItemController extends Controller
                 $imagePath = $photo->store('images', 'public');
                 $profileImage = explode('/', $imagePath)[1];
                 $item->thumbnailPhoto()->where('imageable_id', '=', $item->id)->delete();
-                $item->thumbnailPhoto()->create([
+                $item->thumbnailPhoto()->updateOrCreate([
                     'image' => $profileImage,
                     'imageable_id' => $item->id,
                 ]);
@@ -116,7 +116,7 @@ class ItemController extends Controller
                 foreach ($payload['product_photo'] as $photo) {
                     $imagePath = $photo->store('images', 'public');
                     $profileImage = explode('/', $imagePath)[1];
-                    $item->productPhoto()->create([
+                    $item->productPhoto()->updateOrCreate([
                         'image' => $profileImage,
                         'imageable_id' => $item->id,
                     ]);
