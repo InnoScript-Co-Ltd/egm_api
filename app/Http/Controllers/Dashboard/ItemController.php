@@ -16,7 +16,7 @@ class ItemController extends Controller
 {
     public function index()
     {
-        $item = Item::with(['category', 'shop', 'thumbnailPhoto', 'productPhoto'])
+        $item = Item::with(['thumbnailPhoto', 'productPhoto'])
             ->searchQuery()
             ->sortingQuery()
             ->filterQuery()
