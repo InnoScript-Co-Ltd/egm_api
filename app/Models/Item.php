@@ -36,7 +36,7 @@ class Item extends Model
     {
         $category = Category::where(['id' => $this->attributes['category_id']])->first();
         if ($category) {
-            return $category->title;
+            return $category->name;
         } else {
             return null;
         }
