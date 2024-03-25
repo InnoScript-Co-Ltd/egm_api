@@ -62,7 +62,7 @@ class PromotionController extends Controller
         DB::beginTransaction();
 
         try {
-            $promotion = Promotion::findOrFail($id);
+            $promotion = Promotion::with(['image'])->findOrFail($id);
             DB::commit();
 
             return $this->success('Promotion detail is successfully retrived', $promotion);
@@ -79,7 +79,8 @@ class PromotionController extends Controller
         DB::beginTransaction();
 
         try {
-            $promotion = Promotion::findOrFail($id);
+            $promotion = Promotion::with(['image'])->findOrFail($id);
+            $promotion->update($payload->toArray());
 
             if (isset($payload['image'])) {
                 $imagePath = $payload['image']->store('images', 'public');
@@ -88,10 +89,8 @@ class PromotionController extends Controller
                     'image' => $imageName,
                     'imageable_id' => $promotion->id,
                 ]);
+                $promotion['image'] = $imageName;
             }
-
-            $promotion->update($payload->toArray());
-            $promotion['image'] = $imageName;
             DB::commit();
 
             return $this->success('Promotion is updated successfully', $promotion);
