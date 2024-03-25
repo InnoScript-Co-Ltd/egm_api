@@ -31,20 +31,21 @@ class ItemUpdateRequest extends FormRequest
         $shopIds = implode(',', Shop::all()->pluck('id')->toArray());
 
         return [
-            'category_id' => "nullable | in:$categoryId",
-            'shop_id' => "nullable | in:$shopIds",
-            'name' => 'string',
-            'code' => 'string',
+            'name' => 'nullable | string',
+            'thumbnail_photo' => 'nullable | file',
+            'product_photo' => 'nullable | array',
+            'product_photo.*' => 'nullable|file',
+            'item_code' => ['nullable', 'unique:items,item_code', 'string'],
+            'item_color' => 'nullable | array',
+            'item_color.*' => 'nullable | string',
+            'item_size' => 'nullable | array',
+            'item_size.*' => 'nullable | string',
             'description' => 'string | nullable',
             'content' => 'string | nullable',
-            'price' => 'numeric | nullable',
-            'sell_price' => 'numeric',
-            'out_of_stock' => 'boolean',
-            'status' => "nullable | in:$generalStatusEnum",
+            'price' => 'nullable | numeric',
+            'sell_price' => 'nullable | numeric',
             'instock' => 'nullable | numeric',
-            'image' => 'nullable | array',
-            'image.*.id' => ['required'],
-            'image.*.is_feature' => ['nullable', 'boolean'],
+            'status' => "nullable | in:$generalStatusEnum",
         ];
     }
 }

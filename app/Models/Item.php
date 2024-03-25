@@ -2,13 +2,22 @@
 
 namespace App\Models;
 
+use App\Models\Item;
+use App\Models\Category;
+use App\Traits\BasicAudit;
+use App\Traits\SnowflakeID;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class Item extends Model
 {
+    use BasicAudit,HasFactory,SnowflakeID,SoftDeletes;
+
     protected $fillable = [
-        'category_id', 'shop_id', 'name', 'images', 'code', 'description', 'content', 'price', 'sell_price', 'out_of_stock', 'instock',
+        'category_id', 'shop_id', 'name', 'thumbnail_photo', 'product_photo', 'item_code', 
+        'item_color', 'item_size', 'description', 'content', 'price', 'sell_price', 'instock',
         'status',
     ];
 
@@ -17,7 +26,9 @@ class Item extends Model
     public $appends = ['category_name', 'shop_name'];
 
     protected $casts = [
-        'images' => 'json',
+        'product_photo' => 'json',
+        "item_color" => 'json',
+        "item_size" => 'json',
         'out_of_stock' => 'boolean',
     ];
 
@@ -41,8 +52,24 @@ class Item extends Model
         }
     }
 
+    public function thumbnailPhoto()
+    {
+        return $this->morphOne(Image::class, 'imageable');
+    }
+
+    public function productPhoto()
+    {
+        return $this->morphMany(Image::class, 'imageable');
+    }
+
     public function category(): BelongsTo
     {
         return $this->belongsTo(Category::class, 'category_id', 'id');
     }
+
+    public function shop(): BelongsTo
+    {
+        return $this->belongsTo(Shop::class, 'shop_id', 'id');
+    }
+
 }

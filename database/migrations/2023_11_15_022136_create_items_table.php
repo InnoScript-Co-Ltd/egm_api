@@ -17,14 +17,16 @@ return new class extends Migration
             $table->snowflakeId('category_id')->nullable()->default(null);
             $table->snowflakeId('shop_id')->nullable()->default(null);
             $table->string('name')->default(null);
-            $table->json('images')->nullable()->default(null);
-            $table->string('code');
+            $table->string('thumbnail_photo');
+            $table->json("product_photo");
+            $table->string('item_code');
+            $table->json("item_color");
+            $table->json("item_size");
             $table->longtext('description')->nullable()->default(null);
             $table->longtext('content')->nullable()->default(null);
             $table->float('price', 9, 2)->nullable()->default(null);
             $table->float('sell_price', 9, 2);
-            $table->boolean('out_of_stock')->default(false);
-            $table->integer('instock')->default(false);
+            $table->integer('instock')->default(0);
             $table->string('status')->default(GeneralStatusEnum::DISABLE->value);
             $table->auditColumns();
 
