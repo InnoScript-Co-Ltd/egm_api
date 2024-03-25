@@ -16,7 +16,7 @@ class ItemController extends Controller
 {
     public function index()
     {
-        $item = Item::with(['category'])
+        $item = Item::with(['category', 'shop', 'thumbnailPhoto', 'productPhoto'])
             ->searchQuery()
             ->sortingQuery()
             ->filterQuery()
@@ -40,45 +40,35 @@ class ItemController extends Controller
 
         $payload = collect($request->validated());
 
-        $files = collect($payload['images'])->map(function ($image) {
-            $image_path = $image->store('images', 'public');
-            $name = explode('/', $image_path)[1];
-            $snowflake = new SnowFlake;
-
-            return [
-                'id' => $snowflake->id(),
-                'name' => $name,
-                'category' => 'ITEM',
-                'size' => $image->getSize(),
-                'type' => $image->getMimeType(),
-            ];
-        });
-
         DB::beginTransaction();
         try {
-            $uploadFile = collect($files->toArray())->map(function ($file) {
-                return File::create($file);
-            });
 
-            if ($uploadFile) {
-                $fileId = $uploadFile->map(function ($file) {
-                    return $file->id;
-                });
+            $item = Item::create($payload->toArray());
 
-                $payload['images'] = $fileId->toArray();
-
-                $item = Item::create($payload->toArray());
-                DB::commit();
-
-                return $this->success('Item is created successfully', $item);
-
-            } else {
-                DB::commit();
-
-                return $this->validationError('Item is created fialed', [
-                    'images' => ['can not upload image files'],
+            if($request->has('thumbnail_photo') && is_array($payload['thumbnail_photo'])){
+                $imagePath = $photo->store('images', 'public');
+                $profileImage = explode('/', $imagePath)[1];
+                $item->thumbnailPhoto()->create([
+                    'image' => $profileImage,
+                    'imageable_id' => $item->id,
                 ]);
             }
+
+            if ($request->has('product_photo') && is_array($payload['product_photo'])) {
+                foreach ($payload['product_photo'] as $photo) {
+                    $imagePath = $photo->store('images', 'public');
+                    $profileImage = explode('/', $imagePath)[1];
+                    $item->productPhoto()->create([
+                        'image' => $profileImage,
+                        'imageable_id' => $item->id,
+                    ]);
+                }
+            }
+
+            DB::commit();
+
+            return $this->success('Item is created successfully', $item);
+
 
         } catch (Exception $e) {
             DB::rollback();
@@ -92,7 +82,7 @@ class ItemController extends Controller
         DB::beginTransaction();
         try {
 
-            $item = Item::findOrFail($id);
+            $item = Item::with(['thumbnailPhoto', 'productPhoto'])->findOrFail($id);
             DB::commit();
 
             return $this->success('Item detail is successfully retrived', $item);
@@ -110,6 +100,29 @@ class ItemController extends Controller
         try {
 
             $item = Item::findOrFail($id);
+
+            if($request->has('thumbnail_photo') && is_array($payload['thumbnail_photo'])){
+                $imagePath = $photo->store('images', 'public');
+                $profileImage = explode('/', $imagePath)[1];
+                $item->thumbnailPhoto()->where('imageable_id', '=', $item->id)->delete();
+                $item->thumbnailPhoto()->create([
+                    'image' => $profileImage,
+                    'imageable_id' => $item->id,
+                ]);
+            }
+
+            if ($request->has('product_photo') && is_array($payload['product_photo'])) {
+                $item->productPhoto()->where('imageable_id', '=', $item->id)->delete();
+                foreach ($payload['product_photo'] as $photo) {
+                    $imagePath = $photo->store('images', 'public');
+                    $profileImage = explode('/', $imagePath)[1];
+                    $item->productPhoto()->create([
+                        'image' => $profileImage,
+                        'imageable_id' => $item->id,
+                    ]);
+                }
+            }
+
             $item->update($payload->toArray());
             DB::commit();
 
