@@ -138,16 +138,16 @@ class ClientAuthController extends Controller
         try {
             $user = User::where(['email' => $payload['email']])->first();
 
-            if($user !== null){
+            if ($user !== null) {
                 $updatePayload['email_verify_code'] = rand(100000, 999999);
                 $updatePayload['email_expired_at'] = Carbon::now()->addMinutes(5);
                 $updatePayload['user_id'] = $user->id;
                 $updatePayload['email'] = $user->email;
                 $user->update($updatePayload);
-    
+
                 Mail::to($payload['email'])->send(new EmailVerifyCode($updatePayload['email_verify_code']));
                 DB::commit();
-    
+
                 return $this->success('email verify code is resend successfully', $updatePayload);
             }
 
