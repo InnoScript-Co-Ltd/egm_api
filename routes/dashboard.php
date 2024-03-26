@@ -194,8 +194,16 @@ Route::middleware('jwt')->group(function () {
             Route::get('/', 'CountryController@index')->permission(PermissionEnum::COUNTRY_INDEX->value);
             Route::post('/', 'CountryController@store')->permission(PermissionEnum::COUNTRY_STORE->value);
             Route::get('/{id}', 'CountryController@show')->permission(PermissionEnum::COUNTRY_SHOW->value);
-            Route::put('/{id}', 'CountryController@update')->permission(PermissionEnum::COUNTRY_UPDATE->value);
+            Route::post('/{id}', 'CountryController@update')->permission(PermissionEnum::COUNTRY_UPDATE->value);
             Route::delete('/{id}', 'CountryController@destroy')->permission(PermissionEnum::COUNTRY_DESTROY->value);
+        });
+
+        Route::group(['prefix' => 'region-and-state'], function () {
+            Route::get('/', 'RegionAndStateController@index')->permission(PermissionEnum::REGION_AND_STATE_INDEX->value);
+            Route::post('/', 'RegionAndStateController@store')->permission(PermissionEnum::REGION_AND_STATE_STORE->value);
+            Route::get('/{id}', 'RegionAndStateController@show')->permission(PermissionEnum::REGION_AND_STATE_SHOW->value);
+            Route::put('/{id}', 'RegionAndStateController@update')->permission(PermissionEnum::REGION_AND_STATE_UPDATE->value);
+            Route::delete('/{id}', 'RegionAndStateController@destroy')->permission(PermissionEnum::REGION_AND_STATE_DESTROY->value);
         });
     });
 

@@ -15,7 +15,7 @@ class CountryController extends Controller
         DB::beginTransaction();
         try {
 
-            $countries = Country::with(['flagImage'])
+            $countries = Country::with(['flagImage', 'regionOrState'])
                 ->searchQuery()
                 ->sortingQuery()
                 ->filterQuery()
@@ -65,7 +65,7 @@ class CountryController extends Controller
         DB::beginTransaction();
         try {
 
-            $country = Country::with(['flagImage'])->findOrFail($id);
+            $country = Country::with(['flagImage', 'regionOrState'])->findOrFail($id);
             DB::commit();
 
             return $this->success('Country detail is successfully retrived', $country);
