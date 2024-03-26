@@ -205,6 +205,14 @@ Route::middleware('jwt')->group(function () {
             Route::put('/{id}', 'RegionAndStateController@update')->permission(PermissionEnum::REGION_AND_STATE_UPDATE->value);
             Route::delete('/{id}', 'RegionAndStateController@destroy')->permission(PermissionEnum::REGION_AND_STATE_DESTROY->value);
         });
+
+        Route::group(['prefix' => 'city'], function () {
+            Route::get('/', 'CityController@index')->permission(PermissionEnum::CITY_INDEX->value);
+            Route::post('/', 'CityController@store')->permission(PermissionEnum::CITY_STORE->value);
+            Route::get('/{id}', 'CityController@show')->permission(PermissionEnum::CITY_SHOW->value);
+            Route::put('/{id}', 'CityController@update')->permission(PermissionEnum::CITY_UPDATE->value);
+            Route::delete('/{id}', 'CityController@destroy')->permission(PermissionEnum::CITY_DESTROY->value);
+        });
     });
 
     Route::group(['prefix' => 'mpe'], function () {

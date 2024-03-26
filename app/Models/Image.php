@@ -16,7 +16,7 @@ class Image extends Model
     protected $fillable = ['image', 'imageable_type', 'imageable_id', 'status'];
 
     protected $hidden = [
-        'imageable_type', 'created_at', 'updated_at', 'deleted_at',
+        'imageable_type', 'imageable_id', 'status', 'created_at', 'updated_at', 'deleted_at',
     ];
 
     public function imageable()
