@@ -5,8 +5,8 @@ namespace App\Http\Controllers\Client;
 use App\Http\Controllers\Dashboard\Controller;
 use App\Http\Requests\ClientUserUpdateRequest;
 use App\Models\User;
-use Illuminate\Support\Facades\DB;
 use Exception;
+use Illuminate\Support\Facades\DB;
 
 class ClientUserController extends Controller
 {

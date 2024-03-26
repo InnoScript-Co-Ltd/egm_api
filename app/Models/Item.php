@@ -2,21 +2,19 @@
 
 namespace App\Models;
 
-use App\Models\Item;
-use App\Models\Category;
 use App\Traits\BasicAudit;
 use App\Traits\SnowflakeID;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Item extends Model
 {
     use BasicAudit,HasFactory,SnowflakeID,SoftDeletes;
 
     protected $fillable = [
-        'category_id', 'shop_id', 'name', 'thumbnail_photo', 'product_photo', 'item_code', 
+        'category_id', 'shop_id', 'name', 'thumbnail_photo', 'product_photo', 'item_code',
         'item_color', 'item_size', 'description', 'content', 'price', 'sell_price', 'instock',
         'status',
     ];
@@ -27,8 +25,8 @@ class Item extends Model
 
     protected $casts = [
         'product_photo' => 'json',
-        "item_color" => 'json',
-        "item_size" => 'json',
+        'item_color' => 'json',
+        'item_size' => 'json',
         'out_of_stock' => 'boolean',
     ];
 
@@ -71,5 +69,4 @@ class Item extends Model
     {
         return $this->belongsTo(Shop::class, 'shop_id', 'id');
     }
-
 }

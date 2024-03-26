@@ -3,11 +3,9 @@
 namespace App\Http\Controllers\Dashboard;
 
 use App\Exports\ExportItem;
-use App\Helpers\Snowflake;
 use App\Http\Requests\ItemStoreRequest;
 use App\Http\Requests\ItemUpdateRequest;
 use App\Imports\ImportItem;
-use App\Models\File;
 use App\Models\Item;
 use Illuminate\Support\Facades\DB;
 use Maatwebsite\Excel\Facades\Excel;
@@ -45,7 +43,7 @@ class ItemController extends Controller
 
             $item = Item::create($payload->toArray());
 
-            if($request->has('thumbnail_photo') && is_array($payload['thumbnail_photo'])){
+            if ($request->has('thumbnail_photo') && is_array($payload['thumbnail_photo'])) {
                 $imagePath = $photo->store('images', 'public');
                 $profileImage = explode('/', $imagePath)[1];
                 $item->thumbnailPhoto()->create([
@@ -68,7 +66,6 @@ class ItemController extends Controller
             DB::commit();
 
             return $this->success('Item is created successfully', $item);
-
 
         } catch (Exception $e) {
             DB::rollback();
@@ -101,7 +98,7 @@ class ItemController extends Controller
 
             $item = Item::findOrFail($id);
 
-            if($request->has('thumbnail_photo') && is_array($payload['thumbnail_photo'])){
+            if ($request->has('thumbnail_photo') && is_array($payload['thumbnail_photo'])) {
                 $imagePath = $photo->store('images', 'public');
                 $profileImage = explode('/', $imagePath)[1];
                 $item->thumbnailPhoto()->where('imageable_id', '=', $item->id)->delete();

@@ -18,10 +18,10 @@ return new class extends Migration
             $table->snowflakeId('shop_id')->nullable()->default(null);
             $table->string('name')->default(null);
             $table->string('thumbnail_photo');
-            $table->json("product_photo");
+            $table->json('product_photo');
             $table->string('item_code');
-            $table->json("item_color");
-            $table->json("item_size");
+            $table->json('item_color');
+            $table->json('item_size');
             $table->longtext('description')->nullable()->default(null);
             $table->longtext('content')->nullable()->default(null);
             $table->float('price', 9, 2)->nullable()->default(null);
