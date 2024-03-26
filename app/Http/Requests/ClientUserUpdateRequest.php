@@ -2,8 +2,8 @@
 
 namespace App\Http\Requests;
 
-use App\Models\User;
 use App\Enums\REGXEnum;
+use App\Models\User;
 use Illuminate\Foundation\Http\FormRequest;
 
 class ClientUserUpdateRequest extends FormRequest
@@ -32,7 +32,7 @@ class ClientUserUpdateRequest extends FormRequest
             'email' => "nullable | email | unique:users,email,$userId",
             'phone' => ['nullable', "regex:$mobileRule", "unique:users,phone,$userId"],
             'dob' => 'nullable | date',
-            'profile' => 'nullable | file'
+            'profile' => 'nullable | file',
         ];
     }
 }

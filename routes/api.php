@@ -25,7 +25,7 @@ Route::middleware(['api'])->group(function () {
     });
 
     Route::middleware('jwt')->group(function () {
-        Route::post('/{id}', 'ClientUserController@update'); 
+        Route::post('/{id}', 'ClientUserController@update');
     });
 
 });
