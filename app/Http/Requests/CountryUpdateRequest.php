@@ -25,12 +25,15 @@ class CountryUpdateRequest extends FormRequest
     public function rules(): array
     {
         $country = Country::findOrFail(request('id'));
-        $countryId = $country->id();
+        $countryId = $country->id;
 
         $generalStatus = implode(',', (new Enum(GeneralStatusEnum::class))->values());
 
         return [
-            'name' => "nullable | string | unique:name,$countryId",
+            'name' => "nullable | string | unique:countries,name,$countryId",
+            'country_code' => "nullable | string | min:2 | max:4 | unique:countries,country_code,$countryId",
+            'mobile_prefix' => "nullable | string | unique:countries,mobile_prefix,$countryId",
+            'flag_image' => 'nullable |  image:mimes:jpeg,png,jpg,gif|max:2048',
             'status' => "nullable | string | in:$generalStatus",
         ];
     }
