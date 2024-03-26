@@ -1,8 +1,7 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Dashboard;
 
-use App\Http\Controllers\Dashboard\Controller;
 use App\Http\Requests\CountryStoreRequest;
 use App\Http\Requests\CountryUpdateRequest;
 use App\Models\Country;
@@ -16,7 +15,8 @@ class CountryController extends Controller
         DB::beginTransaction();
         try {
 
-            $countries = Country::searchQuery()
+            $countries = Country::with(['flagImage'])
+                ->searchQuery()
                 ->sortingQuery()
                 ->filterQuery()
                 ->filterDateQuery()
@@ -38,6 +38,18 @@ class CountryController extends Controller
         try {
 
             $country = Country::create($payload->toArray());
+
+            if (isset($payload['flag_image'])) {
+                $imagePath = $payload['flag_image']->store('images', 'public');
+                $flagImage = explode('/', $imagePath)[1];
+                $country->flagImage()->updateOrCreate(['imageable_id' => $country->id], [
+                    'image' => $flagImage,
+                    'imageable_id' => $country->id,
+                    'image_type' => 'COUNTRY_FLAG_IMAGE',
+                ]);
+
+                $country['flag_image'] = $flagImage;
+            }
             DB::commit();
 
             return $this->success('Country is created successfully', $country);
@@ -53,7 +65,7 @@ class CountryController extends Controller
         DB::beginTransaction();
         try {
 
-            $country = Country::findOrFail($id);
+            $country = Country::with(['flagImage'])->findOrFail($id);
             DB::commit();
 
             return $this->success('Country detail is successfully retrived', $country);
@@ -72,6 +84,18 @@ class CountryController extends Controller
 
             $country = Country::findOrFail($id);
             $country->update($payload->toArray());
+
+            if (isset($payload['flag_image'])) {
+                $imagePath = $payload['flag_image']->store('images', 'public');
+                $flagImage = explode('/', $imagePath)[1];
+                $country->flagImage()->updateOrCreate(['imageable_id' => $country->id], [
+                    'image' => $flagImage,
+                    'imageable_id' => $country->id,
+                    'image_type' => 'COUNTRY_FLAG_IMAGE',
+                ]);
+
+                $country['flag_image'] = $flagImage;
+            }
             DB::commit();
 
             return $this->success('Country is updated successfully', $country);

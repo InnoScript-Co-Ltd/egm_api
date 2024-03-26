@@ -189,6 +189,16 @@ Route::middleware('jwt')->group(function () {
         Route::get('/{id}', 'MembershipOrderController@show')->permission(PermissionEnum::MEMBER_ORDER_SHOW->value);
     });
 
+    Route::group(['prefix' => 'location'], function () {
+        Route::group(['prefix' => 'country'], function () {
+            Route::get('/', 'CountryController@index')->permission(PermissionEnum::COUNTRY_INDEX->value);
+            Route::post('/', 'CountryController@store')->permission(PermissionEnum::COUNTRY_STORE->value);
+            Route::get('/{id}', 'CountryController@show')->permission(PermissionEnum::COUNTRY_SHOW->value);
+            Route::put('/{id}', 'CountryController@update')->permission(PermissionEnum::COUNTRY_UPDATE->value);
+            Route::delete('/{id}', 'CountryController@destroy')->permission(PermissionEnum::COUNTRY_DESTROY->value);
+        });
+    });
+
     Route::group(['prefix' => 'mpe'], function () {
         Route::group(['prefix' => 'category'], function () {
             Route::get('/', 'MPECategoryController@index');
