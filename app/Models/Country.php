@@ -31,6 +31,6 @@ class Country extends Model
 
     public function regionOrState(): HasMany
     {
-        return $this->hasMany(RegionOrState::class);
+        return $this->hasMany(RegionOrState::class, 'country_id', 'id');
     }
 }

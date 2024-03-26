@@ -2,20 +2,20 @@
 
 namespace App\Http\Controllers\Dashboard;
 
-use App\Http\Requests\RegionAndStateStoreRequest;
-use App\Http\Requests\RegionAndStateUpdateRequest;
-use App\Models\RegionOrState;
+use App\Http\Requests\CityStoreRequest;
+use App\Http\Requests\CityUpdateRequest;
+use App\Models\City;
 use Exception;
 use Illuminate\Support\Facades\DB;
 
-class RegionAndStateController extends Controller
+class CityController extends Controller
 {
     public function index()
     {
         DB::beginTransaction();
         try {
 
-            $regionsAndStates = RegionOrState::with(['country', 'cities'])
+            $cities = City::with(['regionOrState'])
                 ->searchQuery()
                 ->sortingQuery()
                 ->filterQuery()
@@ -23,7 +23,7 @@ class RegionAndStateController extends Controller
                 ->paginationQuery();
             DB::commit();
 
-            return $this->success('Region or state list is successfully retrived', $regionsAndStates);
+            return $this->success('City list is successfully retrived', $cities);
 
         } catch (Exception $e) {
             DB::rollback();
@@ -31,16 +31,16 @@ class RegionAndStateController extends Controller
         }
     }
 
-    public function store(RegionAndStateStoreRequest $request)
+    public function store(CityStoreRequest $request)
     {
         $payload = collect($request->validated());
         DB::beginTransaction();
         try {
 
-            $regionsAndStates = RegionOrState::create($payload->toArray());
+            $city = City::create($payload->toArray());
             DB::commit();
 
-            return $this->success('Region or state is created successfully', $regionsAndStates);
+            return $this->success('City is created successfully', $city);
 
         } catch (Exception $e) {
             DB::rollback();
@@ -53,10 +53,10 @@ class RegionAndStateController extends Controller
         DB::beginTransaction();
         try {
 
-            $regionsAndStates = RegionOrState::with(['country'])->findOrFail($id);
+            $city = City::with(['regionOrState'])->findOrFail($id);
             DB::commit();
 
-            return $this->success('Region or state detail is successfully retrived', $regionsAndStates);
+            return $this->success('City detail is successfully retrived', $city);
 
         } catch (Exception $e) {
             DB::rollback();
@@ -64,17 +64,17 @@ class RegionAndStateController extends Controller
         }
     }
 
-    public function update(RegionAndStateUpdateRequest $request, $id)
+    public function update(CityUpdateRequest $request, $id)
     {
         $payload = collect($request->validated());
         DB::beginTransaction();
         try {
 
-            $regionOrState = RegionOrState::findOrFail($id);
-            $regionOrState->update($payload->toArray());
+            $city = City::findOrFail($id);
+            $city->update($payload->toArray());
             DB::commit();
 
-            return $this->success('Region or state is updated successfully', $regionOrState);
+            return $this->success('City is updated successfully', $city);
 
         } catch (Exception $e) {
             DB::rollback();
@@ -87,11 +87,11 @@ class RegionAndStateController extends Controller
         DB::beginTransaction();
         try {
 
-            $regionOrState = RegionOrState::findOrFail($id);
-            $regionOrState->delete();
+            $city = City::findOrFail($id);
+            $city->delete();
             DB::commit();
 
-            return $this->success('Region or state is deleted successfully', $regionOrState);
+            return $this->success('City is deleted successfully', $city);
 
         } catch (Exception $e) {
             DB::rollback();

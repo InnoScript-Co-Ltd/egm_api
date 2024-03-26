@@ -24,6 +24,15 @@ Route::middleware(['api'])->group(function () {
         Route::post('/reset-password', 'ClientAuthController@resetPassword');
     });
 
+    Route::group(['prefix' => 'location'], function () {
+        Route::get('/country', 'LocationController@countries');
+        Route::get('/country/{id}', 'LocationController@countryDetail');
+        Route::get('/region-or-state', 'LocationController@regionOrStates');
+        Route::get('/region-or-state/{id}', 'LocationController@regionOrStateDetail');
+        Route::get('/city', 'LocationController@cityIndex');
+        Route::get('/city/{id}', 'LocationController@cityDetail');
+    });
+
     Route::middleware('jwt')->group(function () {
         Route::post('/{id}', 'ClientUserController@update');
     });
