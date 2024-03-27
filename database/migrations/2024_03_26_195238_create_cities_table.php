@@ -15,7 +15,7 @@ return new class extends Migration
         Schema::create('cities', function (Blueprint $table) {
             $table->snowflakeIdAndPrimary();
             $table->snowflakeId('region_or_state_id');
-            $table->string('name')->unique();
+            $table->string('name');
             $table->string('status')->default(GeneralStatusEnum::ACTIVE->value);
             $table->auditColumns();
 

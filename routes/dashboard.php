@@ -213,6 +213,14 @@ Route::middleware('jwt')->group(function () {
             Route::put('/{id}', 'CityController@update')->permission(PermissionEnum::CITY_UPDATE->value);
             Route::delete('/{id}', 'CityController@destroy')->permission(PermissionEnum::CITY_DESTROY->value);
         });
+
+        Route::group(['prefix' => 'township'], function () {
+            Route::get('/', 'TownshipController@index')->permission(PermissionEnum::TOWNSHIP_INDEX->value);
+            Route::post('/', 'TownshipController@store')->permission(PermissionEnum::TOWNSHIP_STORE->value);
+            Route::get('/{id}', 'TownshipController@show')->permission(PermissionEnum::TOWNSHIP_SHOW->value);
+            Route::put('/{id}', 'TownshipController@update')->permission(PermissionEnum::TOWNSHIP_UPDATE->value);
+            Route::delete('/{id}', 'TownshipController@destroy')->permission(PermissionEnum::TOWNSHIP_DESTROY->value);
+        });
     });
 
     Route::group(['prefix' => 'mpe'], function () {

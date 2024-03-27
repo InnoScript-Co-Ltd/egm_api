@@ -4,7 +4,6 @@ namespace App\Http\Requests;
 
 use App\Enums\GeneralStatusEnum;
 use App\Helpers\Enum;
-use App\Models\City;
 use App\Models\RegionOrState;
 use Illuminate\Foundation\Http\FormRequest;
 
@@ -28,11 +27,8 @@ class CityUpdateRequest extends FormRequest
         $regionOrStates = implode(',', RegionOrState::pluck('id')->toArray());
         $generalStatusEnum = implode(',', (new Enum(GeneralStatusEnum::class))->values());
 
-        $city = City::findOrFail(request('id'));
-        $cityId = $city->id;
-
         return [
-            'name' => "nullable | string | unique:cities,name,$cityId",
+            'name' => 'nullable | string',
             'region_or_state_id' => "nullable | in:$regionOrStates",
             'status' => "nullable | string | in:$generalStatusEnum",
         ];

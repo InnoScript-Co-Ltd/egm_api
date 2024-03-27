@@ -2,10 +2,12 @@
 
 namespace App\Http\Requests;
 
-use App\Models\RegionOrState;
+use App\Enums\GeneralStatusEnum;
+use App\Helpers\Enum;
+use App\Models\City;
 use Illuminate\Foundation\Http\FormRequest;
 
-class CityStoreRequest extends FormRequest
+class TownshipUpdateRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -22,11 +24,13 @@ class CityStoreRequest extends FormRequest
      */
     public function rules(): array
     {
-        $regionOrStates = implode(',', RegionOrState::pluck('id')->toArray());
+        $generalStatusEnum = implode(',', (new Enum(GeneralStatusEnum::class))->values());
+        $citiesId = implode(',', City::pluck('id')->toArray());
 
         return [
-            'name' => 'required | string',
-            'region_or_state_id' => "required | in:$regionOrStates",
+            'name' => 'nullable | string',
+            'city_id' => "nullable | in:$citiesId",
+            'status' => "nullable | in:$generalStatusEnum",
         ];
     }
 }
