@@ -6,6 +6,7 @@ use App\Http\Controllers\Dashboard\Controller;
 use App\Models\City;
 use App\Models\Country;
 use App\Models\RegionOrState;
+use App\Models\Township;
 use Exception;
 use Illuminate\Support\Facades\DB;
 
@@ -15,34 +16,53 @@ class LocationController extends Controller
         'country' => ['id', 'name', 'country_code', 'mobile_prefix'],
         'regionOrState' => ['id', 'name', 'country_id'],
         'city' => ['id', 'name', 'region_or_state_id'],
+        'township' => ['id', 'name', 'city_id'],
     ];
 
-    private function cities($builder)
+    protected $active = [
+        'status' => 'ACTIVE',
+    ];
+
+    private function country($builder)
     {
-        $builder->where(['status' => 'ACTIVE'])->select($this->showalbeFields['city']);
+        $builder->where($this->active)
+            ->with(['flagImage'])
+            ->select($this->showalbeFields['country']);
     }
 
     private function regionOrState($builder)
     {
-        $builder->where(['status' => 'ACTIVE'])
+        $builder->where($this->active)
             ->select($this->showalbeFields['regionOrState'])->with([
                 'cities' => fn ($query) => $this->cities($query),
             ]);
     }
 
-    private function country($builder)
+    private function cities($builder)
     {
-        $builder->where(['status' => 'ACTIVE'])
-            ->with(['flagImage'])
-            ->select($this->showalbeFields['country']);
+        $builder->where($this->active)
+            ->select($this->showalbeFields['city'])
+            ->with([
+                'townships' => fn ($query) => $this->townships($query),
+            ]);
+    }
+
+    private function townships($builder)
+    {
+        $builder->where($this->active)->select($this->showalbeFields['township']);
     }
 
     private function cityIn($builder)
     {
-        $builder->where(['status' => 'ACTIVE'])
-            ->select(['id', 'name', 'country_id'])
+        $builder->where($this->active)
+            ->select($this->showalbeFields['city'])
             ->with([
-                'country' => fn ($query) => $query->where(['status' => 'ACTIVE'])->with(['flagImage'])->select(['id', 'name', 'country_code', 'mobile_prefix']),
+                'regionOrState' => fn ($query) => $query->select($this->showalbeFields['regionOrState'])
+                    ->where($this->active)
+                    ->with([
+                        'country' => fn ($query) => $query->select($this->showalbeFields['country'])
+                            ->where($this->active),
+                    ]),
             ]);
     }
 
@@ -53,7 +73,7 @@ class LocationController extends Controller
         try {
             $countries = Country::select($this->showalbeFields['country'])
                 ->with(['flagImage', 'regionOrState' => fn ($query) => $this->regionOrState($query)])
-                ->where(['status' => 'ACTIVE'])
+                ->where($this->active)
                 ->searchQuery()
                 ->sortingQuery()
                 ->filterQuery()
@@ -75,7 +95,7 @@ class LocationController extends Controller
         try {
 
             $country = Country::findOrFail($id)
-                ->where(['status' => 'ACTIVE'])
+                ->where($this->active)
                 ->with(['flagImage', 'regionOrState' => fn ($query) => $this->regionOrState($query)]);
 
             DB::commit();
@@ -95,7 +115,7 @@ class LocationController extends Controller
         try {
             $regionOrStates = RegionOrState::select($this->showalbeFields['regionOrState'])
                 ->with(['cities' => fn ($query) => $this->cities($query)])
-                ->where(['status' => 'ACTIVE'])
+                ->where($this->active)
                 ->searchQuery()
                 ->sortingQuery()
                 ->filterQuery()
@@ -117,7 +137,7 @@ class LocationController extends Controller
         try {
 
             $regionOrState = RegionOrState::findOrFail($id)
-                ->where(['status' => 'ACTIVE'])
+                ->where($this->active)
                 ->select($this->showalbeFields['regionOrState'])
                 ->with([
                     'cities' => fn ($query) => $this->cities($query),
@@ -140,8 +160,8 @@ class LocationController extends Controller
 
         try {
             $cities = City::select($this->showalbeFields['city'])
-                ->where(['status' => 'ACTIVE'])
-                ->with(['regionOrState' => fn ($query) => $this->cityIn($query)])
+                ->where($this->active)
+                ->with(['townships' => fn ($query) => $this->townships($query)])
                 ->searchQuery()
                 ->sortingQuery()
                 ->filterQuery()
@@ -163,7 +183,7 @@ class LocationController extends Controller
         try {
 
             $city = City::findOrFail($id)
-                ->where(['status' => 'ACTIVE'])
+                ->where($this->active)
                 ->select($this->showalbeFields['city'])
                 ->with(['regionOrState' => fn ($query) => $this->cityIn($query)])
                 ->get();
@@ -171,6 +191,49 @@ class LocationController extends Controller
             DB::commit();
 
             return $this->success('City detail is successfully retrived', $city);
+
+        } catch (Exception $e) {
+            DB::rollback();
+            throw $e;
+        }
+    }
+
+    public function townshipIndex()
+    {
+        DB::beginTransaction();
+
+        try {
+            $townships = Township::select($this->showalbeFields['township'])
+                ->where($this->active)
+                ->with(['city' => fn ($query) => $this->cityIn($query)])
+                ->searchQuery()
+                ->sortingQuery()
+                ->filterQuery()
+                ->filterDateQuery()
+                ->paginationQuery();
+            DB::commit();
+
+            return $this->success('Township list is successfully retrived', $townships);
+
+        } catch (Exception $e) {
+            DB::rollback();
+            throw $e;
+        }
+    }
+
+    public function townshipDetail($id)
+    {
+        DB::beginTransaction();
+        try {
+
+            $township = Township::select($this->showalbeFields['township'])
+                ->where($this->active)
+                ->with(['city' => fn ($query) => $this->cityIn($query)])
+                ->get();
+
+            DB::commit();
+
+            return $this->success('township detail is successfully retrived', $township);
 
         } catch (Exception $e) {
             DB::rollback();

@@ -12,14 +12,14 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('regions_and_states', function (Blueprint $table) {
+        Schema::create('townships', function (Blueprint $table) {
             $table->snowflakeIdAndPrimary();
-            $table->snowflakeId('country_id');
+            $table->snowflakeId('city_id');
             $table->string('name');
             $table->string('status')->default(GeneralStatusEnum::ACTIVE->value);
             $table->auditColumns();
 
-            $table->foreign('country_id')->references('id')->on('countries')->onDelete('cascade');
+            $table->foreign('city_id')->references('id')->on('cities')->onDelete('cascade');
         });
     }
 
@@ -28,6 +28,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('regions_and_states');
+        Schema::dropIfExists('townships');
     }
 };

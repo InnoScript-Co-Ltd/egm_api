@@ -2,10 +2,10 @@
 
 namespace App\Http\Requests;
 
-use App\Models\RegionOrState;
+use App\Models\City;
 use Illuminate\Foundation\Http\FormRequest;
 
-class CityStoreRequest extends FormRequest
+class TownshipStoreRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -22,11 +22,11 @@ class CityStoreRequest extends FormRequest
      */
     public function rules(): array
     {
-        $regionOrStates = implode(',', RegionOrState::pluck('id')->toArray());
+        $citiesId = implode(',', City::pluck('id')->toArray());
 
         return [
             'name' => 'required | string',
-            'region_or_state_id' => "required | in:$regionOrStates",
+            'city_id' => "required | in:$citiesId",
         ];
     }
 }

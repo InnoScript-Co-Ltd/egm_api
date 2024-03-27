@@ -25,7 +25,7 @@ class RegionAndStateStoreRequest extends FormRequest
         $countriesId = implode(',', Country::pluck('id')->toArray());
 
         return [
-            'name' => 'required | string | unique:regions_and_states,name',
+            'name' => 'required | string',
             'country_id' => "required | in:$countriesId",
         ];
     }

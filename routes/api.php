@@ -31,6 +31,8 @@ Route::middleware(['api'])->group(function () {
         Route::get('/region-or-state/{id}', 'LocationController@regionOrStateDetail');
         Route::get('/city', 'LocationController@cityIndex');
         Route::get('/city/{id}', 'LocationController@cityDetail');
+        Route::get('/township', 'LocationController@townshipIndex');
+        Route::get('/township/{id}', 'LocationController@townshipDetail');
     });
 
     Route::middleware('jwt')->group(function () {

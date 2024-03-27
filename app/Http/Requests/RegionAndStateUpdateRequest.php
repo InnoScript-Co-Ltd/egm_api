@@ -26,11 +26,9 @@ class RegionAndStateUpdateRequest extends FormRequest
     {
         $generalStatusEnum = implode(',', (new Enum(GeneralStatusEnum::class))->values());
         $regionOrStateIds = implode(',', RegionOrState::pluck('id')->toArray());
-        $regionOrState = RegionOrState::findOrFail(request('id'));
-        $regionOrStateId = $regionOrState->id;
 
         return [
-            'name' => "nullable | string | unique:regions_or_states,name,$regionOrStateId",
+            'name' => 'nullable | string',
             'country_id' => "nullable | in:$regionOrStateIds",
             'status' => "nullable | in:$generalStatusEnum",
         ];
