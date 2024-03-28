@@ -2,8 +2,13 @@
 
 namespace App\Http\Requests;
 
+use App\Enums\AppTypeEnum;
 use App\Enums\REGXEnum;
-use App\Models\Region;
+use App\Helpers\Enum;
+use App\Models\City;
+use App\Models\Country;
+use App\Models\RegionOrState;
+use App\Models\Township;
 use Illuminate\Foundation\Http\FormRequest;
 
 class ShopStoreRequest extends FormRequest
@@ -23,26 +28,27 @@ class ShopStoreRequest extends FormRequest
      */
     public function rules(): array
     {
-        $regionId = implode(',', Region::all()->pluck('id')->toArray());
+        $countriesId = implode(',', Country::pluck('id')->toArray());
+        $regionOrStatesId = implode(',', RegionOrState::pluck('id')->toArray());
+        $citiesId = implode(',', City::pluck('id')->toArray());
+        $townshopsId = implode(',', Township::pluck('id')->toArray());
+
+        $appType = implode(',', (new Enum(AppTypeEnum::class))->values());
         $mobileRule = REGXEnum::MOBILE_NUMBER->value;
 
         return [
-            'region_id' => "required | in:$regionId",
-            'name' => 'string',
-            'phone' => ['nullable', 'string', "regex:$mobileRule"],
-            'address' => 'string',
-            'location' => 'string',
-        ];
-    }
-
-    public function messages()
-    {
-        return [
-            'region_id.required' => 'Please choose your region name',
-            'name.string' => 'Please enter your name using letters only in the name field.',
-            'phone.regex' => 'Please provide your phone number will start only 9xxxxxxx.',
-            'address.string' => 'Please enter your address using letters only in the address field',
-            'location.string' => 'Please enter your location using letters only in the address field',
+            'country_id' => "required | in:$countriesId",
+            'region_or_state_id' => "required | in:$regionOrStatesId",
+            'city_id' => "required | in:$citiesId",
+            'township_id' => "required | in:$townshopsId",
+            'cover_photo' => 'required | image:mimes:jpeg,png,jpg,gif|max:2048',
+            'shop_logo' => 'required |  image:mimes:jpeg,png,jpg,gif|max:2048',
+            'name' => 'required | string',
+            'phone' => ['required', 'string', "regex:$mobileRule"],
+            'email' => 'required | string | unique:shops,email',
+            'address' => 'required | string',
+            'app_type' => "required | string | in:$appType",
+            'description' => 'nullable | string',
         ];
     }
 }

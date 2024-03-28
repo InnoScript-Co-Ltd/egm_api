@@ -6,7 +6,7 @@ use App\Traits\BasicAudit;
 use App\Traits\SnowflakeID;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Shop extends Model
@@ -16,23 +16,37 @@ class Shop extends Model
     public $table = 'shops';
 
     protected $fillable = [
-        'region_id', 'name', 'phone', 'address', 'location', 'status',
+        'country_id', 'region_or_state_id', 'city_id', 'township_id', 'name', 'phone',
+        'email', 'address', 'decription', 'location', 'app_type', 'status',
     ];
 
-    public $appends = ['region_name'];
-
-    protected function getRegionNameAttribute()
+    public function country(): HasOne
     {
-        $region = Region::where(['id' => $this->attributes['region_id']])->first();
-        if ($region) {
-            return $region->name;
-        } else {
-            return null;
-        }
+        return $this->hasOne(Country::class, 'id', 'country_id');
     }
 
-    public function region(): BelongsTo
+    public function regionOrState(): HasOne
     {
-        return $this->belongsTo(Region::class, 'region_id', 'id');
+        return $this->hasOne(RegionOrState::class, 'id', 'region_or_state_id');
+    }
+
+    public function city(): HasOne
+    {
+        return $this->hasOne(City::class, 'id', 'city_id');
+    }
+
+    public function township(): HasOne
+    {
+        return $this->hasOne(Township::class, 'id', 'township_id');
+    }
+
+    public function coverPhoto()
+    {
+        return $this->morphOne(Image::class, 'imageable');
+    }
+
+    public function shopLogo()
+    {
+        return $this->morphOne(Image::class, 'imageable');
     }
 }

@@ -4,7 +4,6 @@ namespace App\Models;
 
 use App\Traits\BasicAudit;
 use App\Traits\SnowflakeID;
-use App\Models\RegionOrState;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
@@ -22,18 +21,6 @@ class City extends Model
     protected $fillable = [
         'name', 'region_or_state_id', 'status',
     ];
-
-    public $appends = ['region_or_state_name'];
-
-    protected function getRegionOrStateNameAttribute()
-    {
-        $regionOrState = RegionOrState::where(['id' => $this->attributes['region_or_state_id']])->first();
-        if ($regionOrState) {
-            return $regionOrState->name;
-        } else {
-            return null;
-        }
-    }
 
     public function regionOrState(): HasOne
     {
