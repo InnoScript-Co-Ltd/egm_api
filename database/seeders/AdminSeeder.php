@@ -29,7 +29,7 @@ class AdminSeeder extends Seeder
 
         try {
             Admin::updateOrCreate($superAdmin)->assignRole('SUPER_ADMIN');
-            Admin::factory(100)->create();
+            // Admin::factory(100)->create();
         } catch (\Exception $e) {
             throw ($e);
         }
