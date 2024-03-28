@@ -4,7 +4,7 @@ namespace App\Http\Requests;
 
 use App\Enums\GeneralStatusEnum;
 use App\Helpers\Enum;
-use App\Models\RegionOrState;
+use App\Models\Country;
 use Illuminate\Foundation\Http\FormRequest;
 
 class RegionAndStateUpdateRequest extends FormRequest
@@ -25,11 +25,11 @@ class RegionAndStateUpdateRequest extends FormRequest
     public function rules(): array
     {
         $generalStatusEnum = implode(',', (new Enum(GeneralStatusEnum::class))->values());
-        $regionOrStateIds = implode(',', RegionOrState::pluck('id')->toArray());
+        $countryIds = implode(',', Country::pluck('id')->toArray());
 
         return [
             'name' => 'nullable | string',
-            'country_id' => "nullable | in:$regionOrStateIds",
+            'country_id' => "nullable | in:$countryIds",
             'status' => "nullable | in:$generalStatusEnum",
         ];
     }
