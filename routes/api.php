@@ -35,6 +35,11 @@ Route::middleware(['api'])->group(function () {
         Route::get('/township/{id}', 'LocationController@townshipDetail');
     });
 
+    Route::group(['prefix' => 'shop'], function () {
+        Route::get('/', 'ClientShopController@index');
+        Route::get('/{id}', 'ClientShopController@show');
+    });
+
     Route::middleware('jwt')->group(function () {
         Route::post('/{id}', 'ClientUserController@update');
     });

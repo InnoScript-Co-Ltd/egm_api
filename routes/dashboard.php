@@ -164,7 +164,7 @@ Route::middleware('jwt')->group(function () {
         Route::get('/', 'ShopController@index')->permission(PermissionEnum::SHOP_INDEX->value);
         Route::post('/', 'ShopController@store')->permission(PermissionEnum::SHOP_STORE->value);
         Route::get('/{id}', 'ShopController@show')->permission(PermissionEnum::SHOP_SHOW->value);
-        Route::put('/{id}', 'ShopController@update')->permission(PermissionEnum::SHOP_UPDATE->value);
+        Route::post('/{id}', 'ShopController@update')->permission(PermissionEnum::SHOP_UPDATE->value);
         Route::delete('/{id}', 'ShopController@destroy')->permission(PermissionEnum::SHOP_DESTROY->value);
     });
 
