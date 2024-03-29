@@ -46,17 +46,18 @@ class ShopController extends Controller
 
             $imagePath = $payload['cover_photo']->store('images', 'public');
             $coverPhoto = explode('/', $imagePath)[1];
-            $shop->coverPhoto()->updateOrCreate(['imageable_id' => $shop->id], [
+            $shop->coverPhoto()->create([
                 'image' => $coverPhoto,
                 'imageable_id' => $shop->id,
             ]);
 
             $imagePath = $payload['shop_logo']->store('images', 'public');
             $shopLogo = explode('/', $imagePath)[1];
-            $shop->shopLogo()->updateOrCreate(['imageable_id' => $shop->id], [
+            $shop->shopLogo()->create([
                 'image' => $shopLogo,
                 'imageable_id' => $shop->id,
             ]);
+        
 
             $shop['cover_photo'] = $coverPhoto;
             $shop['shop_logo'] = $shopLogo;
@@ -79,7 +80,7 @@ class ShopController extends Controller
 
             $shop = Shop::with([
                 'shopLogo', 'coverPhoto',
-                'country' => fn ($query) => $query->select(['name', 'country_code', 'flagIamge', 'mobile_prefix']),
+                'country' => fn ($query) => $query->select(['name', 'country_code', 'mobile_prefix']),
                 'regionOrState' => fn ($query) => $query->select(['country_id', 'name']),
                 'city' => fn ($query) => $query->select(['region_or_state_id', 'name']),
                 'township' => fn ($query) => $query->select(['city_id', 'name']),
@@ -102,9 +103,7 @@ class ShopController extends Controller
         try {
 
             $shop = Shop::findOrFail($id);
-            $shop->update($payload->toArray());
-
-            if (isset($payload['cover_photo'])) {
+            if ($request->hasFile('cover_photo')) {
                 $imagePath = $payload['cover_photo']->store('images', 'public');
                 $coverPhoto = explode('/', $imagePath)[1];
                 $shop->coverPhoto()->updateOrCreate(['imageable_id' => $shop->id], [
@@ -112,10 +111,10 @@ class ShopController extends Controller
                     'imageable_id' => $shop->id,
                 ]);
 
-                $shop['cover_photo'] = $coverPhoto;
+                $payload['cover_photo'] = $coverPhoto;
             }
 
-            if (isset($payload['shop_logo'])) {
+            if ($request->hasFile('shop_logo')) {
                 $imagePath = $payload['shop_logo']->store('images', 'public');
                 $shopLogo = explode('/', $imagePath)[1];
                 $shop->shopLogo()->updateOrCreate(['imageable_id' => $shop->id], [
@@ -123,8 +122,10 @@ class ShopController extends Controller
                     'imageable_id' => $shop->id,
                 ]);
 
-                $shop['shop_logo'] = $shopLogo;
+                $payload['shop_logo'] = $shopLogo;
             }
+
+            $shop->update($payload->toArray());
             DB::commit();
 
             return $this->success('Shop is updated successfully', $shop);
