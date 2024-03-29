@@ -17,7 +17,7 @@ class Shop extends Model
 
     protected $fillable = [
         'country_id', 'region_or_state_id', 'city_id', 'township_id', 'name', 'phone',
-        'email', 'address', 'decription', 'location', 'app_type', 'status',
+        'email', 'address', 'description', 'location', 'app_type', 'status',
     ];
 
     public function country(): HasOne
