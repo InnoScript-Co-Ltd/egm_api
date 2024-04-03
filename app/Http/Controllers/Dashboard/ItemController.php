@@ -45,21 +45,24 @@ class ItemController extends Controller
 
             if ($request->has('thumbnail_photo') && is_array($payload['thumbnail_photo'])) {
                 $imagePath = $photo->store('images', 'public');
-                $profileImage = explode('/', $imagePath)[1];
+                $thumbnailPhoto = explode('/', $imagePath)[1];
                 $item->thumbnailPhoto()->create([
-                    'image' => $profileImage,
+                    'image' => $thumbnailPhoto,
                     'imageable_id' => $item->id,
                 ]);
+                $payload['thumbnail_photo'] = $thumbnailPhoto;
             }
 
             if ($request->has('product_photo') && is_array($payload['product_photo'])) {
                 foreach ($payload['product_photo'] as $photo) {
                     $imagePath = $photo->store('images', 'public');
-                    $profileImage = explode('/', $imagePath)[1];
+                    $productPhoto = explode('/', $imagePath)[1];
                     $item->productPhoto()->create([
-                        'image' => $profileImage,
+                        'image' => $productPhoto,
                         'imageable_id' => $item->id,
                     ]);
+
+                    $payload['thumbnail_photo'] = $productPhoto;
                 }
             }
 
