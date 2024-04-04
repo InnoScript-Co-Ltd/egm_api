@@ -40,6 +40,14 @@ Route::middleware(['api'])->group(function () {
         Route::get('/{id}', 'ClientShopController@show');
     });
 
+    Route::group(['prefix' => 'category'], function () {
+        Route::get('/', 'ClientCategoryController@index');
+    });
+
+    Route::group(['prefix' => 'item'], function () {
+        Route::get('/', 'ClientItemController@index');
+    });
+
     Route::middleware('jwt')->group(function () {
         Route::post('/{id}', 'ClientUserController@update');
     });

@@ -14,14 +14,15 @@ class ItemController extends Controller
 {
     public function index()
     {
-        $item = Item::with(['thumbnailPhoto', 'productPhoto'])
+        DB::beginTransaction();
+        try {
+
+            $item = Item::with(['thumbnailPhoto', 'productPhoto'])
             ->searchQuery()
             ->sortingQuery()
             ->filterQuery()
             ->filterDateQuery()
             ->paginationQuery();
-        DB::beginTransaction();
-        try {
 
             DB::commit();
 
