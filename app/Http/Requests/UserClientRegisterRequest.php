@@ -27,10 +27,8 @@ class UserClientRegisterRequest extends FormRequest
         return [
             'name' => 'required | string',
             'email' => 'required | email | unique:users,email',
-            'phone' => ['required', 'unique:users,phone', "regex:$mobileRule"],
             'password' => 'required | confirmed',
             'client_type' => 'required | string',
-            'gender' => 'required | string',
         ];
     }
 }

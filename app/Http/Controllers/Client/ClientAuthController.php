@@ -72,7 +72,8 @@ class ClientAuthController extends Controller
         try {
             $payload['email_verify_code'] = rand(100000, 999999);
             $payload['email_expired_at'] = Carbon::now()->addMinutes(5);
-
+            $payload['gender'] = "GENDER STATUS";
+            
             $user = User::create($payload->toArray());
             Mail::to($payload['email'])->send(new EmailVerifyCode($payload['email_verify_code']));
             DB::commit();
@@ -84,6 +85,21 @@ class ClientAuthController extends Controller
             throw $e;
         }
 
+    }
+
+    public function checkUser($id)
+    {
+        DB::beginTransaction();
+
+        try {
+            $user = User::findOrFail($id);
+            DB::commit();
+
+            return $this->success('user data is successfully retrived', $user);
+        } catch(Exception $e) {
+            DB::rollBack();
+            throw $e;
+        }
     }
 
     public function emailVerify(EamilVerifyRequest $request)

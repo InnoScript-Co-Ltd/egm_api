@@ -17,6 +17,7 @@ Route::middleware(['api'])->group(function () {
 
     Route::post('/login', 'ClientAuthController@login');
     Route::post('/register', 'ClientAuthController@register');
+    Route::get('/check-user/{id}', 'ClientAuthController@checkUser');
 
     Route::group(['prefix' => 'auth'], function () {
         Route::post('/email-verify', 'ClientAuthController@emailVerify');
