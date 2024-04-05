@@ -49,7 +49,10 @@ Route::middleware(['api'])->group(function () {
     });
 
     Route::middleware('jwt')->group(function () {
-        Route::post('/{id}', 'ClientUserController@update');
+        Route::group(['prefix' => 'user'], function () {
+            Route::post('/{id}', 'ClientUserController@update');
+            Route::get('/{id}', 'ClientUserController@show');
+        });
     });
 
 });

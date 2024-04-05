@@ -35,4 +35,20 @@ class ClientUserController extends Controller
             throw $e;
         }
     }
+
+    public function show($id)
+    {
+        DB::beginTransaction();
+        try {
+            
+            $user = User::with(['profile'])->findOrFail($id);
+            DB::commit();
+
+            return $this->success('User details is successfully retrived', $user);
+
+        } catch (Exception $e) {
+            throw $e;
+            DB::rollback();
+        }
+    }
 }
