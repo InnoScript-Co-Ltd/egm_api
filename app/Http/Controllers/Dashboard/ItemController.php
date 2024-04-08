@@ -44,17 +44,16 @@ class ItemController extends Controller
 
             $item = Item::create($payload->toArray());
 
-            if ($request->has('thumbnail_photo') && is_array($payload['thumbnail_photo'])) {
-                $imagePath = $photo->store('images', 'public');
+            if (isset($payload['thumbnail_photo']) && is_file($payload['thumbnail_photo'])) {
+                $imagePath = $payload['thumbnail_photo']->store('images', 'public');
                 $thumbnailPhoto = explode('/', $imagePath)[1];
                 $item->thumbnailPhoto()->create([
                     'image' => $thumbnailPhoto,
                     'imageable_id' => $item->id,
                 ]);
-                $payload['thumbnail_photo'] = $thumbnailPhoto;
             }
 
-            if ($request->has('product_photo') && is_array($payload['product_photo'])) {
+            if (isset($payload['product_photo']) && is_array($payload['product_photo'])) {
                 foreach ($payload['product_photo'] as $photo) {
                     $imagePath = $photo->store('images', 'public');
                     $productPhoto = explode('/', $imagePath)[1];
@@ -62,8 +61,6 @@ class ItemController extends Controller
                         'image' => $productPhoto,
                         'imageable_id' => $item->id,
                     ]);
-
-                    $payload['thumbnail_photo'] = $productPhoto;
                 }
             }
 

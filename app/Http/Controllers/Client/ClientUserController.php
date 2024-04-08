@@ -19,7 +19,7 @@ class ClientUserController extends Controller
 
             $user = User::findOrFail($id);
 
-            if (isset($payload['profile'])) {
+            if (isset($payload['profile']) && is_file($payload['profile'])) {
                 $imagePath = $payload['profile']->store('images', 'public');
                 $profileImage = explode('/', $imagePath)[1];
                 $user->profile()->updateOrCreate(['imageable_id' => $user->id], [
@@ -29,6 +29,9 @@ class ClientUserController extends Controller
             }
 
             $user->update($payload->toArray());
+            DB::commit();
+
+            return $this->success('User is updated successfully', $user);
 
         } catch (Exception $e) {
             DB::rollback();
