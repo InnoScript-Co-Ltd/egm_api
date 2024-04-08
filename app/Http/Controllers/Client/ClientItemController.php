@@ -32,4 +32,20 @@ class ClientItemController extends Controller
             throw $e;
         }
     }
+
+    public function show($id)
+    {
+        DB::beginTransaction();
+        try {
+
+            $item = Item::with(['thumbnailPhoto', 'productPhoto'])->findOrFail($id);
+            DB::commit();
+
+            return $this->success('Item detail is successfully retrived', $item);
+
+        } catch (Exception $e) {
+            throw $e;
+            DB::rollback();
+        }
+    }
 }

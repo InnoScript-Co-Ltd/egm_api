@@ -32,7 +32,7 @@ class ClientUserUpdateRequest extends FormRequest
             'email' => "nullable | email | unique:users,email,$userId",
             'phone' => ['nullable', "regex:$mobileRule", "unique:users,phone,$userId"],
             'dob' => 'nullable | date',
-            'profile' => 'nullable | file',
+            'profile' => 'nullable',
         ];
     }
 }

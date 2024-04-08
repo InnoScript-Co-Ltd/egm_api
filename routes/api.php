@@ -47,6 +47,7 @@ Route::middleware(['api'])->group(function () {
 
     Route::group(['prefix' => 'item'], function () {
         Route::get('/', 'ClientItemController@index');
+        Route::get('/{id}', 'ClientItemController@show');
     });
 
     Route::middleware('jwt')->group(function () {
