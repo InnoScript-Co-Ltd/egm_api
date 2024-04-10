@@ -41,7 +41,7 @@ class PromotionController extends Controller
             $promotion = Promotion::create($payload->toArray());
             $imagePath = $payload['image']->store('images', 'public');
             $imageName = explode('/', $imagePath)[1];
-            $promotion->image()->updateOrCreate(['imageable_id' => $promotion->id], [
+            $promotion->image()->create([
                 'image' => $imageName,
                 'imageable_id' => $promotion->id,
             ]);
