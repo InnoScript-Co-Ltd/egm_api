@@ -115,6 +115,8 @@ Route::middleware('jwt')->group(function () {
         Route::get('/{id}', 'PromotionController@show')->permission(PermissionEnum::PROMOTION_SHOW->value);
         Route::post('/{id}', 'PromotionController@update')->permission(PermissionEnum::PROMOTION_UPDATE->value);
         Route::delete('/{id}', 'PromotionController@destory')->permission(PermissionEnum::PROMOTION_DESTROY->value);
+
+        Route::post('/{id}/item', 'PromotionController@storeItem')->permission(PermissionEnum::PROMOTION_ITEM_STORE->value);
     });
 
     Route::group(['prefix' => 'delivery-address'], function () {

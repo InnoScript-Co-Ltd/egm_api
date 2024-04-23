@@ -57,7 +57,6 @@ class ShopController extends Controller
                 'image' => $shopLogo,
                 'imageable_id' => $shop->id,
             ]);
-        
 
             $shop['cover_photo'] = $coverPhoto;
             $shop['shop_logo'] = $shopLogo;

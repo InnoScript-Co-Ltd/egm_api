@@ -2,11 +2,10 @@
 
 namespace App\Http\Controllers\Client;
 
-use App\Models\Category;
 use App\Http\Controllers\Dashboard\Controller;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
+use App\Models\Category;
 use Exception;
+use Illuminate\Support\Facades\DB;
 
 class ClientCategoryController extends Controller
 {
@@ -24,7 +23,6 @@ class ClientCategoryController extends Controller
             DB::commit();
 
             return $this->success('Category list is successfully retrived', $category);
-
 
         } catch (Exception $e) {
             throw $e;

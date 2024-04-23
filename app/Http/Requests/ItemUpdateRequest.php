@@ -37,7 +37,7 @@ class ItemUpdateRequest extends FormRequest
             'product_photo.*' => 'nullable|file',
             'item_code' => ['nullable', 'unique:items,item_code', 'string'],
             'item_color' => 'nullable|array',
-            "item_color.*" => "nullable|string",
+            'item_color.*' => 'nullable|string',
             'item_size' => 'nullable|array',
             'item_size.*' => 'nullable|string',
             'description' => 'string | nullable',

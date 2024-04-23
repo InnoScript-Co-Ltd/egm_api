@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Dashboard;
 
+use App\Http\Requests\PromotionItemStoreRequest;
 use App\Http\Requests\PromotionStoreRequest;
 use App\Http\Requests\PromotionUpdateRequest;
 use App\Models\Promotion;
@@ -15,7 +16,7 @@ class PromotionController extends Controller
         DB::beginTransaction();
 
         try {
-            $promotion = Promotion::with(['image'])
+            $promotion = Promotion::with(['image', 'items'])
                 ->searchQuery()
                 ->sortingQuery()
                 ->filterQuery()
@@ -115,5 +116,30 @@ class PromotionController extends Controller
             DB::rollback();
             throw $e;
         }
+    }
+
+    public function storeItem(PromotionItemStoreRequest $request, $id)
+    {
+        $payload = collect($request->validated());
+
+        DB::beginTransaction();
+
+        try {
+            $promotion = Promotion::findOrFail($id);
+
+            collect($payload['item_ids'])->map(function ($item) use ($promotion) {
+                $promotion->items()->create([
+                    'item_id' => $item,
+                ]);
+            });
+
+            DB::commit();
+
+            return $this->success('Promotion is created successfully', $promotion);
+        } catch (Exception $e) {
+            DB::rollback();
+            throw $e;
+        }
+
     }
 }

@@ -25,6 +25,11 @@ Route::middleware(['api'])->group(function () {
         Route::post('/reset-password', 'ClientAuthController@resetPassword');
     });
 
+    Route::group(['prefix' => 'promotion'], function () {
+        Route::get('/', 'PromotionController@index');
+        Route::get('/{id}', 'PromotionController@show');
+    });
+
     Route::group(['prefix' => 'location'], function () {
         Route::get('/country', 'LocationController@countries');
         Route::get('/country/{id}', 'LocationController@countryDetail');

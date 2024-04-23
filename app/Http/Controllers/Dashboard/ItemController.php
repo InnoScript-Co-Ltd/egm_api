@@ -18,11 +18,11 @@ class ItemController extends Controller
         try {
 
             $item = Item::with(['thumbnailPhoto', 'productPhoto'])
-            ->searchQuery()
-            ->sortingQuery()
-            ->filterQuery()
-            ->filterDateQuery()
-            ->paginationQuery();
+                ->searchQuery()
+                ->sortingQuery()
+                ->filterQuery()
+                ->filterDateQuery()
+                ->paginationQuery();
 
             DB::commit();
 

@@ -18,7 +18,7 @@ class ClientShopController extends Controller
     ];
 
     protected $active = [
-        'status' => 'ACTIVE'
+        'status' => 'ACTIVE',
     ];
 
     private function country($builder)

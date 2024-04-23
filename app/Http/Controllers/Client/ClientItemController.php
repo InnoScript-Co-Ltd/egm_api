@@ -2,26 +2,25 @@
 
 namespace App\Http\Controllers\Client;
 
-use App\Models\Item;
 use App\Http\Controllers\Dashboard\Controller;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
+use App\Models\Item;
 use Exception;
+use Illuminate\Support\Facades\DB;
 
 class ClientItemController extends Controller
 {
     public function index()
     {
         DB::beginTransaction();
-        
+
         try {
 
             $item = Item::with(['thumbnailPhoto', 'productPhoto'])
-            ->searchQuery()
-            ->sortingQuery()
-            ->filterQuery()
-            ->filterDateQuery()
-            ->paginationQuery();
+                ->searchQuery()
+                ->sortingQuery()
+                ->filterQuery()
+                ->filterDateQuery()
+                ->paginationQuery();
 
             DB::commit();
 

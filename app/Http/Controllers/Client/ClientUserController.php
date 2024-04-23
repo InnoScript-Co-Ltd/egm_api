@@ -43,7 +43,7 @@ class ClientUserController extends Controller
     {
         DB::beginTransaction();
         try {
-            
+
             $user = User::with(['profile'])->findOrFail($id);
             DB::commit();
 

@@ -27,4 +27,9 @@ class Promotion extends Model
     {
         return $this->morphOne(Image::class, 'imageable');
     }
+
+    public function items()
+    {
+        return $this->morphedByMany(PromotionItem::class, 'promotion_items');
+    }
 }
