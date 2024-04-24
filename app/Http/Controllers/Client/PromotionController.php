@@ -28,7 +28,10 @@ class PromotionController extends Controller
         DB::beginTransaction();
 
         try {
-            $promotions = Promotion::with(['image'])
+            $promotions = Promotion::with([
+                'image',
+                'items' => fn ($query) => $query->where(['status' => 'ACTIVE'])->with(['item']),
+            ])
                 ->where($this->active)
                 ->whereDate('end_date', '>', Carbon::now())
                 ->select($this->showalbeFields)

@@ -2,10 +2,12 @@
 
 namespace App\Http\Requests;
 
-use App\Models\Item;
+use App\Enums\GeneralStatusEnum;
+use App\Helpers\Enum;
+use App\Models\Promotion;
 use Illuminate\Foundation\Http\FormRequest;
 
-class PromotionItemStoreRequest extends FormRequest
+class PromotionItemUpdateRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -22,12 +24,12 @@ class PromotionItemStoreRequest extends FormRequest
      */
     public function rules(): array
     {
-        $items = implode(',', Item::where(['status' => 'ACTIVE'])->pluck('id')->toArray());
+        $generalStatusEnum = implode(',', (new Enum(GeneralStatusEnum::class))->values());
+        Promotion::findOrFail(request('id'));
 
         return [
             'promotion_price' => 'nullable | numeric',
-            'item_ids' => 'required | array',
-            'item_ids.*' => "in:$items",
+            'status' => "nullable | in:$generalStatusEnum",
         ];
     }
 }
