@@ -11,12 +11,16 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('promotion_items', function (Blueprint $table) {
+        Schema::create('items_in_promotion', function (Blueprint $table) {
             $table->snowflakeIdAndPrimary();
             $table->snowflakeId('item_id');
+            $table->snowflakeId('promotion_id');
+            $table->float('promotion_price', 9, 2)->default(0);
             $table->string('status')->default('ACTIVE');
-            $table->timestamps();
-            $table->timestamp('deleted_at')->nullable();
+            $table->auditColumns();
+
+            $table->foreign('item_id')->references('id')->on('items')->onDelete('cascade');
+            $table->foreign('promotion_id')->references('id')->on('promotions')->onDelete('cascade');
         });
     }
 
@@ -25,6 +29,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('promotion_items');
+        Schema::dropIfExists('items_in_promotion');
     }
 };

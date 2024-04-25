@@ -30,6 +30,6 @@ class Promotion extends Model
 
     public function items()
     {
-        return $this->morphedByMany(PromotionItem::class, 'promotion_items');
+        return $this->hasMany(PromotionInItem::class, 'promotion_id', 'id');
     }
 }

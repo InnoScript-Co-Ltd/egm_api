@@ -3,9 +3,11 @@
 namespace App\Http\Controllers\Dashboard;
 
 use App\Http\Requests\PromotionItemStoreRequest;
+use App\Http\Requests\PromotionItemUpdateRequest;
 use App\Http\Requests\PromotionStoreRequest;
 use App\Http\Requests\PromotionUpdateRequest;
 use App\Models\Promotion;
+use App\Models\PromotionInItem;
 use Exception;
 use Illuminate\Support\Facades\DB;
 
@@ -16,7 +18,7 @@ class PromotionController extends Controller
         DB::beginTransaction();
 
         try {
-            $promotion = Promotion::with(['image', 'items'])
+            $promotion = Promotion::with(['image'])
                 ->searchQuery()
                 ->sortingQuery()
                 ->filterQuery()
@@ -63,7 +65,11 @@ class PromotionController extends Controller
         DB::beginTransaction();
 
         try {
-            $promotion = Promotion::with(['image'])->findOrFail($id);
+            $promotion = Promotion::with([
+                'image',
+                'items' => fn ($query) => $query->where('status', '!=', 'DELETED')->with(['item']),
+            ])
+                ->findOrFail($id);
             DB::commit();
 
             return $this->success('Promotion detail is successfully retrived', $promotion);
@@ -108,7 +114,7 @@ class PromotionController extends Controller
 
         try {
             $promotion = Promotion::findOrFail($id);
-            $promotion->delete($id);
+            $promotion->delete();
             DB::commit();
 
             return $this->success('Promotion is deleted successfully', $promotion);
@@ -126,20 +132,40 @@ class PromotionController extends Controller
 
         try {
             $promotion = Promotion::findOrFail($id);
-
-            collect($payload['item_ids'])->map(function ($item) use ($promotion) {
-                $promotion->items()->create([
+            collect($payload['item_ids'])->map(function ($item) use ($id) {
+                PromotionInItem::create([
+                    'promotion_id' => $id,
                     'item_id' => $item,
+                    'status' => 'ACTIVE',
                 ]);
             });
 
+            $promotion['items'] = $payload['item_ids'];
             DB::commit();
 
-            return $this->success('Promotion is created successfully', $promotion);
+            return $this->success('Promotion item are created successfully', $promotion);
         } catch (Exception $e) {
             DB::rollback();
             throw $e;
         }
+    }
 
+    public function updateItem(PromotionItemUpdateRequest $request)
+    {
+        $payload = collect($request->validated());
+        $itemId = $request['itemId'];
+
+        DB::beginTransaction();
+
+        try {
+            $promotionItem = PromotionInItem::with(['item'])->findOrFail($itemId);
+            $promotionItem->update($payload->toArray());
+            DB::commit();
+
+            return $this->success('Promotion item is updated successfully', $promotionItem);
+        } catch (Exception $e) {
+            DB::rollback();
+            throw $e;
+        }
     }
 }
