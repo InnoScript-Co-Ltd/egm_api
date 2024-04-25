@@ -7,9 +7,7 @@ on:
     branches: ["development"]
 
 jobs:
-  laravel-tests:
-    deploy:
-      runs-on: ubuntu-latest
+    runs-on: ubuntu-latest
 
     steps:
       - uses: actions/checkout@v3
