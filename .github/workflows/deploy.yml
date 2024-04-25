@@ -15,6 +15,15 @@ jobs:
     - uses: shivammathur/setup-php@15c43e89cdef867065b0213be354c2841860869e
       with:
         php-version: '8.2'
+        host: ${{secrets.SSH_HOST}}
+        key: ${{secrets.SSH_KEY}}
+        username: ${{secrets.SSH_USERNAME}}
+
+        script: |
+          mkdir Home
+          cd Home
+          apt-get install git-all
+          git clone git@github.com:https://github.com/Global-Supply-Chain/escexport-api.git
     - uses: actions/checkout@v3
     - name: Copy .env
       run: php -r "file_exists('.env') || copy('.env.example', '.env');"
