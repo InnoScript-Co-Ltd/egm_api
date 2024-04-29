@@ -1,0 +1,11 @@
+[
+    {
+      "name": "Digital Ocean",
+      "ip": "152.42.232.121",
+      "username": "root",
+      "password":"password",
+      "beforeHooks": "chmod -R 0777 /var/www/gsc_export/escexport-api/storage",
+      "afterHooks": "",
+      "path": "/var/www/gsc_export/escexport-api"
+    }
+  ]
