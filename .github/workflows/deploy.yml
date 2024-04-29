@@ -7,13 +7,11 @@ on:
     branches: ["development"]
 
 jobs:
-  create-deployment-artifacts:
-    name: Create deployment artifacts
+  deploy:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Use github action
-        uses: actions/checkout@v3
+      - uses: actions/checkout@v3
       # - name: Compile CSS and Javascript
       #   run: |
       #     npm install
@@ -25,26 +23,34 @@ jobs:
             php-version: 8.3
             extensions: mbstring, ctype, fileinfo, openssl, PDO, bcmath, json, tokenizer, xml
       - name: Composer install
+        run: composer install --no-dev --prefer-dist --optimize-autoloader
+      - name: Generate Laravel mix
+        run: npm install && npm run prod
+      - name: Set up SSH keys
+        uses: webfactory/ssh-agent@v0.5.3
+        with:
+          ssh-private-key: ${{ secrets.SSH_KEY }}
+      - name: Deploy to server
         run: |
-            composer install --no-dev --no-interaction --prefer-dist
-      -name: Create staging artifact
-          env:
-            GITHUB_SHA: ${{ github.sha }}
-          run: tar -czf "${GITHUB_SHA}".tar.gz --exclude=*.git --exclude=node_modules *
-      - name: Store artifact for distribution
-        uses: actions/upload-artifact@v3
-        with: 
-            name: app-build
-            path: ${{github.sha}}.tar.gz
+          ssh -o StrictHostKeyChecking=no ${{ secrets.SSH_USERNAME }}@${{ secrets.SSH_HOST }} 'cd /var/www/gsc_export/escexport-api && git pull origin development && composer install --no-dev --prefer-dist --optimize-autoloader && php artisan migrate --force && php artisan config:cache && php artisan route:cache && php artisan view:cache'
+      # -name: Create staging artifact
+      #     env:
+      #       GITHUB_SHA: ${{ github.sha }}
+      #     run: tar -czf "${GITHUB_SHA}".tar.gz --exclude=*.git --exclude=node_modules *
+      # - name: Store artifact for distribution
+      #   uses: actions/upload-artifact@v3
+      #   with: 
+      #       name: app-build
+      #       path: ${{github.sha}}.tar.gz
 
-      - name: Export deployment matrix
-        id: export-deployment-matrix
-        run: |
-            delimiter="$(openssl rand -hex 8)"
-            JSON="$(cat ./.github/workflows/servers.json)"
-            echo "DEPLOYMENT_MATRIX<<${delimiter}" >> "${GITHUB_OUTPUT}"
-            echo "$JSON" >> "${GITHUB_OUTPUT}"
-            echo "${delimiter}" >> "${GITHUB_OUTPUT}"
+      # - name: Export deployment matrix
+      #   id: export-deployment-matrix
+      #   run: |
+      #       delimiter="$(openssl rand -hex 8)"
+      #       JSON="$(cat ./.github/workflows/servers.json)"
+      #       echo "DEPLOYMENT_MATRIX<<${delimiter}" >> "${GITHUB_OUTPUT}"
+      #       echo "$JSON" >> "${GITHUB_OUTPUT}"
+      #       echo "${delimiter}" >> "${GITHUB_OUTPUT}"
       # - name: Deploy to server
       #   run: |
       #     ssh -o StrictHostKeyChecking=no -i ${{secrets.SSH_KEY}} root@152.42.232.121 'ls'
