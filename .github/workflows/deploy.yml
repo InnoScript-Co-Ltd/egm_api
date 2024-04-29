@@ -8,8 +8,7 @@ on:
 
 jobs:
   laravel-test:
-  create-deployment-artifacts:
-    name: Create deployment artifacts
+
     runs-on: ubuntu-latest
 
     steps:
