@@ -34,6 +34,7 @@ class UserStoreRequest extends FormRequest
             'position' => 'nullable | string',
             'address' => 'nullable | string',
             'dob' => 'nullable | date',
+            'client_type' => 'required | string',
         ];
 
     }

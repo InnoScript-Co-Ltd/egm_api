@@ -139,6 +139,14 @@ Route::middleware('jwt')->group(function () {
 
     });
 
+    Route::group(['prefix' => 'invoice'], function () {
+        Route::get('/', 'InvoiceController@index')->permission(PermissionEnum::INVOICE_INDEX->value);
+        Route::post('/', 'InvoiceController@store')->permission(PermissionEnum::INVOICE_STORE->value);
+        Route::get('/{id}', 'InvoiceController@show')->permission(PermissionEnum::INVOICE_SHOW->value);
+        Route::put('/{id}', 'InvoiceController@update')->permission(PermissionEnum::INVOICE_UPDATE->value);
+        Route::delete('/{id}', 'InvoiceController@destroy')->permission(PermissionEnum::INVOIVE_DESTROY->value);
+    });
+
     Route::group(['prefix' => 'point'], function () {
         Route::get('/', 'PointController@index')->permission(PermissionEnum::POINT_INDEX->value);
         Route::post('/', 'PointController@store')->permission(PermissionEnum::POINT_STORE->value);
