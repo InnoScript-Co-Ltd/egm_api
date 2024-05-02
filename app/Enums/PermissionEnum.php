@@ -57,6 +57,12 @@ enum PermissionEnum: string
     case ORDER_INDEX = 'ORDER_INDEX';
     case ORDER_DESTROY = 'ORDER_DESTROY';
 
+    case INVOICE_STORE = "INVOICE_STORE";
+    case INVOICE_SHOW = "INVOICE_SHOW";
+    case INVOICE_UPDATE = "INVOICE_UPDATE";
+    case INVOICE_INDEX = "INVOICE_INDEX";
+    case INVOIVE_DESTROY = "INVOICE_DESTROY";
+
     /** POINT */
     case POINT_STORE = 'POINT_STORE';
     case POINT_SHOW = 'POINT_SHOW';
