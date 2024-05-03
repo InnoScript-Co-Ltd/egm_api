@@ -26,7 +26,6 @@ class Item extends Model
     protected $casts = [
         'product_photo' => 'json',
         'item_color' => 'json',
-        'item_size' => 'json',
         'out_of_stock' => 'boolean',
     ];
 
