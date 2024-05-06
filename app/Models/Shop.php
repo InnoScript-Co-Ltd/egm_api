@@ -42,11 +42,11 @@ class Shop extends Model
 
     public function coverPhoto()
     {
-        return $this->morphOne(Image::class, 'imageable');
+        return $this->morphOne(Image::class, 'imageable')->where('type', 'cover_photo');
     }
 
     public function shopLogo()
     {
-        return $this->morphOne(Image::class, 'imageable');
+        return $this->morphOne(Image::class, 'imageable')->where('type', 'shop_logo');
     }
 }

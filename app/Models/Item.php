@@ -24,6 +24,8 @@ class Item extends Model
     public $appends = ['category_name', 'shop_name'];
 
     protected $casts = [
+        'item_size' => 'json',
+        'item_color' => 'json',
         'product_photo' => 'json',
         'item_color' => 'json',
         'out_of_stock' => 'boolean',
@@ -51,12 +53,12 @@ class Item extends Model
 
     public function thumbnailPhoto()
     {
-        return $this->morphOne(Image::class, 'imageable');
+        return $this->morphOne(Image::class, 'imageable')->where('type', 'thumbnail_photo');
     }
 
     public function productPhoto()
     {
-        return $this->morphMany(Image::class, 'imageable');
+        return $this->morphMany(Image::class, 'imageable')->where('type', 'product_photo');
     }
 
     public function category(): BelongsTo

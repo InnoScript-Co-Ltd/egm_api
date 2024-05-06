@@ -49,7 +49,7 @@ class ItemController extends Controller
                 $thumbnailPhoto = explode('/', $imagePath)[1];
                 $item->thumbnailPhoto()->create([
                     'image' => $thumbnailPhoto,
-                    'imageable_id' => $item->id,
+                    'type' => 'thumbnail_photo',
                 ]);
             }
 
@@ -59,7 +59,7 @@ class ItemController extends Controller
                     $productPhoto = explode('/', $imagePath)[1];
                     $item->productPhoto()->create([
                         'image' => $productPhoto,
-                        'imageable_id' => $item->id,
+                        'type' => 'product_photo',
                     ]);
                 }
             }
@@ -99,13 +99,12 @@ class ItemController extends Controller
 
             $item = Item::findOrFail($id);
 
-            if ($request->has('thumbnail_photo') && is_array($payload['thumbnail_photo'])) {
-                $imagePath = $photo->store('images', 'public');
+            if ($request->has('thumbnail_photo') && is_file($payload['thumbnail_photo'])) {
+                $imagePath = $payload['thumbnail_photo']->store('images', 'public');
                 $profileImage = explode('/', $imagePath)[1];
-                $item->thumbnailPhoto()->where('imageable_id', '=', $item->id)->delete();
-                $item->thumbnailPhoto()->updateOrCreate([
+                $item->thumbnailPhoto()->updateOrCreate(['imageable_id' => $item->id], [
                     'image' => $profileImage,
-                    'imageable_id' => $item->id,
+                    'type' => 'thumbnail_photo',
                 ]);
             }
 
@@ -114,9 +113,9 @@ class ItemController extends Controller
                 foreach ($payload['product_photo'] as $photo) {
                     $imagePath = $photo->store('images', 'public');
                     $profileImage = explode('/', $imagePath)[1];
-                    $item->productPhoto()->updateOrCreate([
+                    $item->productPhoto()->create([
                         'image' => $profileImage,
-                        'imageable_id' => $item->id,
+                        'type' => 'product_photo',
                     ]);
                 }
             }

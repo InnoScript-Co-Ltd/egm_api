@@ -42,14 +42,13 @@ class CategoryController extends Controller
 
             $category = Category::create($payload->toArray());
 
-            if (isset($payload['icon'])) {
+            if (isset($payload['icon']) && is_file($payload['icon'])) {
                 $imagePath = $payload['icon']->store('images', 'public');
                 $iconImage = explode('/', $imagePath)[1];
-                $category->icon()->updateOrCreate(['imageable_id' => $category->id], [
+                $category->icon()->create([
                     'image' => $iconImage,
-                    'imageable_id' => $category->id,
+                    'type' => 'icon',
                 ]);
-                $category['icon'] = $iconImage;
             }
 
             DB::commit();
@@ -87,17 +86,18 @@ class CategoryController extends Controller
         try {
 
             $category = Category::findOrFail($id);
-            $category->update($payload->toArray());
 
             if (isset($payload['icon'])) {
                 $imagePath = $payload['icon']->store('images', 'public');
                 $iconImage = explode('/', $imagePath)[1];
                 $category->icon()->updateOrCreate(['imageable_id' => $category->id], [
                     'image' => $iconImage,
-                    'imageable_id' => $category->id,
+                    'type' => 'icon',
                 ]);
                 $category['icon'] = $iconImage;
             }
+
+            $category->update($payload->toArray());
 
             DB::commit();
 
