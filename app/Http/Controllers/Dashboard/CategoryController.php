@@ -87,14 +87,13 @@ class CategoryController extends Controller
 
             $category = Category::findOrFail($id);
 
-            if (isset($payload['icon'])) {
+            if (isset($payload['icon']) && is_file($payload['icon'])) {
                 $imagePath = $payload['icon']->store('images', 'public');
                 $iconImage = explode('/', $imagePath)[1];
                 $category->icon()->updateOrCreate(['imageable_id' => $category->id], [
                     'image' => $iconImage,
                     'type' => 'icon',
                 ]);
-                $category['icon'] = $iconImage;
             }
 
             $category->update($payload->toArray());

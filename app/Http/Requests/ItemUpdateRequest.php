@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests;
 
+use App\Models\Item;
 use App\Enums\GeneralStatusEnum;
 use App\Helpers\Enum;
 use App\Models\Category;
@@ -29,17 +30,18 @@ class ItemUpdateRequest extends FormRequest
         $categoryId = implode(',', Category::all()->pluck('id')->toArray());
         $generalStatusEnum = implode(',', (new Enum(GeneralStatusEnum::class))->values());
         $shopIds = implode(',', Shop::all()->pluck('id')->toArray());
+        $item = Item::find(request('id'));
+        $itemIds = $item->id;
 
         return [
             'name' => 'nullable | string',
-            'thumbnail_photo' => 'nullable | file',
+            'thumbnail_photo' => 'nullable',
             'product_photo' => 'nullable | array',
             'product_photo.*' => 'nullable|file',
-            'item_code' => ['nullable', 'unique:items,item_code', 'string'],
+            'item_code' => "nullable | unique:items,item_code,$itemIds | string",
             'item_color' => 'nullable|array',
             'item_color.*' => 'nullable|string',
-            'item_size' => 'nullable | array',
-            'item_size.*' => 'nullable|string',
+            'item_size' => 'nullable|string',
             'description' => 'string | nullable',
             'content' => 'string | nullable',
             'price' => 'nullable | numeric',

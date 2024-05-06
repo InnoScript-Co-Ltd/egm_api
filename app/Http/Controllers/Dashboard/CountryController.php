@@ -90,8 +90,6 @@ class CountryController extends Controller
                     'image' => $flagImage,
                     'type' => 'flag_image',
                 ]);
-
-                $country['flag_image'] = $flagImage;
             }
 
             $country->update($payload->toArray());
