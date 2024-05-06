@@ -24,7 +24,6 @@ class Item extends Model
     public $appends = ['category_name', 'shop_name'];
 
     protected $casts = [
-        'item_size' => 'json',
         'item_color' => 'json',
         'product_photo' => 'json',
         'item_color' => 'json',
