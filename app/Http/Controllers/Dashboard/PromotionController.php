@@ -46,7 +46,7 @@ class PromotionController extends Controller
             $imageName = explode('/', $imagePath)[1];
             $promotion->image()->create([
                 'image' => $imageName,
-                'imageable_id' => $promotion->id,
+                'type' => 'image',
             ]);
             $promotion['image'] = $imageName;
 
@@ -94,7 +94,7 @@ class PromotionController extends Controller
                 $imageName = explode('/', $imagePath)[1];
                 $promotion->image()->updateOrCreate(['imageable_id' => $promotion->id], [
                     'image' => $imageName,
-                    'imageable_id' => $promotion->id,
+                    'type' => 'image',
                 ]);
                 $promotion['image'] = $imageName;
             }

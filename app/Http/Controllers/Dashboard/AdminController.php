@@ -79,7 +79,7 @@ class AdminController extends Controller
                 $profileImage = explode('/', $imagePath)[1];
                 $admin->image()->updateOrCreate(['imageable_id' => $admin->id], [
                     'image' => $profileImage,
-                    'imageable_id' => $admin->id,
+                    'type' => 'image',
                 ]);
             }
 

@@ -58,7 +58,7 @@ class Admin extends Authenticatable implements JWTSubject
 
     public function image()
     {
-        return $this->morphOne(Image::class, 'imageable');
+        return $this->morphOne(Image::class, 'imageable')->where('type', 'image');
     }
 
     protected function getRnpAttribute()

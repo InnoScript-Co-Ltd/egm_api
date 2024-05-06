@@ -58,7 +58,7 @@ class User extends Authenticatable implements JWTSubject
 
     public function profile()
     {
-        return $this->morphOne(Image::class, 'imageable');
+        return $this->morphOne(Image::class, 'imageable')->where('type', 'profile');
     }
 
     public function deliveryAddress()

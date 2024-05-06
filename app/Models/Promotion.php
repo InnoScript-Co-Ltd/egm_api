@@ -25,7 +25,7 @@ class Promotion extends Model
 
     public function image()
     {
-        return $this->morphOne(Image::class, 'imageable');
+        return $this->morphOne(Image::class, 'imageable')->where('type', 'image');
     }
 
     public function items()
