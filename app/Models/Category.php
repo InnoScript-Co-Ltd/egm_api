@@ -20,6 +20,6 @@ class Category extends Model
 
     public function icon()
     {
-        return $this->morphOne(Image::class, 'imageable');
+        return $this->morphOne(Image::class, 'imageable')->where('type', 'icon');
     }
 }

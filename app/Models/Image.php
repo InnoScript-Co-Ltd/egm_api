@@ -13,10 +13,10 @@ class Image extends Model
 
     protected $table = 'images';
 
-    protected $fillable = ['image', 'imageable_type', 'imageable_id', 'status'];
+    protected $fillable = ['image', 'type', 'imageable_type', 'imageable_id', 'status'];
 
     protected $hidden = [
-        'imageable_type', 'imageable_id', 'status', 'created_at', 'updated_at', 'deleted_at',
+        'imageable_type', 'imageable_id', 'type', 'status', 'created_at', 'updated_at', 'deleted_at',
     ];
 
     public function imageable()

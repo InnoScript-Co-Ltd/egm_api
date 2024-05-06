@@ -48,14 +48,14 @@ class ShopController extends Controller
             $coverPhoto = explode('/', $imagePath)[1];
             $shop->coverPhoto()->create([
                 'image' => $coverPhoto,
-                'imageable_id' => $shop->id,
+                'type' => 'cover_photo'
             ]);
 
             $imagePath = $payload['shop_logo']->store('images', 'public');
             $shopLogo = explode('/', $imagePath)[1];
             $shop->shopLogo()->create([
                 'image' => $shopLogo,
-                'imageable_id' => $shop->id,
+                'type' => 'shop_logo'
             ]);
 
             $shop['cover_photo'] = $coverPhoto;
@@ -105,9 +105,10 @@ class ShopController extends Controller
             if ($request->hasFile('cover_photo')) {
                 $imagePath = $payload['cover_photo']->store('images', 'public');
                 $coverPhoto = explode('/', $imagePath)[1];
+                $shop->coverPhoto()->where('imageable_id', '=', $shop->id)->delete();
                 $shop->coverPhoto()->updateOrCreate(['imageable_id' => $shop->id], [
                     'image' => $coverPhoto,
-                    'imageable_id' => $shop->id,
+                    'type' => 'cover_photo'
                 ]);
 
                 $payload['cover_photo'] = $coverPhoto;
@@ -116,9 +117,10 @@ class ShopController extends Controller
             if ($request->hasFile('shop_logo')) {
                 $imagePath = $payload['shop_logo']->store('images', 'public');
                 $shopLogo = explode('/', $imagePath)[1];
+                $shop->shopLogo()->where('imageable_id', '=', $shop->id)->delete();
                 $shop->shopLogo()->updateOrCreate(['imageable_id' => $shop->id], [
                     'image' => $shopLogo,
-                    'imageable_id' => $shop->id,
+                    'type' => 'shop_logo'
                 ]);
 
                 $payload['shop_logo'] = $shopLogo;

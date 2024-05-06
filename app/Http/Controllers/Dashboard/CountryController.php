@@ -39,13 +39,12 @@ class CountryController extends Controller
 
             $country = Country::create($payload->toArray());
 
-            if (isset($payload['flag_image'])) {
+            if (isset($payload['flag_image']) && is_file($payload['flag_image'])) {
                 $imagePath = $payload['flag_image']->store('images', 'public');
                 $flagImage = explode('/', $imagePath)[1];
-                $country->flagImage()->updateOrCreate(['imageable_id' => $country->id], [
+                $country->flagImage()->create([
                     'image' => $flagImage,
-                    'imageable_id' => $country->id,
-                    'image_type' => 'COUNTRY_FLAG_IMAGE',
+                    'type' => 'flag_image',
                 ]);
 
                 $country['flag_image'] = $flagImage;
@@ -83,19 +82,19 @@ class CountryController extends Controller
         try {
 
             $country = Country::findOrFail($id);
-            $country->update($payload->toArray());
 
-            if (isset($payload['flag_image'])) {
+            if (isset($payload['flag_image']) && is_file($payload['flag_image'])) {
                 $imagePath = $payload['flag_image']->store('images', 'public');
                 $flagImage = explode('/', $imagePath)[1];
                 $country->flagImage()->updateOrCreate(['imageable_id' => $country->id], [
                     'image' => $flagImage,
-                    'imageable_id' => $country->id,
-                    'image_type' => 'COUNTRY_FLAG_IMAGE',
+                    'type' => 'flag_image',
                 ]);
 
                 $country['flag_image'] = $flagImage;
             }
+
+            $country->update($payload->toArray());
             DB::commit();
 
             return $this->success('Country is updated successfully', $country);

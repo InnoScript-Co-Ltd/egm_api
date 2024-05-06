@@ -26,7 +26,7 @@ class Country extends Model
 
     public function flagImage()
     {
-        return $this->morphOne(Image::class, 'imageable');
+        return $this->morphOne(Image::class, 'imageable')->where('type', 'flag_image');
     }
 
     public function regionOrState(): HasMany
