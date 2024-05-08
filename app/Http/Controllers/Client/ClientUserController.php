@@ -24,7 +24,7 @@ class ClientUserController extends Controller
                 $profileImage = explode('/', $imagePath)[1];
                 $user->profile()->updateOrCreate(['imageable_id' => $user->id], [
                     'image' => $profileImage,
-                    'imageable_id' => $user->id,
+                    'type' => 'profile',
                 ]);
             }
 
