@@ -94,7 +94,7 @@ class ClientShopController extends Controller
                 ->get();
             DB::commit();
 
-            return $this->success('Shop detail is successfully retrived', $shop);
+            return $this->success('Shop detail is successfully retrived', $shop[0]);
         } catch (Exception $e) {
             DB::rollBack();
             throw $e;
