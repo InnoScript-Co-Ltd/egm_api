@@ -14,7 +14,7 @@ class ExportItem implements FromCollection, WithHeadings, WithMapping
      */
     public function collection()
     {
-        return Item::select('id', 'category_id', 'shop_id', 'name', 'code', 'description', 'content', 'price', 'sell_price', 'out_of_stock', 'instock', 'status')->get();
+        return Item::select('id', 'category_id', 'shop_id', 'name', 'item_color', 'item_size', 'item_code', 'description', 'content', 'price', 'sell_price', 'out_of_stock', 'instock', 'status')->get();
     }
 
     public function headings(): array
@@ -24,7 +24,9 @@ class ExportItem implements FromCollection, WithHeadings, WithMapping
             'Category Name',
             'Shop Name',
             'Name',
-            'Code',
+            'Item Color',
+            "Item Size",
+            "Item Code",
             'Description',
             'Content',
             'Price',
@@ -43,7 +45,9 @@ class ExportItem implements FromCollection, WithHeadings, WithMapping
             $post->category_name,
             $post->shop_name,
             $post->name, // Assuming 'name' is a field in the Category model
-            $post->code,
+            $post->item_color,
+            $post->item_size,
+            $post->item_code,
             $post->description,
             $post->content,
             $post->price,
