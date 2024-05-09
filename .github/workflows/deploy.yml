@@ -10,25 +10,40 @@ jobs:
   deploy:
     runs-on: ubuntu-latest
 
-    steps:
-      - name: Use Node.js 20
-        uses: actions/checkout@v4
-      - name: Compile CSS and Javascript
-        run: |
-          npm install
-          npm run prod
-
-      - name: Configure PHP 8.3
-        uses: shivammathur/setup-php@v2
+    setps:
+        - name: Checkout the code
+        uses: actions/checkout@v2
+        - name: Deploy with SSH
+        uses: appleboy/ssh-action@master
         with: 
-            php-version: 8.3
-            extensions: mbstring, ctype, fileinfo, openssl, PDO, bcmath, json, tokenizer, xml
-      - name: Composer install
-        run: composer install --no-dev --prefer-dist --optimize-autoloader
-      - name: Set up SSH keys
-        uses: webfactory/ssh-agent@v0.5.3
-        with:
-          ssh-private-key: ${{ secrets.SSH_KEY }}
-      - name: Deploy to server
-        run: |
-          ssh -o StrictHostKeyChecking=no ${{ secrets.SSH_USERNAME }}@${{ secrets.SSH_HOST }} 'cd /var/www/gscexport/api && git pull origin development && composer install --no-dev --prefer-dist --optimize-autoloader && php artisan migrate --force && php artisan config:cache && php artisan route:cache && php artisan view:cache'
+            host: ${{ secrets.SSH_HOST }} 
+            username: ${{ secrets.SSH_USERNAME }}
+            key: ${{ secrets.SSH_KEY }}
+            script: |
+              cd /var/www/gscexport/api
+              git pull origin development
+              composer install
+              php artisan migrate - force
+
+    # steps:
+    #   - name: Use Node.js 20
+    #     uses: actions/checkout@v4
+    #   - name: Compile CSS and Javascript
+    #     run: |
+    #       npm install
+    #       npm run prod
+
+    #   - name: Configure PHP 8.3
+    #     uses: shivammathur/setup-php@v2
+    #     with: 
+    #         php-version: 8.3
+    #         extensions: mbstring, ctype, fileinfo, openssl, PDO, bcmath, json, tokenizer, xml
+    #   - name: Composer install
+    #     run: composer install --no-dev --prefer-dist --optimize-autoloader
+    #   - name: Set up SSH keys
+    #     uses: webfactory/ssh-agent@v0.5.3
+    #     with:
+    #       ssh-private-key: ${{ secrets.SSH_KEY }}
+    #   - name: Deploy to server
+    #     run: |
+    #       ssh -o StrictHostKeyChecking=no ${{ secrets.SSH_USERNAME }}@${{ secrets.SSH_HOST }} 'cd /var/www/gscexport/api && git pull origin development && composer install --no-dev --prefer-dist --optimize-autoloader && php artisan migrate --force && php artisan config:cache && php artisan route:cache && php artisan view:cache'
