@@ -25,9 +25,9 @@ class InvoiceStoreRequest extends FormRequest
         $orderIds = implode(',', Order::all()->pluck('id')->toArray());
 
         return [
-            "order_id" => "required|in:$orderIds",
-            "username" => "required|string",
-            "amount" => 'required|numeric',
+            'order_id' => "required|in:$orderIds",
+            'username' => 'required|string',
+            'amount' => 'required|numeric',
         ];
     }
 }

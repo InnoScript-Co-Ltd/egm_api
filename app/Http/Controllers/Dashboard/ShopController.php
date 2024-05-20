@@ -48,14 +48,14 @@ class ShopController extends Controller
             $coverPhoto = explode('/', $imagePath)[1];
             $shop->coverPhoto()->create([
                 'image' => $coverPhoto,
-                'type' => 'cover_photo'
+                'type' => 'cover_photo',
             ]);
 
             $imagePath = $payload['shop_logo']->store('images', 'public');
             $shopLogo = explode('/', $imagePath)[1];
             $shop->shopLogo()->create([
                 'image' => $shopLogo,
-                'type' => 'shop_logo'
+                'type' => 'shop_logo',
             ]);
 
             $shop['cover_photo'] = $coverPhoto;
@@ -108,7 +108,7 @@ class ShopController extends Controller
                 $shop->coverPhoto()->where('imageable_id', '=', $shop->id)->delete();
                 $shop->coverPhoto()->updateOrCreate(['imageable_id' => $shop->id], [
                     'image' => $coverPhoto,
-                    'type' => 'cover_photo'
+                    'type' => 'cover_photo',
                 ]);
 
                 $payload['cover_photo'] = $coverPhoto;
@@ -120,7 +120,7 @@ class ShopController extends Controller
                 $shop->shopLogo()->where('imageable_id', '=', $shop->id)->delete();
                 $shop->shopLogo()->updateOrCreate(['imageable_id' => $shop->id], [
                     'image' => $shopLogo,
-                    'type' => 'shop_logo'
+                    'type' => 'shop_logo',
                 ]);
 
                 $payload['shop_logo'] = $shopLogo;

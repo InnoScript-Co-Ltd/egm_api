@@ -55,6 +55,10 @@ Route::middleware(['api'])->group(function () {
         Route::get('/{id}', 'ClientItemController@show');
     });
 
+    Route::group(['prefix' => 'promotion'], function () {
+        Route::get('/', 'ClientPromotionController@index');
+    });
+
     Route::middleware('jwt')->group(function () {
         Route::group(['prefix' => 'user'], function () {
             Route::post('/{id}', 'ClientUserController@update');

@@ -5,22 +5,22 @@ namespace App\Http\Controllers\Dashboard;
 use App\Http\Requests\InvoiceStoreRequest;
 use App\Http\Requests\InvoiceUpdateRequest;
 use App\Models\Invoice;
-use Illuminate\Support\Facades\DB;
 use Exception;
+use Illuminate\Support\Facades\DB;
 
 class InvoiceController extends Controller
 {
-    public function index ()
+    public function index()
     {
         DB::beginTransaction();
         try {
 
             $invoice = Invoice::with('order')
-                        ->searchQuery()
-                        ->sortingQuery()
-                        ->filterQuery()
-                        ->filterDateQuery()
-                        ->paginationQuery();
+                ->searchQuery()
+                ->sortingQuery()
+                ->filterQuery()
+                ->filterDateQuery()
+                ->paginationQuery();
             DB::commit();
 
             return $this->success('Invoice list is successfully retrived', $invoice);
@@ -36,13 +36,12 @@ class InvoiceController extends Controller
         $payload = collect($request->validated());
         DB::beginTransaction();
 
-        try{
+        try {
 
             $invoice = Invoice::create($payload->toArray());
             DB::commit();
 
             return $this->success('Invoice is created successfully', $request);
-
 
         } catch (Exception $e) {
             DB::rollback();
@@ -57,12 +56,12 @@ class InvoiceController extends Controller
         try {
 
             $invoice = Invoice::with('order')
-                        ->findOrFail($id);
+                ->findOrFail($id);
             DB::commit();
 
             return $this->success('Invoice details is retrived successfully', $invoice);
 
-        } catch(Exception $e) {
+        } catch (Exception $e) {
             DB::rollback();
             throw $e;
         }
@@ -80,8 +79,7 @@ class InvoiceController extends Controller
 
             DB::commit();
 
-            return $this->success("Invoice is updated successfully", $invoice);
-
+            return $this->success('Invoice is updated successfully', $invoice);
 
         } catch (Exception $e) {
             DB::rollback();
@@ -100,10 +98,9 @@ class InvoiceController extends Controller
 
             return $this->success('Invoice is deleted successfully', $invoice);
 
-        } catch(Exception $e) {
+        } catch (Exception $e) {
             DB::rollback();
             throw $e;
         }
     }
-
 }

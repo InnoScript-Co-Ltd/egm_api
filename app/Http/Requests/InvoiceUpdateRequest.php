@@ -28,10 +28,10 @@ class InvoiceUpdateRequest extends FormRequest
         $generalStatusEnum = implode(',', (new Enum(GeneralStatusEnum::class))->values());
 
         return [
-            "order_id" => "nullable|in:$orderIds",
-            "username" => "nullable|string",
-            "amount" => 'nullable|numeric',
-            'status' => "nullable | in:$generalStatusEnum"
+            'order_id' => "nullable|in:$orderIds",
+            'username' => 'nullable|string',
+            'amount' => 'nullable|numeric',
+            'status' => "nullable | in:$generalStatusEnum",
         ];
     }
 }
