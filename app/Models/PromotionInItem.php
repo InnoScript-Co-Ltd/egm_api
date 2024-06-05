@@ -22,6 +22,18 @@ class PromotionInItem extends Model
         'created_at', 'updated_at', 'deleted_at',
     ];
 
+    public $appends = ['item_name'];
+
+    protected function getItemNameAttribute()
+    {
+        $item = Item::where(['id' => $this->attributes['item_id']])->first();
+        if ($item) {
+            return $item->name;
+        } else {
+            return null;
+        }
+    }
+
     public function item()
     {
         return $this->hasOne(Item::class, 'id', 'item_id');

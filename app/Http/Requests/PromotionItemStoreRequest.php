@@ -27,7 +27,7 @@ class PromotionItemStoreRequest extends FormRequest
         return [
             'promotion_price' => 'nullable | numeric',
             'item_ids' => 'required | array',
-            'item_ids.*' => "in:$items",
+            'item_ids.*' => "in:$items|unique:items_in_promotion,id",
         ];
     }
 }

@@ -118,6 +118,8 @@ Route::middleware('jwt')->group(function () {
 
         Route::post('/{id}/item', 'PromotionController@storeItem')->permission(PermissionEnum::PROMOTION_ITEM_STORE->value);
         Route::put('/{id}/item/{itemId}', 'PromotionController@updateItem')->permission(PermissionEnum::PROMOTION_ITEM_UPDATE->value);
+        Route::get('/{id}/item', 'PromotionController@showItem')->permission(PermissionEnum::PROMOTION_ITEM_SHOW->value);
+        Route::delete('/{id}/item', 'PromotionController@destroyItem')->permission(PermissionEnum::PROMOTION_ITEM_DESTROY->value);
     });
 
     Route::group(['prefix' => 'delivery-address'], function () {
