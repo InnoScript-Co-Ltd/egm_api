@@ -127,15 +127,15 @@ class PromotionController extends Controller
     public function storeItem(PromotionItemStoreRequest $request, $id)
     {
         $payload = collect($request->validated());
-
         DB::beginTransaction();
 
         try {
             $promotion = Promotion::findOrFail($id);
-            collect($payload['item_ids'])->map(function ($item) use ($id) {
+            collect($payload['item_ids'])->map(function ($item) use ($id, $payload) {
                 PromotionInItem::create([
                     'promotion_id' => $id,
                     'item_id' => $item,
+                    'promotion_price' => $payload['promotion_price'],
                     'status' => 'ACTIVE',
                 ]);
             });
@@ -148,6 +148,60 @@ class PromotionController extends Controller
             DB::rollback();
             throw $e;
         }
+    }
+
+    public function showItem($id)
+    {
+        DB::beginTransaction();
+
+        try {
+
+            $promotionItems = PromotionInItem::where('promotion_id', '=', $id)
+            // ->with(['item'])
+            ->get()
+            ->toArray();
+
+            // Extract 'name' and 'id' from each item
+            // $formattedItems = array_map(function($promotionItem) {
+            //     return [
+            //         'id' => $promotionItem['id'],
+            //         'item_id' => $promotionItem['item_id'],
+            //         'promotion_id' => $promotionItem['promotion_id'],
+            //         'promotion_price' => $promotionItem['promotion_price'],
+            //         'status' => $promotionItem['status'],
+            //         'item' => [
+            //             'id' => $promotionItem['item']['id'],
+            //             'name' => $promotionItem['item']['name']
+            //         ]
+            //     ];
+            // }, $promotionItems);
+
+            DB::commit();
+
+            return $this->success('Promotion in item list is retrived successfully', $promotionItems);
+
+        } catch (Exception $e) {
+            DB::rollback();
+            throw $e;
+        }
+    }
+
+    public function destroyItem($id)
+    {
+        DB::beginTransaction();
+        try {
+
+            $promotionItem = PromotionInItem::findOrFail($id);
+            $promotionItem->delete();
+            DB::commit();
+
+            return $this->success('Promotion in item is deleted successfully', $promotionItem);
+
+        } catch(Exception $e) {
+            DB::rollback();
+            throw $e;
+        }
+
     }
 
     public function updateItem(PromotionItemUpdateRequest $request)
