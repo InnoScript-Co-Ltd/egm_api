@@ -34,6 +34,11 @@ class PromotionInItem extends Model
         }
     }
 
+    public function promotion()
+    {
+        return $this->hasOne(Promotion::class, 'id', 'promotion_id');
+    }
+
     public function item()
     {
         return $this->hasOne(Item::class, 'id', 'item_id');

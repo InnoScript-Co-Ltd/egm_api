@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Client;
 
 use App\Http\Controllers\Dashboard\Controller;
 use App\Models\Promotion;
+use App\Models\PromotionInItem;
 use Carbon\Carbon;
 use Exception;
 use Illuminate\Support\Facades\DB;
@@ -61,6 +62,27 @@ class PromotionController extends Controller
 
             return $this->success('promotions detail is successfully retrived', $promotion);
         } catch (Exception $e) {
+            DB::rollback();
+            throw $e;
+        }
+    }
+
+    public function promotionInItem($id)
+    {
+        DB::beginTransaction();
+        try {
+
+            $promotionInItem = PromotionInItem::with([
+                'item',
+                'item.thumbnailPhoto',
+                'item.productPhoto',
+                'promotion',
+                'promotion.image'
+                ])->where('promotion_id', $id)->get();
+
+            return $this->success('Promotion in item list is successfully retrived', $promotionInItem);
+
+        } catch(Exception $e) {
             DB::rollback();
             throw $e;
         }

@@ -28,6 +28,7 @@ Route::middleware(['api'])->group(function () {
     Route::group(['prefix' => 'promotion'], function () {
         Route::get('/', 'PromotionController@index');
         Route::get('/{id}', 'PromotionController@show');
+        Route::get('/item/{id}', 'PromotionController@promotionInItem');
     });
 
     Route::group(['prefix' => 'location'], function () {
