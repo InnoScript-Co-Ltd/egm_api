@@ -31,6 +31,25 @@ class CityController extends Controller
         }
     }
 
+    public function cityByRegionOrState($id)
+    {
+        DB::beginTransaction();
+        try {
+
+            $cities = City::where([
+                "status" => "ACTIVE",
+                "region_or_state_id" => $id
+            ])->get();
+            DB::commit();
+
+            return $this->success('City list filter by region or state is successfully retrived', $cities);
+
+        } catch (Exception $e) {
+            DB::rollback();
+            throw $e;
+        }
+    }
+
     public function store(CityStoreRequest $request)
     {
         $payload = collect($request->validated());

@@ -20,3 +20,7 @@ Broadcast::channel('App.Models.User.{id}', function ($user, $id) {
 Broadcast::channel('App.Models.Admin.{id}', function ($admin, $id) {
     return (int) $admin->id === (int) $id;
 });
+
+Broadcast::channel('App.Models.Agent.{id}', function ($agent, $id) {
+    return (int) $agent->id === (int) $id;
+});

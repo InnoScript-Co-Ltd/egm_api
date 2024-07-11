@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Dashboard;
 
+use App\Enums\GeneralStatusEnum;
 use App\Http\Requests\RegionAndStateStoreRequest;
 use App\Http\Requests\RegionAndStateUpdateRequest;
 use App\Models\RegionOrState;
@@ -24,6 +25,26 @@ class RegionAndStateController extends Controller
             DB::commit();
 
             return $this->success('Region or state list is successfully retrived', $regionsAndStates);
+
+        } catch (Exception $e) {
+            DB::rollback();
+            throw $e;
+        }
+    }
+
+    public function countryBy($id)
+    {
+        DB::beginTransaction();
+
+        try {
+            $regionsAndStates = RegionOrState::where([
+                "status" => GeneralStatusEnum::ACTIVE->value,
+                "country_id" => $id
+            ])->get();
+
+            DB::commit();
+
+            return $this->success('Region or states filter by country is successfully retrived', $regionsAndStates);
 
         } catch (Exception $e) {
             DB::rollback();

@@ -48,13 +48,9 @@ return [
             'driver' => 'jwt',
             'provider' => 'admins',
         ],
-        'merchant' => [
+        'agent' => [
             'driver' => 'jwt',
-            'provider' => 'admins',
-        ],
-        'mpe' => [
-            'driver' => 'jwt',
-            'provider' => 'mpe_users',
+            'provider' => 'agents',
         ],
     ],
 
@@ -84,9 +80,9 @@ return [
             'driver' => 'eloquent',
             'model' => App\Models\Admin::class,
         ],
-        'mpe_users' => [
+        'agents' => [
             'driver' => 'eloquent',
-            'model' => App\Models\MPEUser::class,
+            'model' => App\Models\Agent::class,
         ],
 
         // 'users' => [
@@ -127,14 +123,8 @@ return [
             'expire' => 60,
             'throttle' => 60,
         ],
-        'merchant' => [
-            'provider' => 'admins',
-            'table' => 'password_reset_tokens',
-            'expire' => 60,
-            'throttle' => 60,
-        ],
-        'mpe' => [
-            'provider' => 'mpe_users',
+        'agent' => [
+            'provider' => 'agnets',
             'table' => 'password_reset_tokens',
             'expire' => 60,
             'throttle' => 60,

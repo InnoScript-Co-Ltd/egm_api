@@ -32,11 +32,7 @@ class RouteServiceProvider extends ServiceProvider
             return Limit::perMinute(60)->by($request->user()?->id ?: $request->ip());
         });
 
-        RateLimiter::for('merchant', function (Request $request) {
-            return Limit::perMinute(60)->by($request->user()?->id ?: $request->ip());
-        });
-
-        RateLimiter::for('mpe', function (Request $request) {
+        RateLimiter::for('agent', function (Request $request) {
             return Limit::perMinute(60)->by($request->user()?->id ?: $request->ip());
         });
 
@@ -51,15 +47,10 @@ class RouteServiceProvider extends ServiceProvider
                 ->namespace('App\Http\Controllers\Client')
                 ->group(base_path('routes/api.php'));
 
-            Route::middleware('merchant')
-                ->prefix('merchant')
-                ->namespace('App\Http\Controllers\Merchant')
-                ->group(base_path('routes/merchant.php'));
-
-            Route::middleware('mpe')
-                ->prefix('mpe')
-                ->namespace('App\Http\Controllers\MPE')
-                ->group(base_path('routes/mpe.php'));
+            Route::middleware('agent')
+                ->prefix('agent')
+                ->namespace('App\Http\Controllers\Agent')
+                ->group(base_path('routes/agent.php'));
 
             Route::middleware('web')
                 ->group(base_path('routes/web.php'));
