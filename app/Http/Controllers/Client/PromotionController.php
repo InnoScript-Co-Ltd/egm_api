@@ -77,12 +77,12 @@ class PromotionController extends Controller
                 'item.thumbnailPhoto',
                 'item.productPhoto',
                 'promotion',
-                'promotion.image'
-                ])->where('promotion_id', $id)->get();
+                'promotion.image',
+            ])->where('promotion_id', $id)->get();
 
             return $this->success('Promotion in item list is successfully retrived', $promotionInItem);
 
-        } catch(Exception $e) {
+        } catch (Exception $e) {
             DB::rollback();
             throw $e;
         }

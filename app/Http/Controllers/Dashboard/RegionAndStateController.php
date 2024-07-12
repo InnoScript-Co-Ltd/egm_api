@@ -38,8 +38,8 @@ class RegionAndStateController extends Controller
 
         try {
             $regionsAndStates = RegionOrState::where([
-                "status" => GeneralStatusEnum::ACTIVE->value,
-                "country_id" => $id
+                'status' => GeneralStatusEnum::ACTIVE->value,
+                'country_id' => $id,
             ])->get();
 
             DB::commit();

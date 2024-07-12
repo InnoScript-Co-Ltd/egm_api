@@ -15,14 +15,14 @@ return new class extends Migration
         Schema::create('sub_agents', function (Blueprint $table) {
             $table->snowflakeIdAndPrimary();
             $table->snowflakeId('agent_id');
-            $table->string("first_name");
-            $table->string("last_name");
-            $table->string("roi_rate")->nullable();
+            $table->string('first_name');
+            $table->string('last_name');
+            $table->string('roi_rate')->nullable();
             $table->string('nrc_front')->nullable()->default(null);
             $table->string('nrc_back')->nullable()->default(null);
-            $table->string("nrc")->nullable()->default(null)->unique();
-            $table->string("phone")->nullable()->default(null)->unique();
-            $table->string("email")->nullable()->default(null)->unique();
+            $table->string('nrc')->nullable()->default(null)->unique();
+            $table->string('phone')->nullable()->default(null)->unique();
+            $table->string('email')->nullable()->default(null)->unique();
             $table->string('status')->default(AgentStatusEnum::PENDING->value);
             $table->auditColumns();
 

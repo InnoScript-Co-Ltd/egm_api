@@ -5,8 +5,8 @@ namespace App\Http\Controllers\Dashboard;
 use App\Http\Requests\AgentStoreRequest;
 use App\Http\Requests\AgentUpdateRequest;
 use App\Models\Agent;
-use Illuminate\Support\Facades\DB;
 use Exception;
+use Illuminate\Support\Facades\DB;
 
 class AgentController extends Controller
 {
@@ -132,7 +132,7 @@ class AgentController extends Controller
             //     $passportFrontImage = explode('/', $passportFrontImagePath)[1];
             //     $payload['passport_front'] = $passportFrontImage;
             // }
-            
+
             $agent->update($payload->toArray());
 
             DB::commit();

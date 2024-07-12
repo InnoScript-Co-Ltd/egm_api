@@ -16,8 +16,12 @@ use Illuminate\Support\Facades\Route;
 Route::middleware(['agent'])->group(function () {
 
     Route::post('/register', 'AccountController@store');
-    
-    Route::middleware('jwt')->group(function () {
+    Route::post('verification', 'AccountController@emailVerify');
+    Route::post('verification-code', 'AccountController@resendVerifyCode');
 
+    Route::post('/auth/login', 'AgentAuthController@login');
+
+    Route::middleware('jwt')->group(function () {
+        Route::get('/auth/profile', 'AgentAuthController@profile');
     });
 });

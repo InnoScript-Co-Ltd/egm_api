@@ -29,13 +29,12 @@ class PackageUpdateRequest extends FormRequest
 
         $generalStatusIds = implode(',', (new Enum(GeneralStatusEnum::class))->values());
 
-
         return [
-            "name" => "nullable | string | unique:packages,name,$packageId",
-            "roi_rate" => "nullable | string",
-            "duration" => "nullable | numeric",
-            "deposit_rate" => "nullable | string",
-            "status" => "nullable | string | in:$generalStatusIds"
+            'name' => "nullable | string | unique:packages,name,$packageId",
+            'roi_rate' => 'nullable | string',
+            'duration' => 'nullable | numeric',
+            'deposit_rate' => 'nullable | string',
+            'status' => "nullable | string | in:$generalStatusIds",
         ];
     }
 }

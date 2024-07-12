@@ -4,8 +4,9 @@ namespace App\Http\Controllers\Dashboard;
 
 use App\Http\Requests\PermissionUpdateRequest;
 use App\Models\Permission;
-use Illuminate\Support\Facades\DB;
 use Exception;
+use Illuminate\Support\Facades\DB;
+
 class PermissionController extends Controller
 {
     public function index()
@@ -49,7 +50,7 @@ class PermissionController extends Controller
         $payload = collect($request->validated());
 
         DB::beginTransaction();
-        
+
         try {
             $permission = Permission::findOrFail($id);
             $permission->update($payload->toArray());
@@ -57,7 +58,7 @@ class PermissionController extends Controller
 
             return $this->success('Permission is successfully updated', $permission);
 
-        } catch(Exception $e) {
+        } catch (Exception $e) {
             DB::rollback();
             throw $e;
         }

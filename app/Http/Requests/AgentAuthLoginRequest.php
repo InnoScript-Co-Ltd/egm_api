@@ -2,11 +2,9 @@
 
 namespace App\Http\Requests;
 
-use App\Enums\VerifyStatusEnum;
-use App\Helpers\Enum;
 use Illuminate\Foundation\Http\FormRequest;
 
-class EamilVerifyRequest extends FormRequest
+class AgentAuthLoginRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -23,12 +21,9 @@ class EamilVerifyRequest extends FormRequest
      */
     public function rules(): array
     {
-        $verifyStatus = implode(',', (new Enum(VerifyStatusEnum::class))->values());
-
         return [
-            'user_id' => 'required',
-            'email_verify_code' => 'required | string | min:6 | max:6',
-            'verify_type' => "required | string | in:$verifyStatus",
+            'email' => 'required | email',
+            'password' => 'required | min:8 | max:24',
         ];
     }
 }

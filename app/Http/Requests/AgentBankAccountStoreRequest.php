@@ -23,13 +23,13 @@ class AgentBankAccountStoreRequest extends FormRequest
     public function rules(): array
     {
         $agentIds = implode(',', Agent::pluck('id')->toArray());
-        
+
         return [
-            "agent_id" => "required | in:$agentIds",
-            "account_name" => "required | string",
-            "account_number" => "required | unique:agent_bank_accounts,account_number",
-            "address" => "nullable | string",
-            "branch" => "nullable | string",
+            'agent_id' => "required | in:$agentIds",
+            'account_name' => 'required | string',
+            'account_number' => 'required | unique:agent_bank_accounts,account_number',
+            'address' => 'nullable | string',
+            'branch' => 'nullable | string',
         ];
     }
 }

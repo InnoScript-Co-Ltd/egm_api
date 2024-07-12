@@ -37,8 +37,8 @@ class CityController extends Controller
         try {
 
             $cities = City::where([
-                "status" => "ACTIVE",
-                "region_or_state_id" => $id
+                'status' => 'ACTIVE',
+                'region_or_state_id' => $id,
             ])->get();
             DB::commit();
 

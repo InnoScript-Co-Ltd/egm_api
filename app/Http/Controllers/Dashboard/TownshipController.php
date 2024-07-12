@@ -37,8 +37,8 @@ class TownshipController extends Controller
         try {
 
             $townships = Township::where([
-                "status" => "ACTIVE",
-                "city_id" => $id
+                'status' => 'ACTIVE',
+                'city_id' => $id,
             ])->get();
             DB::commit();
 

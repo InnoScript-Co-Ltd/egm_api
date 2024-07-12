@@ -2,16 +2,23 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Model;
 use App\Traits\BasicAudit;
 use App\Traits\SnowflakeID;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Foundation\Auth\User as Authenticatable;
+use Illuminate\Notifications\Notifiable;
+use Laravel\Sanctum\HasApiTokens;
+use Spatie\Permission\Traits\HasPermissions;
+use Spatie\Permission\Traits\HasRoles;
+use Tymon\JWTAuth\Contracts\JWTSubject;
 
-class Agent extends Model
+class Agent extends Authenticatable implements JWTSubject
 {
-    use BasicAudit, HasFactory, SnowflakeID, SoftDeletes;
+    use BasicAudit, HasApiTokens, HasFactory, HasPermissions, HasRoles, Notifiable, SnowflakeID, SoftDeletes;
+
     protected $guard = 'agents';
+
     protected $fillable = [
         'profile',
         'first_name',
@@ -35,19 +42,35 @@ class Agent extends Model
         'email_verified_at',
         'phone_verified_at',
         'kyc_status',
-        'status'
+        'status',
+        'email_expired_at',
+        'email_verify_code',
     ];
+
     protected $casts = [
-        "dob" => "date",
-        "password" => "hashed"
+        'dob' => 'date',
+        'password' => 'hashed',
+        'email_expired_at' => 'datetime',
+        'email_verified_at' => 'datetime',
+        'phone_verified_at' => 'datetime',
     ];
 
     protected $hidden = [
-        "password"
+        'password',
     ];
 
     public function bankAccounts()
     {
-        return $this->hasMany(AgentBankAccount::class,"agent_id", "id");
+        return $this->hasMany(AgentBankAccount::class, 'agent_id', 'id');
+    }
+
+    public function getJWTIdentifier()
+    {
+        return $this->getKey();
+    }
+
+    public function getJWTCustomClaims()
+    {
+        return [];
     }
 }

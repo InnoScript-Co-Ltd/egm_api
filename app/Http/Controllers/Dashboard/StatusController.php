@@ -42,7 +42,7 @@ class StatusController extends Controller
             'memberOrder' => (new Enum(MembershipOrderStatusEnum::class))->values(),
             'apptype' => (new Enum(AppTypeEnum::class))->values(),
             'agent' => (new Enum(AgentStatusEnum::class))->values(),
-            'kyc' => (new Enum(KycStatusEnum::class))->values()
+            'kyc' => (new Enum(KycStatusEnum::class))->values(),
         ];
 
         $statusTypes = collect($allowableStatus)->filter(function ($value, $index) use ($requestStatus) {

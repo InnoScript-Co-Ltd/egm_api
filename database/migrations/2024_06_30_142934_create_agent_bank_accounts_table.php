@@ -18,10 +18,10 @@ return new class extends Migration
             $table->snowflakeId('agent_id');
             $table->string('account_name');
             $table->string('account_number')->unique();
-            $table->string("address")->nullable()->default(null);
-            $table->string("branch")->nullable()->default(null);
-            $table->string("default_account")->default(DefaultStatusEnum::NONE->value);
-            $table->string("status")->default(BankAccountStatusEnum::ACTIVE->value);
+            $table->string('address')->nullable()->default(null);
+            $table->string('branch')->nullable()->default(null);
+            $table->string('default_account')->default(DefaultStatusEnum::NONE->value);
+            $table->string('status')->default(BankAccountStatusEnum::ACTIVE->value);
             $table->auditColumns();
 
             $table->foreign('agent_id')->references('id')->on('agents')->onDelete('cascade');

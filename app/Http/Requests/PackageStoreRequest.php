@@ -22,10 +22,10 @@ class PackageStoreRequest extends FormRequest
     public function rules(): array
     {
         return [
-            "name" => "required | string | unique:packages,name",
-            "roi_rate" => "required | string",
-            "duration" => "required | numeric",
-            "deposit_rate" => "required | string"
+            'name' => 'required | string | unique:packages,name',
+            'roi_rate' => 'required | string',
+            'duration' => 'required | numeric',
+            'deposit_rate' => 'required | string',
         ];
     }
 }

@@ -14,11 +14,11 @@ return new class extends Migration
     {
         Schema::create('packages', function (Blueprint $table) {
             $table->snowflakeIdAndPrimary();
-            $table->string("name")->unique();
-            $table->string("roi_rate");
-            $table->integer("duration")->unsigned();
-            $table->string("deposit_rate");
-            $table->string("status")->default(GeneralStatusEnum::ACTIVE->value);
+            $table->string('name')->unique();
+            $table->string('roi_rate');
+            $table->integer('duration')->unsigned();
+            $table->string('deposit_rate');
+            $table->string('status')->default(GeneralStatusEnum::ACTIVE->value);
             $table->auditColumns();
         });
     }

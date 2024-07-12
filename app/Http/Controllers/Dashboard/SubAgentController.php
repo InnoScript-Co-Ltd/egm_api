@@ -1,13 +1,12 @@
 <?php
 
-
 namespace App\Http\Controllers\Dashboard;
 
 use App\Http\Requests\SubAgentStoreRequest;
 use App\Http\Requests\SubAgentUpdateRequest;
 use App\Models\SubAgent;
-use Illuminate\Support\Facades\DB;
 use Exception;
+use Illuminate\Support\Facades\DB;
 
 class SubAgentController extends Controller
 {
@@ -49,7 +48,6 @@ class SubAgentController extends Controller
                 $nrcBackImage = explode('/', $nrcBackImagePath)[1];
                 $payload['nrc_back'] = $nrcBackImage;
             }
-
 
             $subAgent = SubAgent::create($payload->toArray());
 

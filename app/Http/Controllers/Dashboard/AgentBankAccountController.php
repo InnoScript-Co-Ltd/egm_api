@@ -5,8 +5,8 @@ namespace App\Http\Controllers\Dashboard;
 use App\Http\Requests\AgentBankAccountStoreRequest;
 use App\Http\Requests\AgentBankAccountUpdateRequest;
 use App\Models\AgentBankAccount;
-use Illuminate\Support\Facades\DB;
 use Exception;
+use Illuminate\Support\Facades\DB;
 
 class AgentBankAccountController extends Controller
 {
@@ -34,10 +34,11 @@ class AgentBankAccountController extends Controller
     {
         $payload = collect($request->validated());
         DB::beginTransaction();
-        
+
         try {
             $agentBankAccount = AgentBankAccount::create($payload->toArray());
             DB::commit();
+
             return $this->success('New agent bank account is created successfully', $agentBankAccount);
 
         } catch (Exception $e) {

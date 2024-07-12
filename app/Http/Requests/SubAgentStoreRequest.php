@@ -27,15 +27,15 @@ class SubAgentStoreRequest extends FormRequest
         $mobileRule = REGXEnum::MOBILE_NUMBER->value;
 
         return [
-            "agent_id" => "required | string | in:$agentIds",
-            "first_name" => "required | string",
-            "last_name" => "required | string",
-            "nrc" => "nullable | string | unique:sub_agents,nrc",
-            "nrc_front" => "nullable | file",
-            "nrc_back" => "nullable | file",
-            "phone" => ["required", "string", "unique:sub_agents,phone", "regex:$mobileRule"],
-            "email" => "nullable | email | unique:sub_agents,email",
-            "roi_rate" => "nullable | string"
+            'agent_id' => "required | string | in:$agentIds",
+            'first_name' => 'required | string',
+            'last_name' => 'required | string',
+            'nrc' => 'nullable | string | unique:sub_agents,nrc',
+            'nrc_front' => 'nullable | file',
+            'nrc_back' => 'nullable | file',
+            'phone' => ['required', 'string', 'unique:sub_agents,phone', "regex:$mobileRule"],
+            'email' => 'nullable | email | unique:sub_agents,email',
+            'roi_rate' => 'nullable | string',
         ];
     }
 }

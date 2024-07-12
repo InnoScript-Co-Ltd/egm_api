@@ -36,9 +36,9 @@ Route::middleware('jwt')->group(function () {
         Route::get('/{id}', 'AgentController@show');
         // Route::get('/', 'AgentController@index')->permission(PermissionEnum::AGENT_INDEX->value);;
         // Route::get('/{id}', 'AgentController@show')->permission(PermissionEnum::AGENT_SHOW->value);;
-        Route::post('/', 'AgentController@store')->permission(PermissionEnum::AGENT_STORE->value);;
-        Route::post('/{id}', 'AgentController@update')->permission(PermissionEnum::AGENT_UPDATE->value);;
-        Route::delete('/{id}', 'AgentController@destroy')->permission(PermissionEnum::AGENT_DESTROY->value);;
+        Route::post('/', 'AgentController@store')->permission(PermissionEnum::AGENT_STORE->value);
+        Route::post('/{id}', 'AgentController@update')->permission(PermissionEnum::AGENT_UPDATE->value);
+        Route::delete('/{id}', 'AgentController@destroy')->permission(PermissionEnum::AGENT_DESTROY->value);
     });
 
     Route::group(['prefix' => 'sub-agent'], function () {
@@ -46,19 +46,19 @@ Route::middleware('jwt')->group(function () {
         Route::get('/{id}', 'SubAgentController@show');
         // Route::get('/', 'SubAgentController@index')->permission(PermissionEnum::Agent_INDEX->value);;
         // Route::get('/{id}', 'SubAgentController@show')->permission(PermissionEnum::Agent_SHOW->value);;
-        Route::post('/', 'SubAgentController@store')->permission(PermissionEnum::SUB_AGENT_STORE->value);;
-        Route::post('/{id}', 'SubAgentController@update')->permission(PermissionEnum::SUB_AGENT_UPDATE->value);;
-        Route::delete('/{id}', 'SubAgentController@destroy')->permission(PermissionEnum::SUB_AGENT_DESTROY->value);;
+        Route::post('/', 'SubAgentController@store')->permission(PermissionEnum::SUB_AGENT_STORE->value);
+        Route::post('/{id}', 'SubAgentController@update')->permission(PermissionEnum::SUB_AGENT_UPDATE->value);
+        Route::delete('/{id}', 'SubAgentController@destroy')->permission(PermissionEnum::SUB_AGENT_DESTROY->value);
     });
-    
+
     Route::group(['prefix' => 'agent-bank-account'], function () {
         Route::get('/', 'AgentBankAccountController@index')->permission(PermissionEnum::AGENT_BANK_ACCOUNT_INDEX->value);
         Route::post('/', 'AgentBankAccountController@store')->permission(PermissionEnum::AGENT_BANK_ACCOUNT_STORE->value);
         Route::get('/{id}', 'AgentBankAccountController@show')->permission(PermissionEnum::AGENT_BANK_ACCOUNT_SHOW->value);
-        Route::put('/{id}', 'AgentBankAccountController@update')->permission(PermissionEnum::AGENT_BANK_ACCOUNT_UPDATE->value);;
-        Route::delete('/{id}', 'AgentBankAccountController@destroy')->permission(PermissionEnum::AGENT_BANK_ACCOUNT_DESTROY->value);;
+        Route::put('/{id}', 'AgentBankAccountController@update')->permission(PermissionEnum::AGENT_BANK_ACCOUNT_UPDATE->value);
+        Route::delete('/{id}', 'AgentBankAccountController@destroy')->permission(PermissionEnum::AGENT_BANK_ACCOUNT_DESTROY->value);
     });
-    
+
     Route::group(['prefix' => 'package'], function () {
         Route::get('/', 'PackageController@index');
         Route::post('/', 'PackageController@store');
@@ -68,7 +68,7 @@ Route::middleware('jwt')->group(function () {
         // Route::post('/', 'PackageController@store')->permission(PermissionEnum::PACKAGE_STORE->value);;
         // Route::get('/{id}', 'PackageController@show')->permission(PermissionEnum::PACKAGE_SHOW->value);;
         // Route::put('/{id}', 'PackageController@update')->permission(PermissionEnum::PACKAGE_UPDATE->value);;
-        Route::delete('/{id}', 'PackageController@destroy')->permission(PermissionEnum::PACKAGE_DESTROY->value);;
+        Route::delete('/{id}', 'PackageController@destroy')->permission(PermissionEnum::PACKAGE_DESTROY->value);
     });
 
     Route::group(['prefix' => 'permission'], function () {

@@ -12,9 +12,9 @@ class Package extends Model
 {
     use BasicAudit,HasFactory,SnowflakeID,SoftDeletes;
 
-    protected $table = "packages";
+    protected $table = 'packages';
 
     protected $fillable = [
-        "name", "roi_rate", "duration", "deposit_rate", "status"
+        'name', 'roi_rate', 'duration', 'deposit_rate', 'status',
     ];
 }

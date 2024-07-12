@@ -52,10 +52,10 @@ class Kernel extends HttpKernel
         ],
 
         'agent' => [
-            \Illuminate\Routing\Middleware\ThrottleRequests::class.':mpe',
+            \Illuminate\Routing\Middleware\ThrottleRequests::class.':agent',
             \Illuminate\Routing\Middleware\SubstituteBindings::class,
             \App\Http\Middleware\AgentMiddleware::class,
-        ]
+        ],
     ];
 
     /**

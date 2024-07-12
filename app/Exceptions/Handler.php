@@ -66,6 +66,8 @@ class Handler extends ExceptionHandler
             case "Spatie\Permission\Exceptions\UnauthorizedException":
                 return JsonResponder::forbidden('User does not have the right permissions.');
             default:
+                dd($exception);
+
                 return JsonResponder::internalServerError();
         }
     }

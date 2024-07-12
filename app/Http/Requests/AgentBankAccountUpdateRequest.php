@@ -28,15 +28,15 @@ class AgentBankAccountUpdateRequest extends FormRequest
         $agentIds = implode(',', Agent::pluck('id')->toArray());
         $defaultAccountStatus = implode(',', (new Enum(DefaultStatusEnum::class))->values());
         $bankAccountStatus = implode(',', (new Enum(BankAccountStatusEnum::class))->values());
-        
+
         return [
-            "agent_id" => "nullable | in:$agentIds",
-            "account_name" => "nullable | string",
-            "account_number" => "nullable | uniques,agent_bank_accounts,account_number",
-            "address" => "nullable | string",
-            "branch" => "nullable | string",
-            "default_account" => "nullable | string | in:$defaultAccountStatus",
-            "status" => "nullable | string | in:$bankAccountStatus"
+            'agent_id' => "nullable | in:$agentIds",
+            'account_name' => 'nullable | string',
+            'account_number' => 'nullable | uniques,agent_bank_accounts,account_number',
+            'address' => 'nullable | string',
+            'branch' => 'nullable | string',
+            'default_account' => "nullable | string | in:$defaultAccountStatus",
+            'status' => "nullable | string | in:$bankAccountStatus",
         ];
     }
 }

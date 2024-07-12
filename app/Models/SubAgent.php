@@ -12,10 +12,9 @@ class SubAgent extends Model
 {
     use BasicAudit,HasFactory,SnowflakeID,SoftDeletes;
 
-    protected $table = "sub_agents";
+    protected $table = 'sub_agents';
 
     protected $fillable = [
-        "agent_id", "first_name", "last_name", "nrc", "nrc_front", "nrc_back", "phone", "email", "roi_rate", "status"
+        'agent_id', 'first_name', 'last_name', 'nrc', 'nrc_front', 'nrc_back', 'phone', 'email', 'roi_rate', 'status',
     ];
-
 }
