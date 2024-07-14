@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Http\Controllers\Dashboard;
+namespace App\Http\Controllers\Agent;
 
-use App\Enums\GeneralStatusEnum;
+use App\Http\Controllers\Dashboard\Controller;
 use App\Http\Requests\PackageStoreRequest;
 use App\Http\Requests\PackageUpdateRequest;
 use App\Models\Package;
@@ -16,8 +16,7 @@ class PackageController extends Controller
         DB::beginTransaction();
         try {
 
-            $packages = Package::where(['status' => GeneralStatusEnum::ACTIVE->value])
-                ->searchQuery()
+            $packages = Package::searchQuery()
                 ->sortingQuery()
                 ->filterQuery()
                 ->filterDateQuery()

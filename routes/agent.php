@@ -23,5 +23,15 @@ Route::middleware(['agent'])->group(function () {
 
     Route::middleware('jwt')->group(function () {
         Route::get('/auth/profile', 'AgentAuthController@profile');
+
+        Route::group(['prefix' => 'package'], function () {
+            Route::get('/', 'PackageController@index');
+            Route::get('/{id}', 'PackageController@show');
+        });
+
+        Route::group(['prefix' => 'bank-account'], function () {
+            Route::get('/', 'BankAccountController@index');
+            Route::post('/', 'BankAccountController@store');
+        });
     });
 });
