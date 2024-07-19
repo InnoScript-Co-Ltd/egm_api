@@ -33,5 +33,13 @@ Route::middleware(['agent'])->group(function () {
             Route::get('/', 'BankAccountController@index');
             Route::post('/', 'BankAccountController@store');
         });
+
+        Route::group(['prefix' => 'investor'], function () {
+            Route::get('/', 'InvestorController@index');
+            Route::get('/{id}', 'InvestorController@show');
+            Route::post('/', 'InvestorController@store');
+            Route::post('/verify-code', 'InvestorController@verifyCode');
+            Route::post('/resend-code', 'InvestorController@resendCode');
+        });
     });
 });

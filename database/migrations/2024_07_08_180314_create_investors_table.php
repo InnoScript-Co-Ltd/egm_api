@@ -16,11 +16,13 @@ return new class extends Migration
         Schema::create('investors', function (Blueprint $table) {
             $table->snowflakeIdAndPrimary();
             $table->snowflakeId('agent_id')->nullable()->default(null);
+            $table->string('profile')->nullable()->default(null);
             $table->string('first_name');
             $table->string('last_name');
             $table->string('phone')->unique();
-            $table->string('mobile_prefix');
+            $table->string('mobile_prefix')->nullable()->default(null);
             $table->string('email')->unique();
+            $table->string('address')->nullable()->default(null);
             $table->string('password')->nullable();
             $table->date('dob')->nullable()->default(null);
             $table->string('nrc')->nullable()->unique();
@@ -34,6 +36,8 @@ return new class extends Migration
             $table->snowflakeId('township_id')->nullable()->default(null);
             $table->string('kyc_status')->default(KycStatusEnum::NONE->value);
             $table->string('status')->default(InvestorStatusEnum::PENDING->value);
+            $table->string('email_verify_code')->nullable()->default(null);
+            $table->datetime('email_expired_at')->nullable()->default(null);
             $table->auditColumns();
 
             $table->foreign('country_id')->references('id')->on('countries')->onDelete('cascade');

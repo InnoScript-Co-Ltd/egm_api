@@ -22,7 +22,6 @@ class RoleSeeder extends Seeder
                 $createRole = Role::create([
                     'name' => $role,
                     'guard_name' => 'dashboard',
-                    'is_merchant' => false,
                 ]);
 
                 if ($createRole->name === RoleEnum::SUPER_ADMIN->value) {
@@ -34,7 +33,7 @@ class RoleSeeder extends Seeder
                 }
 
             } catch (Exception $e) {
-                throw ($e);
+                throw $e;
             }
         });
     }
