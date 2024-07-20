@@ -41,5 +41,9 @@ Route::middleware(['agent'])->group(function () {
             Route::post('/verify-code', 'InvestorController@verifyCode');
             Route::post('/resend-code', 'InvestorController@resendCode');
         });
+
+        Route::group(['prefix' => 'agent-package'], function () {
+            Route::post('/', 'AgentPackageRequestController@store');
+        });
     });
 });
