@@ -36,4 +36,9 @@ class InvestorPackage extends Model
         'package_start_at' => 'datetime',
         'package_expired_at' => 'datetime',
     ];
+
+    public function investor()
+    {
+        return $this->hasOne(Investor::class, 'id', 'investor_id');
+    }
 }

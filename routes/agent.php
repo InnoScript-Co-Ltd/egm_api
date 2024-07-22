@@ -43,10 +43,12 @@ Route::middleware(['agent'])->group(function () {
         });
 
         Route::group(['prefix' => 'agent-package'], function () {
+            Route::get('/', 'AgentPackageController@index');
             Route::post('/', 'AgentPackageController@store');
         });
 
         Route::group(['prefix' => 'investor-package'], function () {
+            Route::get('/', 'InvestorPackageController@index');
             Route::post('/', 'InvestorPackageController@store');
         });
     });

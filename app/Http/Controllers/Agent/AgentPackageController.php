@@ -13,6 +13,31 @@ use Illuminate\Support\Facades\DB;
 
 class AgentPackageController extends Controller
 {
+    public function index()
+    {
+        $agent = auth('agent')->user();
+
+        if ($agent) {
+            DB::beginTransaction();
+
+            try {
+                $agentPackage = AgentPackage::where(['agent_id' => $agent->id])
+                    ->searchQuery()
+                    ->sortingQuery()
+                    ->filterQuery()
+                    ->filterDateQuery()
+                    ->paginationQuery();
+
+                DB::commit();
+
+                return $this->success('agent package list is successfully retrived', $agentPackage);
+            } catch (Exception $e) {
+                DB::rollback();
+                throw $e;
+            }
+        }
+    }
+
     public function store(AgentPackageRequestStoreRequest $request)
     {
         $payload = collect($request->validated());

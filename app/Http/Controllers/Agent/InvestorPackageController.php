@@ -13,6 +13,32 @@ use Illuminate\Support\Facades\DB;
 
 class InvestorPackageController extends Controller
 {
+    public function index()
+    {
+        $agent = auth('agent')->user();
+
+        if ($agent) {
+            DB::beginTransaction();
+
+            try {
+                $investorPackage = InvestorPackage::where(['agent_id' => $agent->id])
+                    ->with(['investor'])
+                    ->searchQuery()
+                    ->sortingQuery()
+                    ->filterQuery()
+                    ->filterDateQuery()
+                    ->paginationQuery();
+
+                DB::commit();
+
+                return $this->success('investor package list is successfully retrived', $investorPackage);
+            } catch (Exception $e) {
+                DB::rollback();
+                throw $e;
+            }
+        }
+    }
+
     public function store(InvestorPackageReqeustStoreRequest $request)
     {
         $payload = collect($request->validated());
