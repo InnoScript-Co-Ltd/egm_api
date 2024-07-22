@@ -18,18 +18,26 @@ class InvestorController extends Controller
 {
     public function index()
     {
-        $id = auth('agent')->user()->id;
+        $agent = auth('agent')->user();
 
-        DB::beginTransaction();
+        if ($agent) {
+            DB::beginTransaction();
 
-        try {
-            $investors = Investor::where(['agent_id' => $id])->get();
-            DB::commit();
+            try {
+                $investors = Investor::where(['agent_id' => $agent->id])
+                    ->searchQuery()
+                    ->sortingQuery()
+                    ->filterQuery()
+                    ->filterDateQuery()
+                    ->paginationQuery();
 
-            return $this->success('investor list is successfully retrived', $investors);
-        } catch (Exception $e) {
-            DB::rollback();
-            throw $e;
+                DB::commit();
+
+                return $this->success('investor list is successfully retrived', $investors);
+            } catch (Exception $e) {
+                DB::rollback();
+                throw $e;
+            }
         }
     }
 

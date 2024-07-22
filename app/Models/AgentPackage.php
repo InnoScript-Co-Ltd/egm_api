@@ -8,11 +8,11 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
-class AgentPackageRequest extends Model
+class AgentPackage extends Model
 {
     use BasicAudit,HasFactory,SnowflakeID,SoftDeletes;
 
-    protected $table = 'agent_package_requests';
+    protected $table = 'agent_packages';
 
     protected $fillable = [
         'agent_id',

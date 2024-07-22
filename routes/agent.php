@@ -43,7 +43,11 @@ Route::middleware(['agent'])->group(function () {
         });
 
         Route::group(['prefix' => 'agent-package'], function () {
-            Route::post('/', 'AgentPackageRequestController@store');
+            Route::post('/', 'AgentPackageController@store');
+        });
+
+        Route::group(['prefix' => 'investor-package'], function () {
+            Route::post('/', 'InvestorPackageController@store');
         });
     });
 });

@@ -3,14 +3,15 @@
 namespace App\Http\Controllers\Agent;
 
 use App\Enums\GeneralStatusEnum;
+use App\Enums\PackageBuyStatusEnum;
 use App\Http\Controllers\Dashboard\Controller;
 use App\Http\Requests\Agents\AgentPackageRequestStoreRequest;
-use App\Models\AgentPackageRequest;
+use App\Models\AgentPackage;
 use App\Models\Package;
 use Exception;
 use Illuminate\Support\Facades\DB;
 
-class AgentPackageRequestController extends Controller
+class AgentPackageController extends Controller
 {
     public function store(AgentPackageRequestStoreRequest $request)
     {
@@ -38,10 +39,19 @@ class AgentPackageRequestController extends Controller
                     $payload['package_deposit_rate'] = $package->deposit_rate;
                 }
 
-                $agentPackageRequest = AgentPackageRequest::create($payload->toArray());
+                $requestPackage = AgentPackage::where([
+                    'agent_id' => $agent->id,
+                    'package_id' => $package->id,
+                ])->get()->first();
+
+                if ($requestPackage && $requestPackage->status === PackageBuyStatusEnum::REQUEST->value) {
+                    return $this->badRequest('Package is already request');
+                }
+
+                $agentPackageRequest = AgentPackage::create($payload->toArray());
                 DB::commit();
 
-                return $this->success('Agent package request is created successfully', $agentPackageRequest);
+                return $this->success('Agent package is requested successfully', $agentPackageRequest);
 
             } catch (Exception $e) {
                 DB::rollback();

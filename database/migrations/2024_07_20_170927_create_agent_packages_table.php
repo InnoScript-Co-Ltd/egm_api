@@ -12,9 +12,9 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('agent_package_requests', function (Blueprint $table) {
+        Schema::create('agent_packages', function (Blueprint $table) {
             $table->snowflakeIdAndPrimary();
-            $table->snowflakeId('agent_id')->nullable()->default(null);
+            $table->snowflakeId('agent_id');
             $table->snowflakeId('package_id');
             $table->string('package_name');
             $table->string('package_roi_rate');
@@ -37,6 +37,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('agent_package_requests');
+        Schema::dropIfExists('agent_packages');
     }
 };

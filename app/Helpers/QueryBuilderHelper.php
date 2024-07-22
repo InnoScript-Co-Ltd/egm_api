@@ -70,11 +70,6 @@ class QueryBuilderHelper
         $filter = isset($requestQuery['filter']) ? $requestQuery['filter'] : null;
         $value = isset($requestQuery['value']) ? $requestQuery['value'] : null;
 
-        /** For Main Categories Filtere */
-        if ($value === '0' && $filter === 'level') {
-            return $builder->where([$filter => $value]);
-        }
-
         if ($filter && $value) {
             $filterableFields = explode(',', $filter);
             $values = explode(',', $value);
