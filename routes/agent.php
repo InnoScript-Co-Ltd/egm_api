@@ -44,12 +44,20 @@ Route::middleware(['agent'])->group(function () {
 
         Route::group(['prefix' => 'agent-package'], function () {
             Route::get('/', 'AgentPackageController@index');
+            Route::get('/{id}', 'AgentPackageController@show');
             Route::post('/', 'AgentPackageController@store');
         });
 
         Route::group(['prefix' => 'investor-package'], function () {
             Route::get('/', 'InvestorPackageController@index');
             Route::post('/', 'InvestorPackageController@store');
+        });
+
+        Route::group(['prefix' => 'channel'], function () {
+            Route::get('/', 'AgentChannelController@index');
+            Route::post('/', 'AgentChannelController@store');
+            Route::put('/{id}', 'AgentChannelController@update');
+            Route::delete('/{id}', 'AgentChannelController@destroy');
         });
     });
 });

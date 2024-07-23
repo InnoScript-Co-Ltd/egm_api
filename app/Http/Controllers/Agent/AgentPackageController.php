@@ -38,6 +38,26 @@ class AgentPackageController extends Controller
         }
     }
 
+    public function show($id)
+    {
+        $agent = auth('agent')->user();
+
+        if ($agent) {
+            DB::beginTransaction();
+
+            try {
+                $agentPackage = AgentPackage::findOrFail($id);
+
+                DB::commit();
+
+                return $this->success('agent transcation detail is successfully retrived', $agentPackage);
+            } catch (Exception $e) {
+                DB::rollback();
+                throw $e;
+            }
+        }
+    }
+
     public function store(AgentPackageRequestStoreRequest $request)
     {
         $payload = collect($request->validated());
