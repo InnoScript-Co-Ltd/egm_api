@@ -23,6 +23,16 @@ class AgentChannelStoreRequest extends FormRequest
     {
         return [
             'name' => 'required | string',
+            'percentage_pattern' => 'required | string',
+            'max_agent' => 'required | numeric',
+            'percentage' => 'required | array',
+        ];
+    }
+
+    public function messages(): array
+    {
+        return [
+            'percentage.array' => 'Invalid percentage format',
         ];
     }
 }

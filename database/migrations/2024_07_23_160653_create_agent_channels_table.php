@@ -15,6 +15,9 @@ return new class extends Migration
             $table->snowflakeIdAndPrimary();
             $table->snowflakeId('agent_id');
             $table->string('name');
+            $table->string('percentage_pattern');
+            $table->json('percentage');
+            $table->integer('max_agent')->unsigned();
             $table->auditColumns();
 
             $table->foreign('agent_id')->references('id')->on('agents')->onDelete('cascade');

@@ -13,11 +13,14 @@ return new class extends Migration
     {
         Schema::create('agent_in_channels', function (Blueprint $table) {
             $table->snowflakeIdAndPrimary();
+            $table->snowflakeId('main_agent_id');
             $table->snowflakeId('agent_id');
-            $table->integer('percentage')->unsigned();
+            $table->snowflakeId('channel_id');
+            $table->float('percentage', 9, 2);
             $table->auditColumns();
 
             $table->foreign('agent_id')->references('id')->on('agents')->onDelete('cascade');
+            $table->foreign('channel_id')->references('id')->on('agent_channels')->onDelete('cascade');
         });
     }
 

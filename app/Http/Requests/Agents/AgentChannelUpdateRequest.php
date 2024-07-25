@@ -23,6 +23,16 @@ class AgentChannelUpdateRequest extends FormRequest
     {
         return [
             'name' => 'nullable | string',
+            'percentage_pattern' => 'nullable | string',
+            'max_agent' => 'nullable | numeric',
+            'percentage' => 'nullable | array',
+        ];
+    }
+
+    public function messages(): array
+    {
+        return [
+            'percentage.array' => 'Invalid percentage format',
         ];
     }
 }

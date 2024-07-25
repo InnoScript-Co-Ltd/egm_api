@@ -30,9 +30,15 @@ class AgentAuthController extends Controller
         DB::beginTransaction();
 
         try {
-            $agent = auth('agent')->user()->get()[0];
+            $agent = auth('agent')->user();
 
-            return $this->success('Agent is successfully signed in', $agent);
+            if ($agent) {
+                info($agent);
+
+                return $this->success('Agent is successfully signed in', $agent->toArray());
+            } else {
+                $this->unauthenticated('Please login again');
+            }
 
         } catch (Exception $e) {
             DB::rollBack();

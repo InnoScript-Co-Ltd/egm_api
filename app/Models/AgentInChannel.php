@@ -8,13 +8,17 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
-class MPEUnit extends Model
+class AgentInChannel extends Model
 {
     use BasicAudit,HasFactory,SnowflakeID,SoftDeletes;
 
-    protected $table = 'mpe_units';
+    protected $table = 'agent_in_channels';
 
     protected $fillable = [
-        'name', 'status',
+        'main_agent_id', 'agent_id', 'channel_id', 'percentage',
+    ];
+
+    protected $casts = [
+        'percentage' => 'float',
     ];
 }

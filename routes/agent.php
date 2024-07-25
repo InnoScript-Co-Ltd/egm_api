@@ -59,5 +59,12 @@ Route::middleware(['agent'])->group(function () {
             Route::put('/{id}', 'AgentChannelController@update');
             Route::delete('/{id}', 'AgentChannelController@destroy');
         });
+
+        Route::group(['prefix' => 'agent-in-channel'], function () {
+            Route::get('/', 'AgentInChannelController@index');
+            Route::post('/', 'AgentInChannelController@store');
+            Route::put('/{id}', 'AgentInChannelController@update');
+            Route::delete('/{id}', 'AgentInChannelController@destroy');
+        });
     });
 });

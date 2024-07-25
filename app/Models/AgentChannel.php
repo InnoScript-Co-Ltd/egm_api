@@ -15,6 +15,15 @@ class AgentChannel extends Model
     protected $table = 'agent_channels';
 
     protected $fillable = [
-        'agent_id', 'name',
+        'agent_id', 'name', 'percentage_pattern', 'max_agent', 'percentage',
     ];
+
+    protected $casts = [
+        'percentage' => 'array',
+    ];
+
+    public function agentInChannel()
+    {
+        return $this->hasMany(AgentInChannel::class, 'channel_id', 'id');
+    }
 }
