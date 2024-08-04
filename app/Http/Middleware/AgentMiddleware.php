@@ -24,12 +24,12 @@ class AgentMiddleware
             return $next($request);
         }
 
-        if ($auth && $auth->kyc_status !== KycStatusEnum::FULL_KYC->value && $auth->status !== AgentStatusEnum::ACTIVE) {
-            return new JsonResponse([
-                'message' => 'Account is not active',
-                'data' => null,
-            ]);
-        }
+        // if ($auth && $auth->kyc_status !== KycStatusEnum::FULL_KYC->value && $auth->status !== AgentStatusEnum::ACTIVE) {
+        //     return new JsonResponse([
+        //         'message' => 'Account is not active',
+        //         'data' => null,
+        //     ]);
+        // }
 
         return $next($request);
     }

@@ -33,8 +33,6 @@ class AgentAuthController extends Controller
             $agent = auth('agent')->user();
 
             if ($agent) {
-                info($agent);
-
                 return $this->success('Agent is successfully signed in', $agent->toArray());
             } else {
                 $this->unauthenticated('Please login again');
@@ -62,6 +60,7 @@ class AgentAuthController extends Controller
             if ($user->status !== AgentStatusEnum::ACTIVE->value) {
                 return $this->badRequest('Account is not active');
             }
+
             $token = auth()->guard('agent')->attempt($payload->toArray());
 
             DB::commit();

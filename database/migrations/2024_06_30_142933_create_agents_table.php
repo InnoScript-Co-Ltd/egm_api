@@ -16,6 +16,13 @@ return new class extends Migration
     {
         Schema::create('agents', function (Blueprint $table) {
             $table->snowflakeIdAndPrimary();
+            $table->snowflakeId('main_agent_id')->nullable()->default(null);
+            $table->snowflakeId('reference_id')->nullable()->default(null);
+            $table->json('level_one')->nullable()->default(null);
+            $table->json('level_two')->nullable()->default(null);
+            $table->json('level_three')->nullable()->default(null);
+            $table->json('level_four')->nullable()->default(null);
+            $table->float('point', 9, 2)->default(0);
             $table->string('profile')->nullable()->default(null);
             $table->string('username')->unique()->nullable()->default(null);
             $table->string('first_name');
@@ -43,6 +50,8 @@ return new class extends Migration
             $table->auditColumns();
 
             $table->foreign('country_id')->references('id')->on('countries')->onDelete('cascade');
+            $table->foreign('reference_id')->references('id')->on('agents')->onDelete('cascade');
+            $table->foreign('main_agent_id')->references('id')->on('agents')->onDelete('cascade');
             $table->foreign('region_or_state_id')->references('id')->on('regions_and_states')->onDelete('cascade');
             $table->foreign('city_id')->references('id')->on('cities')->onDelete('cascade');
             $table->foreign('township_id')->references('id')->on('townships')->onDelete('cascade');

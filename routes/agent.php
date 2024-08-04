@@ -16,6 +16,7 @@ use Illuminate\Support\Facades\Route;
 Route::middleware(['agent'])->group(function () {
 
     Route::post('/register', 'AccountController@store');
+    Route::post('/reference-link', 'AccountController@referenceLink');
     Route::post('verification', 'AccountController@emailVerify');
     Route::post('verification-code', 'AccountController@resendVerifyCode');
 
@@ -56,6 +57,7 @@ Route::middleware(['agent'])->group(function () {
         Route::group(['prefix' => 'channel'], function () {
             Route::get('/', 'AgentChannelController@index');
             Route::post('/', 'AgentChannelController@store');
+            Route::get('/{id}', 'AgentChannelController@show');
             Route::put('/{id}', 'AgentChannelController@update');
             Route::delete('/{id}', 'AgentChannelController@destroy');
         });

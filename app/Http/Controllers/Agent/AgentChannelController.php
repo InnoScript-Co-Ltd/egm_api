@@ -55,6 +55,29 @@ class AgentChannelController extends Controller
         }
     }
 
+    public function show($id)
+    {
+        $auth = auth('agent')->user();
+
+        if ($auth->agent_type === AgentTypeEnum::MAIN_AGENT->value) {
+
+            DB::beginTransaction();
+
+            try {
+                $agentChannel = AgentChannel::with(['agentInChannel'])->findOrFail($id);
+                DB::commit();
+
+                return $this->success('agent channel is successfully updated', $agentChannel);
+            } catch (Exception $e) {
+                DB::rollback();
+                throw $e;
+            }
+
+        } else {
+            return $this->badRequest('You does not have permission to update channel');
+        }
+    }
+
     public function update(AgentChannelUpdateRequest $payload, $id)
     {
         $auth = auth('agent')->user();

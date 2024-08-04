@@ -21,15 +21,19 @@ class Agent extends Authenticatable implements JWTSubject
 
     protected $fillable = [
         'profile',
+        'main_agent_id',
+        'reference_id',
+        'level_one',
+        'level_two',
+        'level_three',
+        'level_four',
+        'point',
         'first_name',
         'last_name',
         'dob',
         'nrc',
-        'passport',
         'nrc_front',
         'nrc_back',
-        'passport_front',
-        'passport_back',
         'email',
         'prefix',
         'phone',
@@ -45,11 +49,16 @@ class Agent extends Authenticatable implements JWTSubject
         'status',
         'email_expired_at',
         'email_verify_code',
+        'refrence_token',
     ];
 
     protected $casts = [
         'dob' => 'date',
         'password' => 'hashed',
+        'level_one' => 'array',
+        'level_two' => 'array',
+        'level_three' => 'array',
+        'level_four' => 'array',
         'email_expired_at' => 'datetime',
         'email_verified_at' => 'datetime',
         'phone_verified_at' => 'datetime',
@@ -62,6 +71,26 @@ class Agent extends Authenticatable implements JWTSubject
     public function bankAccounts()
     {
         return $this->hasMany(AgentBankAccount::class, 'agent_id', 'id');
+    }
+
+    public function levelOneAgent()
+    {
+        return $this->hasMany(LevelOneAgent::class, 'agent_id', 'id');
+    }
+
+    public function levelTwoAgent()
+    {
+        return $this->hasMany(LevelTwoAgent::class, 'agent_id', 'id');
+    }
+
+    public function levelThreeAgent()
+    {
+        return $this->hasMany(LevelThreeAgent::class, 'agent_id', 'id');
+    }
+
+    public function levelFourAgent()
+    {
+        return $this->hasMany(LevelFourAgent::class, 'agent_id', 'id');
     }
 
     public function getJWTIdentifier()
