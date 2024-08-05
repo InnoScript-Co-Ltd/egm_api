@@ -1,7 +1,6 @@
 <?php
 
 use App\Enums\AgentStatusEnum;
-use App\Enums\AgentTypeEnum;
 use App\Enums\KycStatusEnum;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
@@ -14,15 +13,8 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('agents', function (Blueprint $table) {
+        Schema::create('partners', function (Blueprint $table) {
             $table->snowflakeIdAndPrimary();
-            $table->snowflakeId('partner_id')->nullable()->default(null);
-            $table->snowflakeId('main_agent_id')->nullable()->default(null);
-            $table->snowflakeId('reference_id')->nullable()->default(null);
-            $table->json('level_one')->nullable()->default(null);
-            $table->json('level_two')->nullable()->default(null);
-            $table->json('level_three')->nullable()->default(null);
-            $table->json('level_four')->nullable()->default(null);
             $table->float('point', 9, 2)->default(0);
             $table->string('profile')->nullable()->default(null);
             $table->string('username')->unique()->nullable()->default(null);
@@ -45,7 +37,6 @@ return new class extends Migration
             $table->datetime('phone_verified_at')->nullable()->default(null);
             $table->string('kyc_status')->default(KycStatusEnum::CHECKING->value);
             $table->string('status')->default(AgentStatusEnum::PENDING->value);
-            $table->string('agent_type')->default(AgentTypeEnum::SUB_AGENT->value);
             $table->string('email_verify_code')->nullable()->default(null);
             $table->datetime('email_expired_at')->nullable()->default(null);
             $table->auditColumns();
@@ -54,10 +45,6 @@ return new class extends Migration
             $table->foreign('region_or_state_id')->references('id')->on('regions_and_states')->onDelete('cascade');
             $table->foreign('city_id')->references('id')->on('cities')->onDelete('cascade');
             $table->foreign('township_id')->references('id')->on('townships')->onDelete('cascade');
-
-            $table->foreign('reference_id')->references('id')->on('agents')->onDelete('cascade');
-            $table->foreign('main_agent_id')->references('id')->on('agents')->onDelete('cascade');
-            $table->foreign('partner_id')->references('id')->on('partners')->onDelete('cascade');
         });
     }
 
@@ -66,6 +53,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('agents');
+        Schema::dropIfExists('partners');
     }
 };

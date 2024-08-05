@@ -52,6 +52,10 @@ return [
             'driver' => 'jwt',
             'provider' => 'agents',
         ],
+        'partner' => [
+            'driver' => 'jwt',
+            'provider' => 'partners',
+        ],
     ],
 
     /*
@@ -83,6 +87,10 @@ return [
         'agents' => [
             'driver' => 'eloquent',
             'model' => App\Models\Agent::class,
+        ],
+        'partners' => [
+            'driver' => 'eloquent',
+            'model' => App\Models\Partner::class,
         ],
 
         // 'users' => [
@@ -125,6 +133,12 @@ return [
         ],
         'agent' => [
             'provider' => 'agnets',
+            'table' => 'password_reset_tokens',
+            'expire' => 60,
+            'throttle' => 60,
+        ],
+        'partner' => [
+            'provider' => 'partners',
             'table' => 'password_reset_tokens',
             'expire' => 60,
             'throttle' => 60,

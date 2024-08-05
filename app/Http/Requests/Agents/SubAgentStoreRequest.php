@@ -5,7 +5,7 @@ namespace App\Http\Requests\Agents;
 use App\Enums\REGXEnum;
 use Illuminate\Foundation\Http\FormRequest;
 
-class AccountStoreRequest extends FormRequest
+class SubAgentStoreRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -28,6 +28,7 @@ class AccountStoreRequest extends FormRequest
             'first_name' => 'required | string | min:2 | max:18',
             'last_name' => 'required | string | min:2 | max:18',
             'email' => 'required | email | unique:agents,email',
+            'nrc' => 'required | unique:agents,nrc',
             'phone' => ['required', 'unique:agents,phone', "regex:$mobileRule"],
             'password' => 'required | string | min:6 | max:18 | confirmed',
         ];

@@ -15,7 +15,16 @@ use Illuminate\Support\Facades\Route;
 
 Route::middleware(['agent'])->group(function () {
 
-    Route::post('/register', 'AccountController@store');
+    Route::group(['prefix' => 'main'], function () {
+        Route::post('/register', 'MainAgentController@store');
+        Route::post('/reference-link', 'MainAgentController@referenceLink');
+    });
+
+    Route::group(['prefix' => 'sub'], function () {
+        Route::post('/register', 'SubAgentController@store');
+        Route::post('/reference-link', 'SubAgentController@referenceLink');
+    });
+
     Route::post('/reference-link', 'AccountController@referenceLink');
     Route::post('verification', 'AccountController@emailVerify');
     Route::post('verification-code', 'AccountController@resendVerifyCode');

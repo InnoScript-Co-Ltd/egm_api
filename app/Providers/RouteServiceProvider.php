@@ -36,6 +36,10 @@ class RouteServiceProvider extends ServiceProvider
             return Limit::perMinute(60)->by($request->user()?->id ?: $request->ip());
         });
 
+        RateLimiter::for('partner', function (Request $request) {
+            return Limit::perMinute(60)->by($request->user()?->id ?: $request->ip());
+        });
+
         $this->routes(function () {
             Route::middleware('dashboard')
                 ->prefix('dashboard')
@@ -51,6 +55,11 @@ class RouteServiceProvider extends ServiceProvider
                 ->prefix('agent')
                 ->namespace('App\Http\Controllers\Agent')
                 ->group(base_path('routes/agent.php'));
+
+            Route::middleware('partner')
+                ->prefix('partner')
+                ->namespace('App\Http\Controllers\Partner')
+                ->group(base_path('routes/partner.php'));
 
             Route::middleware('web')
                 ->group(base_path('routes/web.php'));

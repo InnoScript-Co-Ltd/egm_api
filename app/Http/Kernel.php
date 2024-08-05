@@ -56,6 +56,12 @@ class Kernel extends HttpKernel
             \Illuminate\Routing\Middleware\SubstituteBindings::class,
             \App\Http\Middleware\AgentMiddleware::class,
         ],
+
+        'partner' => [
+            \Illuminate\Routing\Middleware\ThrottleRequests::class.':partner',
+            \Illuminate\Routing\Middleware\SubstituteBindings::class,
+            \App\Http\Middleware\PartnerMiddleware::class,
+        ],
     ];
 
     /**
@@ -83,5 +89,6 @@ class Kernel extends HttpKernel
         'role_or_permission' => \Spatie\Permission\Middleware\RoleOrPermissionMiddleware::class,
         'api' => \App\Http\Middleware\ApiMiddleware::class,
         'agent' => \App\Http\Middleware\AgentMiddleware::class,
+        'partner' => \App\Http\Middleware\PartnerMiddleware::class,
     ];
 }

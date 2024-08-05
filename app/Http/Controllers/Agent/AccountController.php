@@ -32,6 +32,7 @@ class AccountController extends Controller
             if ($agent->agent_type === AgentTypeEnum::MAIN_AGENT->value) {
                 $referenceLink['main_agent_id'] = $agent->id;
                 $referenceLink['reference_id'] = $agent->id;
+                $referenceLink['partner_id'] = null;
                 $token = Crypt::encrypt(json_encode($referenceLink));
             }
 
@@ -111,26 +112,6 @@ class AccountController extends Controller
             return $this->success('Agent is successfully created', $agent);
         }
     }
-    // public function test(AccountStoreRequest $request)
-    // {
-    //     $payload = collect($request->validated());
-    //     DB::beginTransaction();
-
-    //     try {
-    //         $payload['email_verify_code'] = rand(100000, 999999);
-    //         $payload['email_expired_at'] = Carbon::now()->addMinutes(5);
-
-    //         $agent = Agent::create($payload->toArray());
-    //         // Mail::to($payload['email'])->send(new EmailVerifyCode($payload['email_verify_code']));
-    //         DB::commit();
-
-    //         return $this->success('Agent is successfully created', $agent);
-
-    //     } catch (Exception $e) {
-    //         DB::rollBack();
-    //         throw $e;
-    //     }
-    // }
 
     public function emailVerify(AgentEmailVerifyRequest $request)
     {

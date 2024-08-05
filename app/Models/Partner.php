@@ -13,21 +13,14 @@ use Spatie\Permission\Traits\HasPermissions;
 use Spatie\Permission\Traits\HasRoles;
 use Tymon\JWTAuth\Contracts\JWTSubject;
 
-class Agent extends Authenticatable implements JWTSubject
+class Partner extends Authenticatable implements JWTSubject
 {
     use BasicAudit, HasApiTokens, HasFactory, HasPermissions, HasRoles, Notifiable, SnowflakeID, SoftDeletes;
 
-    protected $guard = 'agents';
+    protected $guard = 'partners';
 
     protected $fillable = [
         'profile',
-        'partner_id',
-        'main_agent_id',
-        'reference_id',
-        'level_one',
-        'level_two',
-        'level_three',
-        'level_four',
         'point',
         'first_name',
         'last_name',
@@ -50,16 +43,11 @@ class Agent extends Authenticatable implements JWTSubject
         'status',
         'email_expired_at',
         'email_verify_code',
-        'agent_type',
     ];
 
     protected $casts = [
         'dob' => 'date',
         'password' => 'hashed',
-        'level_one' => 'array',
-        'level_two' => 'array',
-        'level_three' => 'array',
-        'level_four' => 'array',
         'email_expired_at' => 'datetime',
         'email_verified_at' => 'datetime',
         'phone_verified_at' => 'datetime',
@@ -68,11 +56,6 @@ class Agent extends Authenticatable implements JWTSubject
     protected $hidden = [
         'password',
     ];
-
-    public function bankAccounts()
-    {
-        return $this->hasMany(AgentBankAccount::class, 'agent_id', 'id');
-    }
 
     public function getJWTIdentifier()
     {
