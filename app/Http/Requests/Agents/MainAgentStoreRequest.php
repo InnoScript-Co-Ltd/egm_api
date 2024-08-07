@@ -29,6 +29,8 @@ class MainAgentStoreRequest extends FormRequest
             'last_name' => 'required | string | min:2 | max:18',
             'email' => 'required | email | unique:agents,email',
             'nrc' => 'required | unique:agents,nrc',
+            'nrc_front' => 'required | file',
+            'nrc_back' => 'required | file',
             'phone' => ['required', 'unique:agents,phone', "regex:$mobileRule"],
             'address' => 'required | string',
             'dob' => 'required | date',

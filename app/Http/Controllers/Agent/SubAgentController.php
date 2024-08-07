@@ -18,6 +18,24 @@ use Mail;
 
 class SubAgentController extends Controller
 {
+    protected $showableForLevelAgent = [
+        'id',
+        'profile',
+        'point',
+        'first_name',
+        'last_name',
+        'dob',
+        'nrc',
+        'email',
+        'phone',
+        'address',
+        'kyc_status',
+        'status',
+        'agent_type',
+        'created_at',
+        'updated_at',
+    ];
+
     public function referenceLink(AccountReferenceLinkRequest $request)
     {
         $payload = collect($request->validated());
@@ -64,6 +82,12 @@ class SubAgentController extends Controller
         if (request('reference')) {
             $refrenceLinkData = request('reference');
             $refrenceData = json_decode(Crypt::decrypt($refrenceLinkData));
+
+            if (! isset($refrenceData->reference_id)) {
+                DB::commit();
+
+                return $this->badRequest('Invalid refrence link');
+            }
 
             $levelTwoRefrenceAgent = Agent::findOrFail($refrenceData->reference_id);
 
@@ -147,6 +171,34 @@ class SubAgentController extends Controller
             DB::commit();
 
             return $this->success('Agent is successfully created', $agent);
+        }
+    }
+
+    public function level($level)
+    {
+        DB::beginTransaction();
+
+        try {
+
+            $agent = auth('agent')->user();
+            $agentIds = $agent[$level];
+
+            if ($agentIds !== null) {
+                $agents = Agent::select($this->showableForLevelAgent)
+                    ->whereIn('id', $agentIds)
+                    ->get();
+
+                DB::commit();
+
+                return $this->success('Level one agents are retrived successfully', $agents);
+            }
+
+            DB::commit();
+
+            return $this->success('Level one agents are retrived successfully', []);
+        } catch (Exception $e) {
+            DB::commit();
+            throw $e;
         }
     }
 }

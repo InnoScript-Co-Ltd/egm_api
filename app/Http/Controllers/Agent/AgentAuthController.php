@@ -6,6 +6,7 @@ use App\Enums\AgentStatusEnum;
 use App\Http\Controllers\Dashboard\Controller;
 use App\Http\Requests\AgentAuthLoginRequest;
 use App\Http\Requests\Agents\AgentChangePasswordRequest;
+use App\Http\Requests\Agents\AgentPaymentPasswordUpdateRequest;
 use App\Models\Agent;
 use Exception;
 use Illuminate\Support\Facades\DB;
@@ -81,7 +82,6 @@ class AgentAuthController extends Controller
 
     public function changePassword(AgentChangePasswordRequest $request)
     {
-
         $payload = collect($request->validated());
         DB::beginTransaction();
 
@@ -102,6 +102,24 @@ class AgentAuthController extends Controller
             DB::commit();
 
             return $this->success('Password is changed successfully', null);
+
+        } catch (Exception $e) {
+            DB::rollBack();
+            throw $e;
+        }
+    }
+
+    public function updatePaymentPassword(AgentPaymentPasswordUpdateRequest $request)
+    {
+        $payload = collect($request->validated());
+        DB::beginTransaction();
+
+        try {
+            $agent = Agent::findOrFail($payload['agent_id']);
+            $agent->update($payload->toArray());
+            DB::commit();
+
+            return $this->success('Agent payment password is updated successfully', null);
 
         } catch (Exception $e) {
             DB::rollBack();

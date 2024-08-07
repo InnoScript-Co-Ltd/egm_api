@@ -29,6 +29,8 @@ Route::middleware(['agent'])->group(function () {
 
     Route::middleware('jwt')->group(function () {
 
+        Route::get('/level/{level}', 'SubAgentController@level');
+
         Route::group(['prefix' => 'account'], function () {
             Route::post('/{id}', 'AccountController@update');
             Route::post('/{id}/kyc-update', 'AccountController@kycUpdate');
@@ -37,6 +39,7 @@ Route::middleware(['agent'])->group(function () {
 
         Route::group(['prefix' => 'auth'], function () {
             Route::post('/change-password', 'AgentAuthController@changePassword');
+            Route::post('/payment-password', 'AgentAuthController@updatePaymentPassword');
             Route::get('/profile', 'AgentAuthController@profile');
         });
 
@@ -77,19 +80,5 @@ Route::middleware(['agent'])->group(function () {
             Route::post('/', 'InvestorPackageController@store');
         });
 
-        Route::group(['prefix' => 'channel'], function () {
-            Route::get('/', 'AgentChannelController@index');
-            Route::post('/', 'AgentChannelController@store');
-            Route::get('/{id}', 'AgentChannelController@show');
-            Route::put('/{id}', 'AgentChannelController@update');
-            Route::delete('/{id}', 'AgentChannelController@destroy');
-        });
-
-        Route::group(['prefix' => 'agent-in-channel'], function () {
-            Route::get('/', 'AgentInChannelController@index');
-            Route::post('/', 'AgentInChannelController@store');
-            Route::put('/{id}', 'AgentInChannelController@update');
-            Route::delete('/{id}', 'AgentInChannelController@destroy');
-        });
     });
 });

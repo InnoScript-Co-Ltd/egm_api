@@ -2,9 +2,10 @@
 
 namespace App\Http\Requests\Agents;
 
+use App\Models\Agent;
 use Illuminate\Foundation\Http\FormRequest;
 
-class AgentChannelUpdateRequest extends FormRequest
+class AgentPaymentPasswordUpdateRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -21,18 +22,11 @@ class AgentChannelUpdateRequest extends FormRequest
      */
     public function rules(): array
     {
-        return [
-            'name' => 'nullable | string',
-            'percentage_pattern' => 'nullable | string',
-            'max_agent' => 'nullable | numeric',
-            'percentage' => 'nullable | array',
-        ];
-    }
+        $agentIds = implode(',', Agent::pluck('id')->toArray());
 
-    public function messages(): array
-    {
         return [
-            'percentage.array' => 'Invalid percentage format',
+            'agent_id' => "required | in:$agentIds",
+            'payment_password' => 'required | string',
         ];
     }
 }

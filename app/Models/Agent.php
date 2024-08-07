@@ -44,6 +44,7 @@ class Agent extends Authenticatable implements JWTSubject
         'city_id',
         'township_id',
         'password',
+        'payment_password',
         'email_verified_at',
         'phone_verified_at',
         'kyc_status',
@@ -56,6 +57,7 @@ class Agent extends Authenticatable implements JWTSubject
     protected $casts = [
         'dob' => 'date',
         'password' => 'hashed',
+        'payment_password' => 'hashed',
         'level_one' => 'array',
         'level_two' => 'array',
         'level_three' => 'array',
@@ -67,6 +69,7 @@ class Agent extends Authenticatable implements JWTSubject
 
     protected $hidden = [
         'password',
+        'payment_password',
     ];
 
     public function bankAccounts()
