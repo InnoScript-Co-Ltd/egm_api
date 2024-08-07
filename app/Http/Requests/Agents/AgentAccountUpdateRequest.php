@@ -3,9 +3,10 @@
 namespace App\Http\Requests\Agents;
 
 use App\Enums\REGXEnum;
+use App\Models\Agent;
 use Illuminate\Foundation\Http\FormRequest;
 
-class MainAgentStoreRequest extends FormRequest
+class AgentAccountUpdateRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -22,17 +23,13 @@ class MainAgentStoreRequest extends FormRequest
      */
     public function rules(): array
     {
+        $agent = Agent::findOrFail(request('id'));
+        $agentId = $agent->id;
         $mobileRule = REGXEnum::MOBILE_NUMBER->value;
 
         return [
-            'first_name' => 'required | string | min:2 | max:18',
-            'last_name' => 'required | string | min:2 | max:18',
-            'email' => 'required | email | unique:agents,email',
-            'nrc' => 'required | unique:agents,nrc',
-            'phone' => ['required', 'unique:agents,phone', "regex:$mobileRule"],
-            'address' => 'required | string',
-            'dob' => 'required | date',
-            'password' => 'required | string | min:6 | max:18 | confirmed',
+            'email' => "nullable | unique:agents,email,$agentId",
+            'phone' => ['nullable', "unique:agents,phone,$agentId", "regex:$mobileRule"],
         ];
     }
 }

@@ -3,9 +3,13 @@
 namespace App\Http\Controllers\Agent;
 
 use App\Enums\AgentStatusEnum;
+use App\Enums\KycStatusEnum;
 use App\Http\Controllers\Dashboard\Controller;
+use App\Http\Requests\Agents\AccountUpdateRequest;
+use App\Http\Requests\Agents\AgentAccountUpdateRequest;
 use App\Http\Requests\Agents\AgentEmailVerifyCodeRequest;
 use App\Http\Requests\Agents\AgentEmailVerifyRequest;
+use App\Http\Requests\Agents\AgentKycUpdateRequest;
 use App\Mail\EmailVerifyCode;
 use App\Models\Agent;
 use Carbon\Carbon;
@@ -80,6 +84,100 @@ class AccountController extends Controller
 
             return $this->badRequest('Your email could not be found');
 
+        } catch (Exception $e) {
+            DB::rollBack();
+            throw $e;
+        }
+    }
+
+    public function update(AccountUpdateRequest $request, $id)
+    {
+
+        $payload = collect($request->validated());
+
+        DB::beginTransaction();
+
+        try {
+            $agent = Agent::findOrFail($id);
+
+            if (isset($payload['profile'])) {
+                $profileImagePath = $payload['profile']->store('images', 'public');
+                $profileImage = explode('/', $profileImagePath)[1];
+                $payload['profile'] = $profileImage;
+            }
+
+            $agent->update($payload->toArray());
+            DB::commit();
+
+            return $this->success('Agent profile is updated successfully');
+        } catch (Exception $e) {
+            DB::rollBack();
+            throw $e;
+        }
+    }
+
+    public function kycUpdate(AgentKycUpdateRequest $request, $id)
+    {
+        $payload = collect($request->validated());
+
+        DB::beginTransaction();
+
+        try {
+            $agent = Agent::findOrFail($id);
+
+            if ($agent->status !== AgentStatusEnum::ACTIVE->value) {
+                DB::commit();
+
+                return $this->badRequest('your account is not active');
+            }
+
+            if ($agent->status === AgentStatusEnum::ACTIVE->value && $agent->kyc_status === KycStatusEnum::FULL_KYC->value) {
+                DB::commit();
+
+                return $this->badRequest('KYC is already active');
+            }
+
+            if (isset($payload['nrc_front'])) {
+                $nrcFrontImagePath = $payload['nrc_front']->store('images', 'public');
+                $nrcFrontImage = explode('/', $nrcFrontImagePath)[1];
+                $payload['nrc_front'] = $nrcFrontImage;
+            }
+
+            if (isset($payload['nrc_back'])) {
+                $nrcBackImagePath = $payload['nrc_back']->store('images', 'public');
+                $nrcBackImage = explode('/', $nrcBackImagePath)[1];
+                $payload['nrc_back'] = $nrcBackImage;
+            }
+
+            $agent->update($payload->toArray());
+            DB::commit();
+
+            return $this->success('Agent kyc is updated successfully', $agent);
+        } catch (Exception $e) {
+            DB::rollBack();
+            throw $e;
+        }
+    }
+
+    public function accountUpdate(AgentAccountUpdateRequest $request, $id)
+    {
+        $payload = collect($request->validated());
+
+        DB::beginTransaction();
+
+        try {
+            $agent = Agent::findOrFail($id);
+
+            if ($agent->status !== AgentStatusEnum::ACTIVE->value) {
+                DB::commit();
+
+                return $this->badRequest('your account is not active');
+            }
+
+            $agent->update($payload->toArray());
+            DB::commit();
+
+            return $this->success('Agent account is updated successfully', $agent);
         } catch (Exception $e) {
             DB::rollBack();
             throw $e;

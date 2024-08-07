@@ -17,12 +17,10 @@ Route::middleware(['agent'])->group(function () {
 
     Route::group(['prefix' => 'main'], function () {
         Route::post('/register', 'MainAgentController@store');
-        Route::post('/reference-link', 'MainAgentController@referenceLink');
     });
 
     Route::group(['prefix' => 'sub'], function () {
         Route::post('/register', 'SubAgentController@store');
-        Route::post('/reference-link', 'SubAgentController@referenceLink');
     });
 
     Route::post('/verify', 'AccountController@emailVerify');
@@ -31,9 +29,23 @@ Route::middleware(['agent'])->group(function () {
 
     Route::middleware('jwt')->group(function () {
 
+        Route::group(['prefix' => 'account'], function () {
+            Route::post('/{id}', 'AccountController@update');
+            Route::post('/{id}/kyc-update', 'AccountController@kycUpdate');
+            Route::post('/{id}/account-update', 'AccountController@accountUpdate');
+        });
+
         Route::group(['prefix' => 'auth'], function () {
             Route::post('/change-password', 'AgentAuthController@changePassword');
             Route::get('/profile', 'AgentAuthController@profile');
+        });
+
+        Route::group(['prefix' => 'main'], function () {
+            Route::post('/reference-link', 'MainAgentController@referenceLink');
+        });
+
+        Route::group(['prefix' => 'sub'], function () {
+            Route::post('/reference-link', 'SubAgentController@referenceLink');
         });
 
         Route::group(['prefix' => 'package'], function () {
