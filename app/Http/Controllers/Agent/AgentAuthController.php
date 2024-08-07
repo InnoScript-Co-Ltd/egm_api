@@ -5,9 +5,11 @@ namespace App\Http\Controllers\Agent;
 use App\Enums\AgentStatusEnum;
 use App\Http\Controllers\Dashboard\Controller;
 use App\Http\Requests\AgentAuthLoginRequest;
+use App\Http\Requests\Agents\AgentChangePasswordRequest;
 use App\Models\Agent;
 use Exception;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Hash;
 
 class AgentAuthController extends Controller
 {
@@ -70,6 +72,36 @@ class AgentAuthController extends Controller
             }
 
             return $this->badRequest('Incorrect email and passwrod');
+
+        } catch (Exception $e) {
+            DB::rollBack();
+            throw $e;
+        }
+    }
+
+    public function changePassword(AgentChangePasswordRequest $request)
+    {
+
+        $payload = collect($request->validated());
+        DB::beginTransaction();
+
+        try {
+            $agent = Agent::findOrFail($payload['agent_id']);
+            $check = Hash::check($payload['old_password'], $agent->password);
+
+            if ($check === false) {
+                DB::commit();
+
+                return $this->badRequest('Old password does not match');
+            }
+
+            $agent->update([
+                'password' => $payload['password'],
+            ]);
+
+            DB::commit();
+
+            return $this->success('Password is changed successfully', null);
 
         } catch (Exception $e) {
             DB::rollBack();
