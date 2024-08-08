@@ -15,6 +15,10 @@ class Package extends Model
     protected $table = 'packages';
 
     protected $fillable = [
-        'name', 'roi_rate', 'duration', 'deposit_rate', 'status',
+        'name', 'roi_rate', 'duration', 'deposit_amount', 'status',
+    ];
+
+    protected $casts = [
+        'deposit_amount' => 'array',
     ];
 }

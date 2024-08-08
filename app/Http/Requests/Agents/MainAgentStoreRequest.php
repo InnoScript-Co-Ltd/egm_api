@@ -34,7 +34,7 @@ class MainAgentStoreRequest extends FormRequest
             'phone' => ['required', 'unique:agents,phone', "regex:$mobileRule"],
             'address' => 'required | string',
             'dob' => 'required | date',
-            'password' => 'required | string | min:6 | max:18 | confirmed',
+            'password' => 'require  d | string | min:6 | max:18 | confirmed',
         ];
     }
 }

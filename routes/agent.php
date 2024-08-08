@@ -44,11 +44,11 @@ Route::middleware(['agent'])->group(function () {
         });
 
         Route::group(['prefix' => 'main'], function () {
-            Route::post('/reference-link', 'MainAgentController@referenceLink');
+            Route::get('/reference-link', 'MainAgentController@referenceLink');
         });
 
         Route::group(['prefix' => 'sub'], function () {
-            Route::post('/reference-link', 'SubAgentController@referenceLink');
+            Route::get('/reference-link', 'SubAgentController@referenceLink');
         });
 
         Route::group(['prefix' => 'package'], function () {

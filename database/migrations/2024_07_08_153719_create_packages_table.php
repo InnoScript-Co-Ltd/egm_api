@@ -17,7 +17,7 @@ return new class extends Migration
             $table->string('name')->unique();
             $table->string('roi_rate');
             $table->integer('duration')->unsigned();
-            $table->string('deposit_rate');
+            $table->json('deposit_amount');
             $table->string('status')->default(GeneralStatusEnum::ACTIVE->value);
             $table->auditColumns();
         });

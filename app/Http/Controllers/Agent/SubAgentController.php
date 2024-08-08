@@ -6,7 +6,6 @@ use App\Enums\AgentStatusEnum;
 use App\Enums\AgentTypeEnum;
 use App\Enums\KycStatusEnum;
 use App\Http\Controllers\Dashboard\Controller;
-use App\Http\Requests\Agents\AccountReferenceLinkRequest;
 use App\Http\Requests\Agents\SubAgentStoreRequest;
 use App\Mail\EmailVerifyCode;
 use App\Models\Agent;
@@ -36,15 +35,10 @@ class SubAgentController extends Controller
         'updated_at',
     ];
 
-    public function referenceLink(AccountReferenceLinkRequest $request)
+    public function referenceLink()
     {
-        $payload = collect($request->validated());
-
-        DB::beginTransaction();
-
         try {
-
-            $subAgent = Agent::findOrFail($payload['agent_id']);
+            $subAgent = auth('agent')->user();
 
             if (
                 $subAgent->agent_type === AgentTypeEnum::SUB_AGENT->value &&
@@ -58,17 +52,12 @@ class SubAgentController extends Controller
 
                 $token = Crypt::encrypt(json_encode($referenceLink));
 
-                DB::commit();
-
                 return $this->success('Reference link is generated successfully', $token);
             }
-
-            DB::commit();
 
             return $this->badRequest('Reference link is generated fail');
 
         } catch (Exception $e) {
-            DB::rollBack();
             throw $e;
         }
 
@@ -88,8 +77,6 @@ class SubAgentController extends Controller
 
                 return $this->badRequest('Invalid refrence link');
             }
-
-            $levelTwoRefrenceAgent = Agent::findOrFail($refrenceData->reference_id);
 
             $payload['main_agent_id'] = $refrenceData->main_agent_id;
             $payload['reference_id'] = $refrenceData->reference_id;
@@ -111,14 +98,38 @@ class SubAgentController extends Controller
             // Mail::to($payload['email'])->send(new EmailVerifyCode($payload['email_verify_code']));
 
             $agent = Agent::create($payload->toArray());
-            $agentUpdate = Agent::findOrFail($agent->id);
-            $agentUpdate->update(['level_one' => [$agent->id]]);
+            // $agentUpdate = Agent::findOrFail($agent->id);
+            // $agentUpdate->update(['level_one' => [$agent->id]]);
 
-            if ($levelTwoRefrenceAgent['agent_type'] === AgentTypeEnum::MAIN_AGENT->value) {
+            $levelOneRefrenceAgent = Agent::findOrFail($refrenceData->reference_id);
+
+            /** Level 1 Agent Update */
+            if ($levelOneRefrenceAgent['agent_type'] === AgentTypeEnum::MAIN_AGENT->value) {
                 DB::commit();
 
                 return $this->success('Agent is successfully created', $agent);
             }
+
+            $levelOneAgentPayload = null;
+
+            if ($levelOneRefrenceAgent['agent_type'] === AgentTypeEnum::SUB_AGENT->value && $levelOneRefrenceAgent['level_one'] === null) {
+                $levelOneAgentPayload = [$agent->id];
+            }
+
+            if ($levelOneRefrenceAgent['agent_type'] === AgentTypeEnum::SUB_AGENT->value && $levelOneRefrenceAgent['level_one'] !== null && count($levelOneRefrenceAgent['level_one']) > 0) {
+                $levelOneAgent = $levelOneRefrenceAgent->toArray();
+                array_push($levelOneAgent['level_one'], $agent->id);
+                $levelOneAgentPayload = $levelOneAgent['level_one'];
+            }
+
+            $levelOneRefrenceAgent->update(['level_one' => $levelOneAgentPayload]);
+
+            /** Level 2 Agent Update */
+            if ($levelOneRefrenceAgent->reference_id !== null) {
+                $levelTwoRefrenceAgent = Agent::findOrFail($levelOneRefrenceAgent->reference_id);
+            }
+
+            $levelTwoAgentPayload = null;
 
             if ($levelTwoRefrenceAgent['agent_type'] === AgentTypeEnum::SUB_AGENT->value && $levelTwoRefrenceAgent['level_two'] === null) {
                 $levelTwoAgentPayload = [$agent->id];
@@ -132,40 +143,40 @@ class SubAgentController extends Controller
 
             $levelTwoRefrenceAgent->update(['level_two' => $levelTwoAgentPayload]);
 
+            /** Level 3 Agent Update */
             if ($levelTwoRefrenceAgent->reference_id !== null) {
                 $levelThreeRefrenceAgent = Agent::findOrFail($levelTwoRefrenceAgent->reference_id);
-            }
+                $levelThreeAgentPayload = null;
 
-            $levelThreeAgentPayload = [];
-
-            if ($levelThreeRefrenceAgent['agent_type'] === AgentTypeEnum::SUB_AGENT->value && $levelThreeRefrenceAgent['level_three'] === null) {
-                $levelThreeAgentPayload = [$agent->id];
-            }
-
-            if ($levelThreeRefrenceAgent['agent_type'] === AgentTypeEnum::SUB_AGENT->value && $levelThreeRefrenceAgent['level_three'] !== null && count($levelThreeRefrenceAgent['level_three']) > 0) {
-                $levelThreeAgent = $levelThreeRefrenceAgent->toArray();
-                array_push($levelThreeAgent['level_three'], $agent->id);
-                $levelThreeAgentPayload = $levelThreeAgent['level_three'];
-            }
-
-            $levelThreeRefrenceAgent->update(['level_three' => $levelThreeAgentPayload]);
-            $levelFourRefrenceAgent = null;
-
-            if ($levelThreeRefrenceAgent->reference_id !== null) {
-                $levelFourRefrenceAgent = Agent::findOrFail($levelThreeRefrenceAgent->reference_id);
-                $levelFourAgentPayload = [];
-
-                if ($levelFourRefrenceAgent['agent_type'] === AgentTypeEnum::SUB_AGENT->value && $levelFourRefrenceAgent['level_four'] === null) {
-                    $levelFourAgentPayload = [$agent->id];
+                if ($levelThreeRefrenceAgent['agent_type'] === AgentTypeEnum::SUB_AGENT->value && $levelThreeRefrenceAgent['level_three'] === null) {
+                    $levelThreeAgentPayload = [$agent->id];
                 }
 
-                if ($levelFourRefrenceAgent['agent_type'] === AgentTypeEnum::SUB_AGENT->value && $levelFourRefrenceAgent['level_four'] !== null && count($levelFourRefrenceAgent['level_four']) > 0) {
-                    $levelFourAgent = $levelFourRefrenceAgent->toArray();
-                    array_push($levelFourAgent['level_four'], $agent->id);
-                    $levelFourAgentPayload = $levelFourAgent['level_four'];
+                if ($levelThreeRefrenceAgent['agent_type'] === AgentTypeEnum::SUB_AGENT->value && $levelThreeRefrenceAgent['level_three'] !== null && count($levelThreeRefrenceAgent['level_three']) > 0) {
+                    $levelThreeAgent = $levelThreeRefrenceAgent->toArray();
+                    array_push($levelThreeAgent['level_three'], $agent->id);
+                    $levelThreeAgentPayload = $levelThreeAgent['level_three'];
                 }
 
-                $levelFourRefrenceAgent->update(['level_four' => $levelFourAgentPayload]);
+                $levelThreeRefrenceAgent->update(['level_three' => $levelThreeAgentPayload]);
+
+                /** Level 4 Agent Update */
+                if ($levelThreeRefrenceAgent->reference_id !== null) {
+                    $levelFourRefrenceAgent = Agent::findOrFail($levelThreeRefrenceAgent->reference_id);
+                    $levelFourAgentPayload = null;
+
+                    if ($levelFourRefrenceAgent['agent_type'] === AgentTypeEnum::SUB_AGENT->value && $levelFourRefrenceAgent['level_four'] === null) {
+                        $levelFourAgentPayload = [$agent->id];
+                    }
+
+                    if ($levelFourRefrenceAgent['agent_type'] === AgentTypeEnum::SUB_AGENT->value && $levelFourRefrenceAgent['level_four'] !== null && count($levelFourRefrenceAgent['level_four']) > 0) {
+                        $levelFourAgent = $levelFourRefrenceAgent->toArray();
+                        array_push($levelFourAgent['level_four'], $agent->id);
+                        $levelFourAgentPayload = $levelFourAgent['level_four'];
+                    }
+
+                    $levelFourRefrenceAgent->update(['level_four' => $levelFourAgentPayload]);
+                }
             }
 
             DB::commit();

@@ -6,7 +6,6 @@ use App\Enums\AgentStatusEnum;
 use App\Enums\AgentTypeEnum;
 use App\Enums\KycStatusEnum;
 use App\Http\Controllers\Dashboard\Controller;
-use App\Http\Requests\Agents\AccountReferenceLinkRequest;
 use App\Http\Requests\Agents\MainAgentStoreRequest;
 use App\Mail\EmailVerifyCode;
 use App\Models\Agent;
@@ -18,16 +17,10 @@ use Mail;
 
 class MainAgentController extends Controller
 {
-    public function referenceLink(AccountReferenceLinkRequest $request)
+    public function referenceLink()
     {
-        $payload = collect($request->validated());
-
-        DB::beginTransaction();
-
         try {
-
-            $mainAgent = Agent::findOrFail($payload['agent_id']);
-
+            $mainAgent = auth('agent')->user();
             if (
                 $mainAgent->agent_type === AgentTypeEnum::MAIN_AGENT->value &&
                 $mainAgent->status === AgentStatusEnum::ACTIVE->value &&
@@ -40,17 +33,12 @@ class MainAgentController extends Controller
 
                 $token = Crypt::encrypt(json_encode($referenceLink));
 
-                DB::commit();
-
                 return $this->success('Reference link is generated successfully', $token);
             }
-
-            DB::commit();
 
             return $this->badRequest('Reference link is generated fail');
 
         } catch (Exception $e) {
-            DB::rollBack();
             throw $e;
         }
 

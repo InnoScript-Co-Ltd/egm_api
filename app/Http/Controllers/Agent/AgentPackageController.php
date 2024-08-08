@@ -17,7 +17,8 @@ class AgentPackageController extends Controller
     {
         $agent = auth('agent')->user();
 
-        if ($agent) {
+        if ($agent && $agent->status === 'ACTIVE') {
+
             DB::beginTransaction();
 
             try {

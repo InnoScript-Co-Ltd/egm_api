@@ -23,9 +23,9 @@ class PackageStoreRequest extends FormRequest
     {
         return [
             'name' => 'required | string | unique:packages,name',
-            'roi_rate' => 'required | string',
+            'roi_rate' => 'required | numeric',
             'duration' => 'required | numeric',
-            'deposit_rate' => 'required | string',
+            'deposit_amount' => 'required | array',
         ];
     }
 }
