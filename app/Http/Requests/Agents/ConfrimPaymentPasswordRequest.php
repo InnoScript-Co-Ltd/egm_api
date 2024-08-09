@@ -4,7 +4,7 @@ namespace App\Http\Requests\Agents;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class BankAccountStoreRequest extends FormRequest
+class ConfrimPaymentPasswordRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -22,11 +22,7 @@ class BankAccountStoreRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'account_name' => 'required | string',
-            'account_number' => 'required | unique:bank_accounts,account_number',
-            'branch_address' => 'required | string',
-            'branch' => 'required | string',
-            'bank_type' => 'required | string',
+            'payment_password' => 'required | string',
         ];
     }
 }

@@ -161,26 +161,25 @@ class AccountController extends Controller
 
     public function accountUpdate(AgentAccountUpdateRequest $request, $id)
     {
-        $payload = collect($request->validated());
+        $agent = auth('agent')->user();
+        $agentId = $agent->id;
 
-        DB::beginTransaction();
+        if ($agent->status === AgentStatusEnum::ACTIVE->value) {
+            $payload = collect($request->validated());
+            DB::beginTransaction();
 
-        try {
-            $agent = Agent::findOrFail($id);
-
-            if ($agent->status !== AgentStatusEnum::ACTIVE->value) {
+            try {
+                $agent = Agent::findOrFail($agentId);
+                $agent->update($payload->toArray());
                 DB::commit();
 
-                return $this->badRequest('your account is not active');
+                return $this->success('Agent account is updated successfully', $agent);
+            } catch (Exception $e) {
+                DB::rollBack();
+                throw $e;
             }
-
-            $agent->update($payload->toArray());
-            DB::commit();
-
-            return $this->success('Agent account is updated successfully', $agent);
-        } catch (Exception $e) {
-            DB::rollBack();
-            throw $e;
         }
+
+        return $this->badRequest('You does not have permission right now');
     }
 }

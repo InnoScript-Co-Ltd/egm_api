@@ -7,6 +7,7 @@ use App\Http\Controllers\Dashboard\Controller;
 use App\Http\Requests\AgentAuthLoginRequest;
 use App\Http\Requests\Agents\AgentChangePasswordRequest;
 use App\Http\Requests\Agents\AgentPaymentPasswordUpdateRequest;
+use App\Http\Requests\Agents\ConfrimPaymentPasswordRequest;
 use App\Models\Agent;
 use Exception;
 use Illuminate\Support\Facades\DB;
@@ -125,5 +126,40 @@ class AgentAuthController extends Controller
             DB::rollBack();
             throw $e;
         }
+    }
+
+    public function confirmPaymentPassword(ConfrimPaymentPasswordRequest $request)
+    {
+        $agent = auth('agent')->user();
+        $agentId = $agent->id;
+
+        if ($agent->payment_password === null) {
+            return $this->badRequest('Payment password is not set.');
+        }
+
+        $payload = collect($request->validated());
+
+        if ($agent->status === AgentStatusEnum::ACTIVE->value) {
+
+            DB::beginTransaction();
+
+            try {
+                $agent = Agent::findOrFail($agentId);
+                $check = Hash::check($payload['payment_password'], $agent->payment_password);
+                DB::commit();
+
+                if ($check === false) {
+                    return $this->badRequest('Payment password does not match');
+                }
+
+                return $this->success('payment password is match', true);
+
+            } catch (Exception $e) {
+                DB::rollBack();
+                throw $e;
+            }
+        }
+
+        return $this->badRequest('You does not have permission right now');
     }
 }

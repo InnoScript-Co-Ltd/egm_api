@@ -41,6 +41,7 @@ Route::middleware(['agent'])->group(function () {
             Route::post('/change-password', 'AgentAuthController@changePassword');
             Route::post('/payment-password', 'AgentAuthController@updatePaymentPassword');
             Route::get('/profile', 'AgentAuthController@profile');
+            Route::post('/payment-password', 'AgentAuthController@confirmPaymentPassword');
         });
 
         Route::group(['prefix' => 'main'], function () {
@@ -59,26 +60,8 @@ Route::middleware(['agent'])->group(function () {
         Route::group(['prefix' => 'bank-account'], function () {
             Route::get('/', 'BankAccountController@index');
             Route::post('/', 'BankAccountController@store');
+            Route::put('/{id}', 'BankAccountController@update');
+            Route::delete('/{id}', 'BankAccountController@destroy');
         });
-
-        Route::group(['prefix' => 'investor'], function () {
-            Route::get('/', 'InvestorController@index');
-            Route::get('/{id}', 'InvestorController@show');
-            Route::post('/', 'InvestorController@store');
-            Route::post('/verify-code', 'InvestorController@verifyCode');
-            Route::post('/resend-code', 'InvestorController@resendCode');
-        });
-
-        Route::group(['prefix' => 'agent-package'], function () {
-            Route::get('/', 'AgentPackageController@index');
-            Route::get('/{id}', 'AgentPackageController@show');
-            Route::post('/', 'AgentPackageController@store');
-        });
-
-        Route::group(['prefix' => 'investor-package'], function () {
-            Route::get('/', 'InvestorPackageController@index');
-            Route::post('/', 'InvestorPackageController@store');
-        });
-
     });
 });
