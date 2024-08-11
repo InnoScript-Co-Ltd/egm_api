@@ -31,17 +31,17 @@ Route::middleware(['agent'])->group(function () {
 
         Route::get('/level/{level}', 'SubAgentController@level');
 
-        Route::group(['prefix' => 'account'], function () {
-            Route::post('/{id}', 'AccountController@update');
-            Route::post('/{id}/kyc-update', 'AccountController@kycUpdate');
-            Route::post('/{id}/account-update', 'AccountController@accountUpdate');
-        });
-
         Route::group(['prefix' => 'auth'], function () {
             Route::post('/change-password', 'AgentAuthController@changePassword');
             Route::post('/payment-password', 'AgentAuthController@updatePaymentPassword');
             Route::get('/profile', 'AgentAuthController@profile');
             Route::post('/payment-password', 'AgentAuthController@confirmPaymentPassword');
+        });
+
+        Route::group(['prefix' => 'account'], function () {
+            Route::post('/{id}', 'AccountController@update');
+            Route::post('/{id}/kyc-update', 'AccountController@kycUpdate');
+            Route::post('/{id}/account-update', 'AccountController@accountUpdate');
         });
 
         Route::group(['prefix' => 'main'], function () {
@@ -62,6 +62,13 @@ Route::middleware(['agent'])->group(function () {
             Route::post('/', 'BankAccountController@store');
             Route::put('/{id}', 'BankAccountController@update');
             Route::delete('/{id}', 'BankAccountController@destroy');
+        });
+
+        Route::group(['prefix' => 'deposit'], function () {
+            Route::get('/', 'DepositController@index');
+            Route::post('/', 'DepositController@store');
+            Route::put('/{id}', 'DepositController@update');
+            Route::delete('/{id}', 'DepositController@destroy');
         });
     });
 });
