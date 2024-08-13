@@ -12,6 +12,7 @@ use App\Enums\MemberDiscountStatus;
 use App\Enums\MembershipOrderStatusEnum;
 use App\Enums\MemberStatusEnum;
 use App\Enums\OrderStatusEnum;
+use App\Enums\PartnerStatusEnum;
 use App\Enums\PaymentTypeEnum;
 use App\Enums\PointLabelEnum;
 use App\Enums\UserStatusEnum;
@@ -43,6 +44,7 @@ class StatusController extends Controller
             'apptype' => (new Enum(AppTypeEnum::class))->values(),
             'agent' => (new Enum(AgentStatusEnum::class))->values(),
             'kyc' => (new Enum(KycStatusEnum::class))->values(),
+            'partner' => (new Enum(PartnerStatusEnum::class))->values(),
         ];
 
         $statusTypes = collect($allowableStatus)->filter(function ($value, $index) use ($requestStatus) {

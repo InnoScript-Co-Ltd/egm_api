@@ -21,6 +21,7 @@ class Partner extends Authenticatable implements JWTSubject
 
     protected $fillable = [
         'profile',
+        'username',
         'point',
         'first_name',
         'last_name',

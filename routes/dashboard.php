@@ -31,6 +31,23 @@ Route::middleware('jwt')->group(function () {
         Route::get('/', 'DashboardController@count');
     });
 
+    Route::group(['prefix' => 'merchant-bank-account'], function () {
+        Route::post('/', 'MerchantBankAccountController@store');
+        Route::get('/', 'MerchantBankAccountController@index');
+        Route::get('/{id}', 'MerchantBankAccountController@show');
+        Route::put('/{id}', 'MerchantBankAccountController@update');
+        Route::delete('/{id}', 'MerchantBankAccountController@destroy');
+    });
+
+    Route::group(['prefix' => 'partner'], function () {
+        Route::get('/generate-password', 'PartnerController@generatePassword');
+        Route::post('/', 'PartnerController@store');
+        Route::get('/', 'PartnerController@index');
+        Route::get('/{id}', 'PartnerController@show');
+        Route::put('/{id}', 'PartnerController@update');
+        Route::delete('/{id}', 'PartnerController@destroy');
+    });
+
     Route::group(['prefix' => 'agent'], function () {
         Route::get('/', 'AgentController@index');
         Route::get('/{id}', 'AgentController@show');
