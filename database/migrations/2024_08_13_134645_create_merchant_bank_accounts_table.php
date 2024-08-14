@@ -15,6 +15,7 @@ return new class extends Migration
         Schema::create('merchant_bank_accounts', function (Blueprint $table) {
             $table->snowflakeIdAndPrimary();
             $table->string('bank_type');
+            $table->string('bank_type_label');
             $table->string('holder_name');
             $table->string('account_number')->unique();
             $table->string('status')->default(GeneralStatusEnum::ACTIVE->value);

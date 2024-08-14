@@ -1,7 +1,6 @@
 <?php
 
-use App\Enums\BankAccountStatusEnum;
-use App\Enums\DefaultStatusEnum;
+use App\Enums\GeneralStatusEnum;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -18,10 +17,11 @@ return new class extends Migration
             $table->snowflakeId('agent_id');
             $table->string('account_name');
             $table->string('account_number')->unique();
-            $table->string('address')->nullable()->default(null);
+            $table->string('bank_type');
+            $table->string('bank_type_label');
             $table->string('branch')->nullable()->default(null);
-            $table->string('default_account')->default(DefaultStatusEnum::NONE->value);
-            $table->string('status')->default(BankAccountStatusEnum::ACTIVE->value);
+            $table->string('branch_address')->nullable()->default(null);
+            $table->string('status')->default(GeneralStatusEnum::ACTIVE->value);
             $table->auditColumns();
 
             $table->foreign('agent_id')->references('id')->on('agents')->onDelete('cascade');

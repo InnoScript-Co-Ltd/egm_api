@@ -4,7 +4,7 @@ namespace App\Http\Requests\Agents;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class BankAccountStoreRequest extends FormRequest
+class AgentBankAccountStoreRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -23,10 +23,11 @@ class BankAccountStoreRequest extends FormRequest
     {
         return [
             'account_name' => 'required | string',
-            'account_number' => 'required | unique:bank_accounts,account_number',
+            'account_number' => 'required | unique:agent_bank_accounts,account_number',
             'branch_address' => 'required | string',
             'branch' => 'required | string',
             'bank_type' => 'required | string',
+            'bank_type_label' => 'required | string',
         ];
     }
 }

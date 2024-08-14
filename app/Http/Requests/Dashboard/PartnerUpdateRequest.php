@@ -40,8 +40,8 @@ class PartnerUpdateRequest extends FormRequest
             'address' => 'nullable | string',
             'nrc' => "nullable | string | unique:partners,nrc,$partnerId",
             'dob' => 'nullable | date',
-            'kyc_status' => "nullable | in:$partnerStatus",
-            'status' => "nullable | in:$kycStatus",
+            'kyc_status' => "nullable | in:$kycStatus",
+            'status' => "nullable | in:$partnerStatus",
         ];
     }
 }

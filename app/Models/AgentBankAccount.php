@@ -15,6 +15,6 @@ class AgentBankAccount extends Model
     protected $table = 'agent_bank_accounts';
 
     protected $fillable = [
-        'agent_id', 'account_name', 'account_number', 'address', 'branch', 'default_account',
+        'agent_id', 'account_name', 'account_number', 'branch_address', 'branch', 'bank_type', 'bank_type_label',
     ];
 }

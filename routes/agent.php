@@ -57,11 +57,15 @@ Route::middleware(['agent'])->group(function () {
             Route::get('/{id}', 'PackageController@show');
         });
 
-        Route::group(['prefix' => 'bank-account'], function () {
-            Route::get('/', 'BankAccountController@index');
-            Route::post('/', 'BankAccountController@store');
-            Route::put('/{id}', 'BankAccountController@update');
-            Route::delete('/{id}', 'BankAccountController@destroy');
+        Route::group(['prefix' => 'agent-bank-account'], function () {
+            Route::get('/', 'AgentBankAccountController@index');
+            Route::post('/', 'AgentBankAccountController@store');
+            Route::put('/{id}', 'AgentBankAccountController@update');
+            Route::delete('/{id}', 'AgentBankAccountController@destroy');
+        });
+
+        Route::group(['prefix' => 'merchant-bank-account'], function () {
+            Route::get('/', 'MerchantBankAccountController@index');
         });
 
         Route::group(['prefix' => 'deposit'], function () {

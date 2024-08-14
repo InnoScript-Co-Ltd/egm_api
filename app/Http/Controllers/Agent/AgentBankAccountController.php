@@ -3,12 +3,13 @@
 namespace App\Http\Controllers\Agent;
 
 use App\Http\Controllers\Dashboard\Controller;
-use App\Http\Requests\Agents\BankAccountStoreRequest;
-use App\Models\BankAccount;
+use App\Http\Requests\Agents\AgentBankAccountStoreRequest;
+use App\Http\Requests\Agents\AgentBankAccountUpdateRequest;
+use App\Models\AgentBankAccount;
 use Exception;
 use Illuminate\Support\Facades\DB;
 
-class BankAccountController extends Controller
+class AgentBankAccountController extends Controller
 {
     public function index()
     {
@@ -19,10 +20,10 @@ class BankAccountController extends Controller
             DB::beginTransaction();
 
             try {
-                $bankAccounts = BankAccount::where(['agent_id' => $id])->get();
+                $agentBankAccounts = AgentBankAccount::where(['agent_id' => $id])->get();
                 DB::commit();
 
-                return $this->success('bank account list is successfully retrived', $bankAccounts);
+                return $this->success('Agent bank account list is successfully retrived', $agentBankAccounts);
             } catch (Exception $e) {
                 DB::rollback();
                 throw $e;
@@ -32,7 +33,7 @@ class BankAccountController extends Controller
         return $this->badRequest('You does not have permission right now.');
     }
 
-    public function store(BankAccountStoreRequest $request)
+    public function store(AgentBankAccountStoreRequest $request)
     {
         $agent = auth('agent')->user();
         $id = $agent->id;
@@ -44,10 +45,10 @@ class BankAccountController extends Controller
             DB::beginTransaction();
 
             try {
-                $agentBankAccount = BankAccount::create($payload->toArray());
+                $agentBankAccount = AgentBankAccount::create($payload->toArray());
                 DB::commit();
 
-                return $this->success('New bank account is created successfully', $agentBankAccount);
+                return $this->success('New agent bank account is created successfully', $agentBankAccount);
             } catch (Exception $e) {
                 DB::rollback();
                 throw $e;
@@ -57,7 +58,7 @@ class BankAccountController extends Controller
         return $this->badRequest('You does not have permission right now.');
     }
 
-    public function update(BankAccountStoreRequest $request, $id)
+    public function update(AgentBankAccountUpdateRequest $request, $id)
     {
         $agent = auth('agent')->user();
         $agentId = $agent->id;
@@ -67,7 +68,7 @@ class BankAccountController extends Controller
             DB::beginTransaction();
 
             try {
-                $agentBankAccount = BankAccount::where([
+                $agentBankAccount = AgentBankAccount::where([
                     'id' => $id,
                     'agent_id' => $agentId,
                 ])->get()->first();
@@ -75,7 +76,7 @@ class BankAccountController extends Controller
                 $agentBankAccount->update($payload->toArray());
                 DB::commit();
 
-                return $this->success('New bank account is updated successfully', $agentBankAccount);
+                return $this->success('New agent bank account is updated successfully', $agentBankAccount);
 
             } catch (Exception $e) {
                 DB::rollback();
@@ -95,7 +96,7 @@ class BankAccountController extends Controller
             DB::beginTransaction();
 
             try {
-                $agentBankAccount = BankAccount::where([
+                $agentBankAccount = AgentBankAccount::where([
                     'id' => $id,
                     'agent_id' => $agentId,
                 ])->get()->first();
@@ -103,7 +104,7 @@ class BankAccountController extends Controller
                 $agentBankAccount->delete($id);
                 DB::commit();
 
-                return $this->success('bank account is deleted successfully', $agentBankAccount);
+                return $this->success('Agent bank account is deleted successfully', $agentBankAccount);
 
             } catch (Exception $e) {
                 DB::rollback();
