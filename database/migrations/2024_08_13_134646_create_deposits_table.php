@@ -1,6 +1,6 @@
 <?php
 
-use App\Enums\OrderStatusEnum;
+use App\Enums\DepositStatusEnum;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -15,30 +15,33 @@ return new class extends Migration
         Schema::create('deposits', function (Blueprint $table) {
             $table->snowflakeIdAndPrimary();
             $table->snowflakeId('agent_id');
+            $table->snowflakeId('bank_account_id');
+            $table->snowflakeId('merchant_account_id');
+            $table->snowflakeId('package_id');
             $table->string('agent_name');
             $table->string('agent_email');
             $table->string('agent_phone');
             $table->string('agent_nrc');
             $table->string('agent_address');
-            $table->snowflakeId('package_id');
-            $table->string('name');
-            $table->integer('roi_rate')->unsigned();
-            $table->integer('duration')->unsigned();
-            $table->float('deposit_amount', 30, 2);
-            $table->snowflakeId('bank_account_id');
-            $table->string('account_name');
-            $table->string('account_number');
+            $table->string('agent_account_name');
+            $table->string('agent_account_number');
+            $table->string('agent_bank_branch');
+            $table->string('agent_bank_address');
+            $table->string('merchant_account_name');
+            $table->string('merchant_account_number');
             $table->string('bank_type');
-            $table->string('branch');
-            $table->string('branch_address');
-            $table->string('merchant_account');
+            $table->string('package_name');
+            $table->integer('package_roi_rate')->unsigned();
+            $table->integer('package_duration')->unsigned();
+            $table->float('package_deposit_amount', 15, 2);
             $table->string('transaction_screenshoot');
-            $table->string('status')->default(OrderStatusEnum::PENDING->value);
+            $table->string('status')->default(DepositStatusEnum::PENDING->value);
             $table->auditColumns();
 
             $table->foreign('agent_id')->references('id')->on('agents')->onDelete('cascade');
             $table->foreign('package_id')->references('id')->on('packages')->onDelete('cascade');
-            $table->foreign('bank_account_id')->references('id')->on('bank_accounts')->onDelete('cascade');
+            $table->foreign('bank_account_id')->references('id')->on('agent_bank_accounts')->onDelete('cascade');
+            $table->foreign('merchant_account_id')->references('id')->on('merchant_bank_accounts')->onDelete('cascade');
         });
     }
 

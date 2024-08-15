@@ -2,11 +2,9 @@
 
 namespace App\Enums;
 
-enum DepositSatusEnum: string
+enum DepositStatusEnum: string
 {
-    case ACTIVE = 'ACTIVE';
+    case PAYMENT_ACCEPTED = 'PAYMENT_ACCEPTED';
     case PENDING = 'PENDING';
     case REJECT = 'REJECT';
-    case BLOCK = 'BLOCK';
-    case DELETED = 'DELETED';
 }

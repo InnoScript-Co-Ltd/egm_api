@@ -15,13 +15,10 @@ class Deposit extends Model
     protected $table = 'deposits';
 
     protected $fillable = [
-        'agent_id',
-        'agent_name', 'agent_email', 'agent_phone', 'agent_nrc', 'agent_address',
-        'package_id',
-        'name', 'roi_rate', 'duration', 'deposit_amount',
-        'bank_account_id',
-        'account_name', 'account_number', 'bank_type', 'branch', 'branch_address',
-        'merchant_account',
+        'agent_id', 'bank_account_id', 'merchant_account_id', 'package_id',
+        'agent_name', 'agent_email', 'agent_phone', 'agent_nrc', 'agent_address', 'agent_account_name', 'agent_account_number', 'agent_bank_branch', 'agent_bank_address',
+        'merchant_account_name', 'merchant_account_number', 'bank_type',
+        'package_name', 'package_roi_rate', 'package_duration', 'package_deposit_amount',
         'transaction_screenshoot',
         'status',
     ];

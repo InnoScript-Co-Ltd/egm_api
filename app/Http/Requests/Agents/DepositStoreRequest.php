@@ -2,7 +2,8 @@
 
 namespace App\Http\Requests\Agents;
 
-use App\Models\BankAccount;
+use App\Models\AgentBankAccount;
+use App\Models\MerchantBankAccount;
 use App\Models\Package;
 use Illuminate\Foundation\Http\FormRequest;
 
@@ -24,13 +25,15 @@ class DepositStoreRequest extends FormRequest
     public function rules(): array
     {
         $packageIds = implode(',', Package::pluck('id')->toArray());
-        $bankAccountIds = implode(',', BankAccount::pluck('id')->toArray());
+        $agentBankAccountIds = implode(',', AgentBankAccount::pluck('id')->toArray());
+        $merchantBankAccountIds = implode(',', MerchantBankAccount::pluck('id')->toArray());
 
         return [
             'package_id' => "required | in:$packageIds",
-            'bank_account_id' => "required | in:$bankAccountIds",
-            'deposit_amount' => 'required',
-            'merchant_account' => 'required',
+            'bank_account_id' => "required | in:$agentBankAccountIds",
+            'merchant_account_id' => "required | in:$merchantBankAccountIds",
+            'package_deposit_amount' => 'required | numeric',
+            'bank_type' => 'required | string',
             'transaction_screenshoot' => 'required | file',
         ];
     }

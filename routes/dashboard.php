@@ -88,6 +88,10 @@ Route::middleware('jwt')->group(function () {
         Route::delete('/{id}', 'PackageController@destroy')->permission(PermissionEnum::PACKAGE_DESTROY->value);
     });
 
+    Route::group(['prefix' => 'deposit'], function () {
+        Route::get('/', 'DepositController@index');
+    });
+
     Route::group(['prefix' => 'permission'], function () {
         Route::get('/', 'PermissionController@index')->permission(PermissionEnum::PERMISSION_INDEX->value);
         Route::get('/{id}', 'PermissionController@show')->permission(PermissionEnum::PERMISSION_SHOW->value);

@@ -38,6 +38,13 @@ Route::middleware(['agent'])->group(function () {
             Route::post('/payment-password', 'AgentAuthController@confirmPaymentPassword');
         });
 
+        Route::group(['prefix' => 'deposit'], function () {
+            Route::post('/', 'DepositController@store');
+            Route::get('/', 'DepositController@index');
+            // Route::put('/{id}', 'DepositController@update');
+            // Route::delete('/{id}', 'DepositController@destroy');
+        });
+
         Route::group(['prefix' => 'account'], function () {
             Route::post('/{id}', 'AccountController@update');
             Route::post('/{id}/kyc-update', 'AccountController@kycUpdate');
@@ -66,13 +73,6 @@ Route::middleware(['agent'])->group(function () {
 
         Route::group(['prefix' => 'merchant-bank-account'], function () {
             Route::get('/', 'MerchantBankAccountController@index');
-        });
-
-        Route::group(['prefix' => 'deposit'], function () {
-            Route::get('/', 'DepositController@index');
-            Route::post('/', 'DepositController@store');
-            Route::put('/{id}', 'DepositController@update');
-            Route::delete('/{id}', 'DepositController@destroy');
         });
     });
 });
