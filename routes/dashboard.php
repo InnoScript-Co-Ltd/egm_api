@@ -90,6 +90,7 @@ Route::middleware('jwt')->group(function () {
 
     Route::group(['prefix' => 'deposit'], function () {
         Route::get('/', 'DepositController@index');
+        Route::get('/{id}', 'DepositController@show');
     });
 
     Route::group(['prefix' => 'permission'], function () {

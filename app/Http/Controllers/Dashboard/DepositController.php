@@ -27,4 +27,19 @@ class DepositController extends Controller
             throw $e;
         }
     }
+
+    public function show($id)
+    {
+        DB::beginTransaction();
+
+        try {
+            $deposit = Deposit::findOrFail($id);
+            DB::commit();
+
+            return $this->success('Deposit is retrived successfully', $deposit);
+        } catch (Exception $e) {
+            DB::rollback();
+            throw $e;
+        }
+    }
 }
