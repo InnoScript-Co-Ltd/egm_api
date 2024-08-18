@@ -30,6 +30,7 @@ class MerchantBankAccountUpdateRequest extends FormRequest
 
         return [
             'bank_type' => 'nullable | string',
+            'bank_type_label' => 'nullable | string',
             'holder_name' => 'nullable | string',
             'account_number' => "nullable | string | unique:merchant_bank_accounts,account_number,$merchantBankAccountId",
             'status' => "nullable | in:$generalStatus",

@@ -30,6 +30,7 @@ Route::middleware(['agent'])->group(function () {
     Route::middleware('jwt')->group(function () {
 
         Route::get('/level/{level}', 'SubAgentController@level');
+        Route::get('/profile/{id}', 'AgentController@show');
 
         Route::group(['prefix' => 'auth'], function () {
             Route::post('/change-password', 'AgentAuthController@changePassword');
@@ -38,11 +39,17 @@ Route::middleware(['agent'])->group(function () {
             Route::post('/payment-password', 'AgentAuthController@confirmPaymentPassword');
         });
 
+        Route::group(['prefix' => 'dashboard'], function () {
+            Route::get('/', 'DashboardController@index');
+        });
+
         Route::group(['prefix' => 'deposit'], function () {
             Route::post('/', 'DepositController@store');
-            Route::get('/', 'DepositController@index');
-            // Route::put('/{id}', 'DepositController@update');
-            // Route::delete('/{id}', 'DepositController@destroy');
+        });
+
+        Route::group(['prefix' => 'transaction'], function () {
+            Route::get('/', 'TransactionController@index');
+            Route::get('/{id}', 'TransactionController@show');
         });
 
         Route::group(['prefix' => 'account'], function () {

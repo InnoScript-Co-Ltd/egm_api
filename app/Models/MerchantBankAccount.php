@@ -18,6 +18,7 @@ class MerchantBankAccount extends Model
         'bank_type',
         'holder_name',
         'account_number',
+        'bank_type_label',
         'status',
     ];
 }

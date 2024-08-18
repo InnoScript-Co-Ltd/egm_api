@@ -2,7 +2,7 @@
 
 namespace App\Enums;
 
-enum DepositStatusEnum: string
+enum TransactionStatusEnum: string
 {
     case DEPOSIT_PAYMENT_ACCEPTED = 'DEPOSIT_PAYMENT_ACCEPTED';
     case DEPOSIT_PENDING = 'DEPOSIT_PENDING';

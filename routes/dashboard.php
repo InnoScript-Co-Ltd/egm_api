@@ -89,8 +89,15 @@ Route::middleware('jwt')->group(function () {
     });
 
     Route::group(['prefix' => 'deposit'], function () {
+        Route::post('/', 'DepositController@store');
         Route::get('/', 'DepositController@index');
         Route::get('/{id}', 'DepositController@show');
+    });
+
+    Route::group(['prefix' => 'transaction'], function () {
+        Route::post('/make-payment', 'TransactionController@makePayment');
+        Route::get('/', 'TransactionController@index');
+        Route::get('/{id}', 'TransactionController@show');
     });
 
     Route::group(['prefix' => 'permission'], function () {

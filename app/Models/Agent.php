@@ -77,6 +77,11 @@ class Agent extends Authenticatable implements JWTSubject
         return $this->hasMany(AgentBankAccount::class, 'agent_id', 'id');
     }
 
+    public function Deposit()
+    {
+        return $this->hasMany(Deposit::class, 'agent_id', 'id');
+    }
+
     public function getJWTIdentifier()
     {
         return $this->getKey();

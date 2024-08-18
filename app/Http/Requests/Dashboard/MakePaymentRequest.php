@@ -2,9 +2,10 @@
 
 namespace App\Http\Requests\Dashboard;
 
+use App\Models\Transaction;
 use Illuminate\Foundation\Http\FormRequest;
 
-class MerchantBankAccountStoreRequest extends FormRequest
+class MakePaymentRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -21,11 +22,10 @@ class MerchantBankAccountStoreRequest extends FormRequest
      */
     public function rules(): array
     {
+        $transactionIds = implode(',', Transaction::pluck('id')->toArray());
+
         return [
-            'bank_type_label' => 'required | string',
-            'holder_name' => 'required | string',
-            'account_number' => 'required | string | unique:merchant_bank_accounts,account_number',
-            'bank_type' => 'required | string',
+            'transaction_id' => "required | in:$transactionIds",
         ];
     }
 }

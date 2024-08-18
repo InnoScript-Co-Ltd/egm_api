@@ -2,12 +2,15 @@
 
 namespace App\Http\Controllers\Agent;
 
+use App\Enums\DepositStatusEnum;
+use App\Enums\TransactionTypeEnum;
 use App\Http\Controllers\Dashboard\Controller;
 use App\Http\Requests\Agents\DepositStoreRequest;
 use App\Models\AgentBankAccount;
 use App\Models\Deposit;
 use App\Models\MerchantBankAccount;
 use App\Models\Package;
+use App\Models\Transaction;
 use Exception;
 use Illuminate\Support\Facades\DB;
 
@@ -16,7 +19,6 @@ class DepositController extends Controller
     public function index()
     {
         $agent = auth('agent')->user();
-        $id = $agent->id;
 
         if ($agent->kyc_status === 'FULL_KYC' && $agent->status === 'ACTIVE') {
 
@@ -31,7 +33,7 @@ class DepositController extends Controller
                     ->paginationQuery();
                 DB::commit();
 
-                return $this->success('Agent deposit transcations are retrived successfully', $deposits);
+                return $this->success('Agent deposit transactions are retrived successfully', $deposits);
 
             } catch (Exception $e) {
                 DB::rollback();
@@ -53,7 +55,6 @@ class DepositController extends Controller
             DB::beginTransaction();
 
             try {
-
                 $payload['agent_name'] = $agent->first_name.' '.$agent->last_name;
                 $payload['agent_email'] = $agent->email;
                 $payload['agent_phone'] = $agent->phone;
@@ -85,7 +86,10 @@ class DepositController extends Controller
                     $payload['transaction_screenshoot'] = $image;
                 }
 
-                $deposit = Deposit::create($payload->toArray());
+                $payload['transaction_type'] = TransactionTypeEnum::DEPOSIT->value;
+                $payload['status'] = DepositStatusEnum::DEPOSIT_PENDING->value;
+
+                $deposit = Transaction::create($payload->toArray());
                 DB::commit();
 
                 return $this->success('Deposit is created successfully', $deposit);

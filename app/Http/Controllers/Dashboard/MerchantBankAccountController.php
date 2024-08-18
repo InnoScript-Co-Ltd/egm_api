@@ -22,7 +22,7 @@ class MerchantBankAccountController extends Controller
                 ->paginationQuery();
             DB::commit();
 
-            return $this->success('merchant bank account list is successfully retrived', $merchantBankAccount);
+            return $this->success('Merchant bank account list is successfully retrived', $merchantBankAccount);
 
         } catch (Exception $e) {
             DB::rollback();
