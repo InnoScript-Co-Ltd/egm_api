@@ -32,17 +32,23 @@ class PackageController extends Controller
 
     public function show($id)
     {
-        DB::beginTransaction();
-        try {
+        $agent = auth('agent')->user();
 
-            $package = Package::findOrFail($id);
-            DB::commit();
+        if ($agent->kyc_status === 'FULL_KYC' && $agent->status === 'ACTIVE') {
+            DB::beginTransaction();
 
-            return $this->success('Package detail is successfully retrived', $package);
+            try {
+                $package = Package::findOrFail($id);
+                DB::commit();
 
-        } catch (Exception $e) {
-            DB::rollback();
-            throw $e;
+                return $this->success('Package detail is successfully retrived', $package);
+
+            } catch (Exception $e) {
+                DB::rollback();
+                throw $e;
+            }
         }
+
+        return $this->badRequest('You does not have permission right now');
     }
 }

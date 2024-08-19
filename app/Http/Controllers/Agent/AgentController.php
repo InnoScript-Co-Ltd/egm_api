@@ -19,7 +19,7 @@ class AgentController extends Controller
             DB::beginTransaction();
 
             try {
-                $agent = Agent::with(['deposit'])
+                $agent = Agent::with(['deposit', 'transactions'])
                     ->findOrFail($id);
 
                 DB::commit();
