@@ -196,6 +196,7 @@ class SubAgentController extends Controller
 
             if ($agentIds !== null) {
                 $agents = Agent::select($this->showableForLevelAgent)
+                    ->with(['deposit'])
                     ->whereIn('id', $agentIds)
                     ->get();
 

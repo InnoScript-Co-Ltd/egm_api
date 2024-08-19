@@ -19,7 +19,9 @@ class AgentController extends Controller
             DB::beginTransaction();
 
             try {
-                $agent = Agent::findOrFail($id);
+                $agent = Agent::with(['deposit'])
+                    ->findOrFail($id);
+
                 DB::commit();
 
                 return $this->success('Agent is retrived successfully', $agent);
