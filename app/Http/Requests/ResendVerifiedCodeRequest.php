@@ -23,7 +23,7 @@ class ResendVerifiedCodeRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'id' => ['required', new UserActiveRule()],
+            'id' => ['required', new UserActiveRule],
         ];
     }
 }

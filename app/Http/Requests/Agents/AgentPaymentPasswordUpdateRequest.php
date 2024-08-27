@@ -2,7 +2,6 @@
 
 namespace App\Http\Requests\Agents;
 
-use App\Models\Agent;
 use Illuminate\Foundation\Http\FormRequest;
 
 class AgentPaymentPasswordUpdateRequest extends FormRequest
@@ -22,10 +21,7 @@ class AgentPaymentPasswordUpdateRequest extends FormRequest
      */
     public function rules(): array
     {
-        $agentIds = implode(',', Agent::pluck('id')->toArray());
-
         return [
-            'agent_id' => "required | in:$agentIds",
             'payment_password' => 'required | string',
         ];
     }

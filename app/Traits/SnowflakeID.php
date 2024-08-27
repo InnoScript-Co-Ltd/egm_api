@@ -13,7 +13,7 @@ trait SnowflakeID
     {
         static::creating(function ($model) {
             if (empty($model->{$model->getKeyName()})) {
-                $model->{$model->getKeyName()} = (new Snowflake())->short();
+                $model->{$model->getKeyName()} = (new Snowflake)->short();
             }
         });
     }

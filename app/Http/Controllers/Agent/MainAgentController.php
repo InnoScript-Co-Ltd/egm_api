@@ -71,7 +71,7 @@ class MainAgentController extends Controller
             $payload['email_verify_code'] = rand(100000, 999999);
             $payload['email_expired_at'] = Carbon::now()->addMinutes(5);
 
-            // Mail::to($payload['email'])->send(new EmailVerifyCode($payload['email_verify_code']));
+            Mail::to($payload['email'])->send(new EmailVerifyCode($payload['email_verify_code']));
 
             try {
                 $mainAgent = Agent::create($payload->toArray());

@@ -37,8 +37,8 @@ class SubAgentController extends Controller
 
     public function referenceLink()
     {
+        $subAgent = auth('agent')->user();
         try {
-            $subAgent = auth('agent')->user();
 
             if (
                 $subAgent->agent_type === AgentTypeEnum::SUB_AGENT->value &&
@@ -48,7 +48,6 @@ class SubAgentController extends Controller
                 $referenceLink['main_agent_id'] = $subAgent->main_agent_id;
                 $referenceLink['reference_id'] = $subAgent->id;
                 $referenceLink['partner_id'] = $subAgent->partner_id;
-                $referenceLink['expired_at'] = Carbon::now()->addMonths(6);
 
                 $token = Crypt::encrypt(json_encode($referenceLink));
 
@@ -95,7 +94,8 @@ class SubAgentController extends Controller
                 $nrcBackImage = explode('/', $nrcBackImagePath)[1];
                 $payload['nrc_back'] = $nrcBackImage;
             }
-            // Mail::to($payload['email'])->send(new EmailVerifyCode($payload['email_verify_code']));
+
+            Mail::to($payload['email'])->send(new EmailVerifyCode($payload['email_verify_code']));
 
             $agent = Agent::create($payload->toArray());
             // $agentUpdate = Agent::findOrFail($agent->id);

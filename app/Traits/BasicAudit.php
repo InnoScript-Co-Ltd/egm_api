@@ -6,7 +6,7 @@ trait BasicAudit
 {
     protected static function bootBasicAudit()
     {
-        $self = new static();
+        $self = new static;
 
         // if (auth('dashboard')->id()) {
         //     $userId = auth('dashboard')->id();

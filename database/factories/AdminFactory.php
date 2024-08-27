@@ -25,7 +25,7 @@ class AdminFactory extends Factory
         $adminStatus = (new Enum(AdminStatusEnum::class))->values();
         $status = $adminStatus[rand(0, count($adminStatus) - 1)];
         $verified_at = $status === 'PENDING' ? null : now();
-        $snowflake = new Snowflake();
+        $snowflake = new Snowflake;
 
         return [
             'id' => $snowflake->next(),

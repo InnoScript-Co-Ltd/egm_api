@@ -74,7 +74,7 @@ class AccountController extends Controller
                 $updatePayload['email_expired_at'] = Carbon::now()->addMinutes(5);
                 $agent->update($updatePayload);
 
-                // Mail::to($payload['email'])->send(new EmailVerifyCode($updatePayload['email_verify_code']));
+                Mail::to($payload['email'])->send(new EmailVerifyCode($updatePayload['email_verify_code']));
                 DB::commit();
 
                 $updatePayload['agent_id'] = $agent->id;
@@ -90,86 +90,82 @@ class AccountController extends Controller
         }
     }
 
-    public function update(AccountUpdateRequest $request, $id)
-    {
-
-        $payload = collect($request->validated());
-
-        DB::beginTransaction();
-
-        try {
-            $agent = Agent::findOrFail($id);
-
-            if (isset($payload['profile'])) {
-                $profileImagePath = $payload['profile']->store('images', 'public');
-                $profileImage = explode('/', $profileImagePath)[1];
-                $payload['profile'] = $profileImage;
-            }
-
-            $agent->update($payload->toArray());
-            DB::commit();
-
-            return $this->success('Agent profile is updated successfully');
-        } catch (Exception $e) {
-            DB::rollBack();
-            throw $e;
-        }
-    }
-
-    public function kycUpdate(AgentKycUpdateRequest $request, $id)
-    {
-        $payload = collect($request->validated());
-
-        DB::beginTransaction();
-
-        try {
-            $agent = Agent::findOrFail($id);
-
-            if ($agent->status !== AgentStatusEnum::ACTIVE->value) {
-                DB::commit();
-
-                return $this->badRequest('your account is not active');
-            }
-
-            if ($agent->status === AgentStatusEnum::ACTIVE->value && $agent->kyc_status === KycStatusEnum::FULL_KYC->value) {
-                DB::commit();
-
-                return $this->badRequest('KYC is already active');
-            }
-
-            if (isset($payload['nrc_front'])) {
-                $nrcFrontImagePath = $payload['nrc_front']->store('images', 'public');
-                $nrcFrontImage = explode('/', $nrcFrontImagePath)[1];
-                $payload['nrc_front'] = $nrcFrontImage;
-            }
-
-            if (isset($payload['nrc_back'])) {
-                $nrcBackImagePath = $payload['nrc_back']->store('images', 'public');
-                $nrcBackImage = explode('/', $nrcBackImagePath)[1];
-                $payload['nrc_back'] = $nrcBackImage;
-            }
-
-            $agent->update($payload->toArray());
-            DB::commit();
-
-            return $this->success('Agent kyc is updated successfully', $agent);
-        } catch (Exception $e) {
-            DB::rollBack();
-            throw $e;
-        }
-    }
-
-    public function accountUpdate(AgentAccountUpdateRequest $request, $id)
+    public function update(AccountUpdateRequest $request)
     {
         $agent = auth('agent')->user();
-        $agentId = $agent->id;
+        $payload = collect($request->validated());
 
-        if ($agent->status === AgentStatusEnum::ACTIVE->value) {
-            $payload = collect($request->validated());
+        if ($agent && $agent->status === AgentStatusEnum::ACTIVE->value) {
+            DB::beginTransaction();
+            try {
+                if (isset($payload['profile'])) {
+                    $profileImagePath = $payload['profile']->store('images', 'public');
+                    $profileImage = explode('/', $profileImagePath)[1];
+                    $payload['profile'] = $profileImage;
+                }
+
+                $agent->update($payload->toArray());
+                DB::commit();
+
+                return $this->success('Agent profile is updated successfully');
+            } catch (Exception $e) {
+                DB::rollback();
+                throw $e;
+            }
+        }
+
+        return $this->badRequest('You account is not active');
+    }
+
+    public function kycUpdate(AgentKycUpdateRequest $request)
+    {
+        $agent = auth('agent')->user();
+        $payload = collect($request->validated());
+
+        if ($agent && $agent->status === AgentStatusEnum::ACTIVE->value) {
             DB::beginTransaction();
 
             try {
-                $agent = Agent::findOrFail($agentId);
+                if ($agent->kyc_status === KycStatusEnum::FULL_KYC->value) {
+                    DB::commit();
+
+                    return $this->badRequest('KYC is already active');
+                }
+
+                if (isset($payload['nrc_front'])) {
+                    $nrcFrontImagePath = $payload['nrc_front']->store('images', 'public');
+                    $nrcFrontImage = explode('/', $nrcFrontImagePath)[1];
+                    $payload['nrc_front'] = $nrcFrontImage;
+                }
+
+                if (isset($payload['nrc_back'])) {
+                    $nrcBackImagePath = $payload['nrc_back']->store('images', 'public');
+                    $nrcBackImage = explode('/', $nrcBackImagePath)[1];
+                    $payload['nrc_back'] = $nrcBackImage;
+                }
+
+                $agent->update($payload->toArray());
+                DB::commit();
+
+                return $this->success('Agent kyc is updated successfully', $agent);
+            } catch (Exception $e) {
+                DB::rollBack();
+                throw $e;
+            }
+        }
+
+        return $this->badRequest('Your account is not active');
+    }
+
+    public function accountUpdate(AgentAccountUpdateRequest $request)
+    {
+        $agent = auth('agent')->user();
+        $payload = collect($request->validated());
+
+        if ($agent->status === AgentStatusEnum::ACTIVE->value) {
+            DB::beginTransaction();
+
+            try {
                 $agent->update($payload->toArray());
                 DB::commit();
 
@@ -180,6 +176,6 @@ class AccountController extends Controller
             }
         }
 
-        return $this->badRequest('You does not have permission right now');
+        return $this->badRequest('Your account is not active');
     }
 }

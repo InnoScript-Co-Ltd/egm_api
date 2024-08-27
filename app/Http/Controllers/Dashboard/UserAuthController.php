@@ -117,7 +117,7 @@ class UserAuthController extends Controller
                 'user_id' => $user->id,
                 'code' => rand(100000, 999999),
             ]);
-            $send = Mail::to($user->email)->send(new MailVerifiedCode());
+            $send = Mail::to($user->email)->send(new MailVerifiedCode);
             DB::commit();
 
         } catch (Exception $e) {

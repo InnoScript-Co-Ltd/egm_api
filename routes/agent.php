@@ -15,6 +15,9 @@ use Illuminate\Support\Facades\Route;
 
 Route::middleware(['agent'])->group(function () {
 
+    Route::get('/level/{level}', 'SubAgentController@level');
+    Route::get('/profile/{id}', 'AgentController@show');
+
     Route::group(['prefix' => 'main'], function () {
         Route::post('/register', 'MainAgentController@store');
     });
@@ -29,18 +32,25 @@ Route::middleware(['agent'])->group(function () {
 
     Route::middleware('jwt')->group(function () {
 
-        Route::get('/level/{level}', 'SubAgentController@level');
-        Route::get('/profile/{id}', 'AgentController@show');
+        Route::group(['prefix' => 'account'], function () {
+            Route::post('/', 'AccountController@update');
+            Route::post('/kyc', 'AccountController@kycUpdate');
+            Route::post('/account-update', 'AccountController@accountUpdate');
+        });
 
         Route::group(['prefix' => 'auth'], function () {
             Route::post('/change-password', 'AgentAuthController@changePassword');
             Route::post('/payment-password', 'AgentAuthController@updatePaymentPassword');
+            Route::post('/payment-password/check', 'AgentAuthController@confirmPaymentPassword');
             Route::get('/profile', 'AgentAuthController@profile');
-            Route::post('/payment-password', 'AgentAuthController@confirmPaymentPassword');
         });
 
-        Route::group(['prefix' => 'dashboard'], function () {
-            Route::get('/', 'DashboardController@index');
+        Route::group(['prefix' => 'sub'], function () {
+            Route::get('/reference-link', 'SubAgentController@referenceLink');
+        });
+
+        Route::group(['prefix' => 'main'], function () {
+            Route::get('/reference-link', 'MainAgentController@referenceLink');
         });
 
         Route::group(['prefix' => 'deposit'], function () {
@@ -52,18 +62,8 @@ Route::middleware(['agent'])->group(function () {
             Route::get('/{id}', 'TransactionController@show');
         });
 
-        Route::group(['prefix' => 'account'], function () {
-            Route::post('/{id}', 'AccountController@update');
-            Route::post('/{id}/kyc-update', 'AccountController@kycUpdate');
-            Route::post('/{id}/account-update', 'AccountController@accountUpdate');
-        });
-
-        Route::group(['prefix' => 'main'], function () {
-            Route::get('/reference-link', 'MainAgentController@referenceLink');
-        });
-
-        Route::group(['prefix' => 'sub'], function () {
-            Route::get('/reference-link', 'SubAgentController@referenceLink');
+        Route::group(['prefix' => 'dashboard'], function () {
+            Route::get('/', 'DashboardController@index');
         });
 
         Route::group(['prefix' => 'package'], function () {

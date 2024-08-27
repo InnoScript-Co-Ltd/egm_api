@@ -2,7 +2,6 @@
 
 namespace App\Http\Requests\Agents;
 
-use App\Models\Agent;
 use Illuminate\Foundation\Http\FormRequest;
 
 class AgentKycUpdateRequest extends FormRequest
@@ -22,7 +21,7 @@ class AgentKycUpdateRequest extends FormRequest
      */
     public function rules(): array
     {
-        $agent = Agent::findOrFail(request('id'));
+        $agent = auth('agent')->user();
         $agentId = $agent->id;
 
         return [

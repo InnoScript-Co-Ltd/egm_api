@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Agent;
 
 use App\Enums\AgentStatusEnum;
+use App\Enums\KycStatusEnum;
 use App\Http\Controllers\Dashboard\Controller;
 use App\Http\Requests\AgentAuthLoginRequest;
 use App\Http\Requests\Agents\AgentChangePasswordRequest;
@@ -83,79 +84,79 @@ class AgentAuthController extends Controller
 
     public function changePassword(AgentChangePasswordRequest $request)
     {
+        $agent = auth('agent')->user();
         $payload = collect($request->validated());
-        DB::beginTransaction();
 
-        try {
-            $agent = Agent::findOrFail($payload['agent_id']);
-            $check = Hash::check($payload['old_password'], $agent->password);
+        if ($agent && $agent->status === 'ACTIVE' && $agent->kyc_status === 'FULL_KYC') {
+            DB::beginTransaction();
 
-            if ($check === false) {
+            try {
+                $check = Hash::check($payload['old_password'], $agent->password);
+
+                if ($check === false) {
+                    DB::commit();
+
+                    return $this->badRequest('Old password does not match');
+                }
+
+                $agent->update([
+                    'password' => $payload['password'],
+                ]);
+
                 DB::commit();
 
-                return $this->badRequest('Old password does not match');
+                return $this->success('Password is changed successfully', null);
+
+            } catch (Exception $e) {
+                DB::rollBack();
+                throw $e;
             }
-
-            $agent->update([
-                'password' => $payload['password'],
-            ]);
-
-            DB::commit();
-
-            return $this->success('Password is changed successfully', null);
-
-        } catch (Exception $e) {
-            DB::rollBack();
-            throw $e;
         }
+
+        return $this->badRequest('Your account is not active');
     }
 
     public function updatePaymentPassword(AgentPaymentPasswordUpdateRequest $request)
     {
+        $agent = auth('agent')->user();
         $payload = collect($request->validated());
-        DB::beginTransaction();
 
-        try {
-            $agent = Agent::findOrFail($payload['agent_id']);
-            $agent->update($payload->toArray());
-            DB::commit();
+        if ($agent && $agent->status === 'ACTIVE' && $agent->kyc_status === 'FULL_KYC') {
+            DB::beginTransaction();
 
-            return $this->success('Agent payment password is updated successfully', null);
+            try {
+                $agent->update($payload->toArray());
+                DB::commit();
 
-        } catch (Exception $e) {
-            DB::rollBack();
-            throw $e;
+                return $this->success('Agent payment password is updated successfully', null);
+
+            } catch (Exception $e) {
+                DB::rollBack();
+                throw $e;
+            }
         }
+
+        return $this->badRequest('Your account is not active');
     }
 
     public function confirmPaymentPassword(ConfrimPaymentPasswordRequest $request)
     {
         $agent = auth('agent')->user();
-        $agentId = $agent->id;
-
-        if ($agent->payment_password === null) {
-            return $this->badRequest('Payment password is not set.');
-        }
-
         $payload = collect($request->validated());
 
-        if ($agent->status === AgentStatusEnum::ACTIVE->value) {
-
-            DB::beginTransaction();
+        if ($agent->status === AgentStatusEnum::ACTIVE->value && $agent->payment_password !== null && $agent->kyc_status === KycStatusEnum::FULL_KYC->value) {
 
             try {
-                $agent = Agent::findOrFail($agentId);
                 $check = Hash::check($payload['payment_password'], $agent->payment_password);
-                DB::commit();
-
                 if ($check === false) {
                     return $this->badRequest('Payment password does not match');
                 }
 
+                $agent->update($payload->toArray());
+
                 return $this->success('payment password is match', true);
 
             } catch (Exception $e) {
-                DB::rollBack();
                 throw $e;
             }
         }
