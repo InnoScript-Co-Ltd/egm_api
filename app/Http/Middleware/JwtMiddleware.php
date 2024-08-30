@@ -4,6 +4,7 @@ namespace App\Http\Middleware;
 
 use App\Exceptions\UnauthorizedException;
 use Closure;
+use Exception;
 use Illuminate\Http\Request;
 use JWTAuth;
 use Symfony\Component\HttpFoundation\Response;
@@ -20,12 +21,13 @@ class JwtMiddleware
         if ($request->header('authorization') === null) {
             throw new UnauthorizedException('token is not found');
         } else {
-            $user = JWTAuth::parseToken()->authenticate();
+            try {
+                $user = JWTAuth::parseToken()->authenticate();
 
-            return $next($request);
+                return $next($request);
+            } catch (Exception $e) {
+                throw new UnauthorizedException('CAN NOT AUTHORIZE');
+            }
         }
-
-        return $next($request);
-
     }
 }
