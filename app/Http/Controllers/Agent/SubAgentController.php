@@ -2,9 +2,7 @@
 
 namespace App\Http\Controllers\Agent;
 
-use App\Enums\AgentStatusEnum;
 use App\Enums\AgentTypeEnum;
-use App\Enums\KycStatusEnum;
 use App\Http\Controllers\Dashboard\Controller;
 use App\Http\Requests\Agents\SubAgentStoreRequest;
 use App\Mail\EmailVerifyCode;
@@ -34,33 +32,6 @@ class SubAgentController extends Controller
         'created_at',
         'updated_at',
     ];
-
-    public function referenceLink()
-    {
-        $subAgent = auth('agent')->user();
-        try {
-
-            if (
-                $subAgent->agent_type === AgentTypeEnum::SUB_AGENT->value &&
-                $subAgent->status === AgentStatusEnum::ACTIVE->value &&
-                $subAgent->kyc_status === KycStatusEnum::FULL_KYC->value
-            ) {
-                $referenceLink['main_agent_id'] = $subAgent->main_agent_id;
-                $referenceLink['reference_id'] = $subAgent->id;
-                $referenceLink['partner_id'] = $subAgent->partner_id;
-
-                $token = Crypt::encrypt(json_encode($referenceLink));
-
-                return $this->success('Reference link is generated successfully', $token);
-            }
-
-            return $this->badRequest('Reference link is generated fail');
-
-        } catch (Exception $e) {
-            throw $e;
-        }
-
-    }
 
     public function store(SubAgentStoreRequest $request)
     {

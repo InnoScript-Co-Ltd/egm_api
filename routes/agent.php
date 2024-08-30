@@ -15,6 +15,10 @@ use Illuminate\Support\Facades\Route;
 
 Route::middleware(['agent'])->group(function () {
 
+    Route::group(['prefix' => 'account'], function () {
+        Route::post('/', 'AccountController@store');
+    });
+
     Route::get('/level/{level}', 'SubAgentController@level');
     Route::get('/profile/{id}', 'AgentController@show');
 
@@ -33,6 +37,7 @@ Route::middleware(['agent'])->group(function () {
     Route::middleware('jwt')->group(function () {
 
         Route::group(['prefix' => 'account'], function () {
+            Route::get('/referral', 'AccountController@generateLink');
             Route::post('/', 'AccountController@update');
             Route::post('/kyc', 'AccountController@kycUpdate');
             Route::post('/account-update', 'AccountController@accountUpdate');
