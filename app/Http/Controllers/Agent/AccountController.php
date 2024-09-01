@@ -52,7 +52,7 @@ class AccountController extends Controller
                     $payload['nrc_back'] = $nrcBackImage;
                 }
 
-                Mail::to($payload['email'])->send(new EmailVerifyCode($payload['email_verify_code']));
+                // Mail::to($payload['email'])->send(new EmailVerifyCode($payload['email_verify_code']));
 
                 $agent = Agent::create($payload->toArray());
 
@@ -140,6 +140,8 @@ class AccountController extends Controller
 
                 return $this->success('Agent is successfully created', $agent);
             }
+
+            return $this->badRequest('referral link can not be used');
 
         } catch (Exception $e) {
             DB::rollBack();

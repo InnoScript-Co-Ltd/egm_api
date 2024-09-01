@@ -16,19 +16,11 @@ use Illuminate\Support\Facades\Route;
 Route::middleware(['agent'])->group(function () {
 
     Route::group(['prefix' => 'account'], function () {
-        Route::post('/', 'AccountController@store');
+        Route::post('/create', 'AccountController@store');
     });
 
     Route::get('/level/{level}', 'SubAgentController@level');
     Route::get('/profile/{id}', 'AgentController@show');
-
-    Route::group(['prefix' => 'main'], function () {
-        Route::post('/register', 'MainAgentController@store');
-    });
-
-    Route::group(['prefix' => 'sub'], function () {
-        Route::post('/register', 'SubAgentController@store');
-    });
 
     Route::post('/verify', 'AccountController@emailVerify');
     Route::post('resend', 'AccountController@resendVerifyCode');
