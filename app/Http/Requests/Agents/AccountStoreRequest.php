@@ -2,7 +2,6 @@
 
 namespace App\Http\Requests\Agents;
 
-use App\Enums\REGXEnum;
 use Illuminate\Foundation\Http\FormRequest;
 
 class AccountStoreRequest extends FormRequest
@@ -22,8 +21,6 @@ class AccountStoreRequest extends FormRequest
      */
     public function rules(): array
     {
-        $mobileRule = REGXEnum::MOBILE_NUMBER->value;
-
         return [
             'first_name' => 'required | string | min:2 | max:18',
             'last_name' => 'required | string | min:2 | max:18',
@@ -33,7 +30,7 @@ class AccountStoreRequest extends FormRequest
             'nrc_back' => 'required | file',
             'address' => 'required | string',
             'dob' => 'required | date',
-            'phone' => ['required', 'unique:agents,phone', "regex:$mobileRule"],
+            'phone' => ['required', 'unique:agents,phone'],
             'password' => 'required | string | min:6 | max:18 | confirmed',
             'referral' => 'required | string',
         ];
