@@ -13,10 +13,10 @@ return new class extends Migration
     {
         Schema::create('referrals', function (Blueprint $table) {
             $table->snowflakeIdAndPrimary();
-            $table->snowflakeId('agent_id');
-            $table->snowflakeId('main_agent_id');
-            $table->snowflakeId('reference_id');
-            $table->snowflakeId('partner_id');
+            $table->snowflakeId('agent_id')->nullable()->default(null);
+            $table->snowflakeId('main_agent_id')->nullable()->default(null);
+            $table->snowflakeId('reference_id')->nullable()->default(null);
+            $table->snowflakeId('partner_id')->nullable()->default(null);
             $table->json('register_agents')->nullable()->default(null);
             $table->string('agent_type');
             $table->string('link');
