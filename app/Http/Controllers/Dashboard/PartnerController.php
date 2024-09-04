@@ -2,13 +2,16 @@
 
 namespace App\Http\Controllers\Dashboard;
 
+use App\Enums\EmailContentTypeEnum;
 use App\Enums\GeneralStatusEnum;
 use App\Http\Requests\Dashboard\PartnerStoreRequest;
 use App\Http\Requests\Dashboard\PartnerUpdateRequest;
 use App\Mail\Dashboard\PartnerAcconuntOpening;
+use App\Models\EmailContent;
 use App\Models\Partner;
 use Exception;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\HtmlString;
 use Illuminate\Support\Str;
 use Mail;
 
@@ -57,13 +60,19 @@ class PartnerController extends Controller
             $payload['password'] = str()->random();
             $payload['status'] = GeneralStatusEnum::ACTIVE->value;
 
-            Mail::to($payload['email'])->send(new PartnerAcconuntOpening($payload));
+            $emailContent = EmailContent::where([
+                'status' => GeneralStatusEnum::ACTIVE->value,
+                'content_type' => EmailContentTypeEnum::PARTNER_ACCOUNT_OPENING->value,
+            ])->first()->toArray();
 
-            // $partner = Partner::create($payload->toArray());
+            $emailContent['content'] = new HtmlString($emailContent['content']);
 
+            Mail::to($payload['email'])->send(new PartnerAcconuntOpening($payload, $emailContent));
+
+            $partner = Partner::create($payload->toArray());
             DB::commit();
 
-            return $this->success('Partner account is successfully created', $payload);
+            return $this->success('Partner account is successfully created', $partner);
         } catch (Exception $e) {
             DB::rollBack();
             throw $e;

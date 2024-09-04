@@ -14,12 +14,15 @@ class PartnerAcconuntOpening extends Mailable
 
     public $mailData;
 
+    public $emailContent;
+
     /**
      * Create a new message instance.
      */
-    public function __construct($mailData)
+    public function __construct($mailData, $emailContent)
     {
         $this->mailData = $mailData;
+        $this->emailContent = $emailContent;
     }
 
     /**
@@ -28,7 +31,7 @@ class PartnerAcconuntOpening extends Mailable
     public function envelope(): Envelope
     {
         return new Envelope(
-            subject: 'Partner Acconunt Opening',
+            subject: $this->emailContent['title']
         );
     }
 
@@ -38,7 +41,7 @@ class PartnerAcconuntOpening extends Mailable
     public function content(): Content
     {
         return new Content(
-            view: 'dashboard.partnerOpeningAccount',
+            view: $this->emailContent['template'],
         );
     }
 

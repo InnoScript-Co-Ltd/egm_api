@@ -15,7 +15,7 @@ class CountryController extends Controller
         DB::beginTransaction();
         try {
 
-            $countries = Country::with(['flagImage', 'regionOrState'])
+            $countries = Country::with(['regionOrState'])
                 ->searchQuery()
                 ->sortingQuery()
                 ->filterQuery()
@@ -38,17 +38,6 @@ class CountryController extends Controller
         try {
 
             $country = Country::create($payload->toArray());
-
-            if (isset($payload['flag_image']) && is_file($payload['flag_image'])) {
-                $imagePath = $payload['flag_image']->store('images', 'public');
-                $flagImage = explode('/', $imagePath)[1];
-                $country->flagImage()->create([
-                    'image' => $flagImage,
-                    'type' => 'flag_image',
-                ]);
-
-                $country['flag_image'] = $flagImage;
-            }
             DB::commit();
 
             return $this->success('Country is created successfully', $country);

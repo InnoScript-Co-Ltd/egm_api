@@ -48,6 +48,14 @@ Route::middleware('jwt')->group(function () {
         Route::delete('/{id}', 'PartnerController@destroy');
     });
 
+    Route::group(['prefix' => 'email-content'], function () {
+        Route::post('/', 'EmailContentController@store')->permission(PermissionEnum::EMAIL_CONTENT_STORE->value);
+        Route::get('/', 'EmailContentController@index')->permission(PermissionEnum::EMAIL_CONTENT_INDEX->value);
+        Route::get('/{id}', 'EmailContentController@show')->permission(PermissionEnum::EMAIL_CONTENT_SHOW->value);
+        Route::put('/{id}', 'EmailContentController@update')->permission(PermissionEnum::EMAIL_CONTENT_UPDATE->value);
+        Route::delete('/{id}', 'EmailContentController@destroy')->permission(PermissionEnum::EMAIL_CONTENT_DESTROY->value);
+    });
+
     Route::group(['prefix' => 'agent'], function () {
         Route::get('/', 'AgentController@index');
         Route::get('/{id}', 'AgentController@show');
