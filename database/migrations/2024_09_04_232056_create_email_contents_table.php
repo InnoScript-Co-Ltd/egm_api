@@ -1,5 +1,6 @@
 <?php
 
+use App\Enums\EmailContentTypeEnum;
 use App\Enums\GeneralStatusEnum;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
@@ -12,13 +13,14 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('packages', function (Blueprint $table) {
+        Schema::create('email_contents', function (Blueprint $table) {
             $table->snowflakeIdAndPrimary();
-            $table->string('name')->unique();
-            $table->string('package_type');
-            $table->string('roi_rate');
-            $table->integer('duration')->unsigned();
-            $table->json('deposit_amount');
+            $table->snowflakeId('country_id');
+            $table->string('country_code');
+            $table->string('content_type')->default(EmailContentTypeEnum::PARTNER_ACCOUNT_OPENING->value);
+            $table->string('title');
+            $table->longText('content');
+            $table->string('template')->default(null);
             $table->string('status')->default(GeneralStatusEnum::ACTIVE->value);
             $table->auditColumns();
         });
@@ -29,6 +31,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('packages');
+        Schema::dropIfExists('email_contents');
     }
 };

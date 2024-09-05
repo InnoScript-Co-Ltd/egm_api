@@ -15,6 +15,7 @@ return new class extends Migration
         Schema::create('countries', function (Blueprint $table) {
             $table->snowflakeIdAndPrimary();
             $table->string('name')->unique();
+            $table->string('flag');
             $table->string('country_code')->unique();
             $table->string('mobile_prefix')->unique();
             $table->string('status')->default(GeneralStatusEnum::ACTIVE->value);

@@ -8,17 +8,13 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
-class Package extends Model
+class EmailHistory extends Model
 {
     use BasicAudit,HasFactory,SnowflakeID,SoftDeletes;
 
-    protected $table = 'packages';
+    protected $table = 'email_histories';
 
     protected $fillable = [
-        'name', 'package_type', 'roi_rate', 'duration', 'deposit_amount', 'status',
-    ];
-
-    protected $casts = [
-        'deposit_amount' => 'array',
+        'email_content_id', 'delivery_email', 'errors', 'status',
     ];
 }

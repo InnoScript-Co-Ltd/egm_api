@@ -25,14 +25,11 @@ class PartnerStoreRequest extends FormRequest
         $mobileRule = REGXEnum::MOBILE_NUMBER->value;
 
         return [
+            'username' => 'required | string | unique:partners,username',
             'first_name' => 'required | string | min:2 | max:18',
             'last_name' => 'required | string | min:2 | max:18',
             'email' => 'required | email | unique:partners,email',
-            'nrc' => 'required | unique:partners,nrc',
-            'nrc_front' => 'nullable | file',
-            'nrc_back' => 'nullable | file',
             'phone' => ['required', 'unique:agents,phone', "regex:$mobileRule"],
-            'password' => 'required | string | min:6 | max:18 | confirmed',
         ];
     }
 }

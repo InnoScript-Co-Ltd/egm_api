@@ -2,10 +2,10 @@
 
 namespace App\Http\Requests\Dashboard;
 
-use App\Enums\REGXEnum;
+use App\Models\Country;
 use Illuminate\Foundation\Http\FormRequest;
 
-class PartnerStoreRequest extends FormRequest
+class EmailContentStoreRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -22,14 +22,14 @@ class PartnerStoreRequest extends FormRequest
      */
     public function rules(): array
     {
-        $mobileRule = REGXEnum::MOBILE_NUMBER->value;
+        $countryId = implode(',', Country::pluck('id')->toArray());
 
         return [
-            'username' => 'required | string | unique:partners,username',
-            'first_name' => 'required | string | min:2 | max:18',
-            'last_name' => 'required | string | min:2 | max:18',
-            'email' => 'required | email | unique:partners,email',
-            'phone' => ['required', 'unique:agents,phone', "regex:$mobileRule"],
+            'country_id' => "required | in:$countryId",
+            'template' => 'required | string',
+            'content_type' => 'required | string',
+            'title' => 'required | string',
+            'content' => 'required | string',
         ];
     }
 }

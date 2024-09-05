@@ -2,12 +2,19 @@
 
 namespace App\Http\Controllers\Dashboard;
 
+use App\Enums\EmailContentTypeEnum;
+use App\Enums\GeneralStatusEnum;
+use App\Enums\KycStatusEnum;
 use App\Http\Requests\Dashboard\PartnerStoreRequest;
 use App\Http\Requests\Dashboard\PartnerUpdateRequest;
+use App\Mail\Dashboard\PartnerAccountEmailTemplate;
+use App\Models\EmailContent;
 use App\Models\Partner;
 use Exception;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\HtmlString;
 use Illuminate\Support\Str;
+use Mail;
 
 class PartnerController extends Controller
 {
@@ -51,6 +58,18 @@ class PartnerController extends Controller
         DB::beginTransaction();
 
         try {
+            $payload['password'] = str()->random();
+            $payload['status'] = GeneralStatusEnum::ACTIVE->value;
+
+            $emailContent = EmailContent::where([
+                'status' => GeneralStatusEnum::ACTIVE->value,
+                'content_type' => EmailContentTypeEnum::PARTNER_ACCOUNT_OPENING->value,
+            ])->first()->toArray();
+
+            $emailContent['content'] = new HtmlString($emailContent['content']);
+
+            Mail::to($payload['email'])->send(new PartnerAccountEmailTemplate($payload, $emailContent));
+
             $partner = Partner::create($payload->toArray());
             DB::commit();
 
@@ -84,6 +103,25 @@ class PartnerController extends Controller
         try {
 
             $partner = Partner::findOrFail($id);
+
+            if ($payload['kyc_status'] === KycStatusEnum::REJECT->value) {
+                $emailContent = EmailContent::where([
+                    'status' => GeneralStatusEnum::ACTIVE->value,
+                    'content_type' => EmailContentTypeEnum::PARTNER_KYC_REJECT->value,
+                ])->first()->toArray();
+            }
+
+            if ($payload['kyc_status'] === KycStatusEnum::FULL_KYC->value) {
+                $emailContent = EmailContent::where([
+                    'status' => GeneralStatusEnum::ACTIVE->value,
+                    'content_type' => EmailContentTypeEnum::PARTNER_KYC_APPROVE->value,
+                ])->first()->toArray();
+            }
+
+            $emailContent['content'] = new HtmlString($emailContent['content']);
+
+            Mail::to($payload['email'])->send(new PartnerAccountEmailTemplate($payload, $emailContent));
+
             $partner->update($payload->toArray());
             DB::commit();
 
