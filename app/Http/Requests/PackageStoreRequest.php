@@ -2,6 +2,8 @@
 
 namespace App\Http\Requests;
 
+use App\Enums\PackageTypeEnum;
+use App\Helpers\Enum;
 use Illuminate\Foundation\Http\FormRequest;
 
 class PackageStoreRequest extends FormRequest
@@ -21,11 +23,14 @@ class PackageStoreRequest extends FormRequest
      */
     public function rules(): array
     {
+        $packageTypes = implode(',', (new Enum(PackageTypeEnum::class))->values());
+
         return [
             'name' => 'required | string | unique:packages,name',
             'roi_rate' => 'required | numeric',
             'duration' => 'required | numeric',
             'deposit_amount' => 'required | array',
+            'package_type' => "required | in:$packageTypes",
         ];
     }
 }

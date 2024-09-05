@@ -37,6 +37,12 @@ class CountryController extends Controller
         DB::beginTransaction();
         try {
 
+            if (isset($payload['flag'])) {
+                $ImagePath = $payload['flag']->store('images', 'public');
+                $image = explode('/', $ImagePath)[1];
+                $payload['flag'] = $image;
+            }
+
             $country = Country::create($payload->toArray());
             DB::commit();
 

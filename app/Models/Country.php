@@ -18,16 +18,11 @@ class Country extends Model
     protected $table = 'countries';
 
     protected $fillable = [
-        'name', 'country_code', 'mobile_prefix', 'status',
+        'name', 'flag', 'country_code', 'mobile_prefix', 'status',
     ];
 
     protected $casts = [
     ];
-
-    public function flagImage()
-    {
-        return $this->morphOne(Image::class, 'imageable')->where('type', 'flag_image');
-    }
 
     public function regionOrState(): HasMany
     {
