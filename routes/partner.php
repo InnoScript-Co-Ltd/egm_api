@@ -15,6 +15,10 @@ use Illuminate\Support\Facades\Route;
 
 Route::middleware(['partner'])->group(function () {
 
+    Route::group(['prefix' => 'auth'], function () {
+        Route::post('/login', 'PartnerAuthController@login');
+    });
+
     Route::post('/register', 'PartnerController@store');
     Route::post('/reference-link', 'PartnerController@referenceLink');
     // Route::post('verification', 'AccountController@emailVerify');
