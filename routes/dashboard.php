@@ -1,6 +1,7 @@
 <?php
 
 use App\Enums\PermissionEnum;
+use App\Http\Controllers\Article\ArticleController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -139,7 +140,6 @@ Route::middleware('jwt')->group(function () {
         Route::get('/{id}', 'AdminController@show')->permission(PermissionEnum::ADMIN_SHOW->value);
         Route::post('/{id}', 'AdminController@update')->permission(PermissionEnum::ADMIN_UPDATE->value);
         Route::delete('/{id}', 'AdminController@destroy')->permission(PermissionEnum::ADMIN_DESTROY->value);
-
     });
 
     Route::group(['prefix' => 'faq'], function () {
@@ -186,4 +186,14 @@ Route::middleware('jwt')->group(function () {
             Route::delete('/{id}', 'TownshipController@destroy')->permission(PermissionEnum::TOWNSHIP_DESTROY->value);
         });
     });
+
+    // article
+    Route::group(['prefix' => 'article', function () {
+        Route::get('/', [ArticleController::class, 'index'])->permission(PermissionEnum::ARTICLE_INDEX->value);
+        Route::post('/', [ArticleController::class, 'store'])->permission(PermissionEnum::ARTICLE_STORE->value);
+        Route::get('/{id}', [ArticleController::class, 'show'])->permission(PermissionEnum::ARTICLE_SHOW->value);
+        Route::put('/{id}', [ArticleController::class, 'update'])->permission(PermissionEnum::ARTICLE_UPDATE->value);
+        Route::delete('/{id}', [ArticleController::class, 'destroy'])->permission(PermissionEnum::ARTICLE_DESTROY->value);
+    }]);
+    
 });
