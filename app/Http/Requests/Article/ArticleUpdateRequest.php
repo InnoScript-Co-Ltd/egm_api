@@ -26,7 +26,7 @@ class ArticleUpdateRequest extends FormRequest
     {
         return [
             'article_type_id' => [
-                'required',
+                'nullable',
                 'integer',
                 'exists:article_types,id',
             ],
@@ -37,34 +37,34 @@ class ArticleUpdateRequest extends FormRequest
                 'max: 10',
             ],
             'title' => [
-                'required',
+                'nullable',
                 'string',
                 'max:255',
                 Rule::unique('articles', 'title')->ignore($this->id),
             ],
             'description' => [
-                'required',
+                'nullable',
                 'string',
                 'min: 10',
             ],
             'content' => [
-                'required',
+                'nullable',
                 'string',
                 'min: 10',
             ],
             'photos' => [
-                'required',
+                'nullable',
                 'array',
                 'min:1',
             ],
             'photos.*' => [
-                'required',
+                'nullable',
                 'image',
                 'mimes:jpg,jpeg,png,gif',
                 'max:2048',
             ],
             'status' => [
-                'required',
+                'nullable',
                 'string',
                 Rule::in(Enum::make(GeneralStatusEnum::class)->values()),
             ],
