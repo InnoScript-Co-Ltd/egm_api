@@ -40,6 +40,7 @@ class ArticleStoreRequest extends FormRequest
                 'required',
                 'string',
                 'max:255',
+                Rule::unique('articles', 'title'),
             ],
             'description' => [
                 'required',

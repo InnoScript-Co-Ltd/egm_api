@@ -40,6 +40,7 @@ class ArticleUpdateRequest extends FormRequest
                 'required',
                 'string',
                 'max:255',
+                Rule::unique('articles', 'title')->ignore($this->id),
             ],
             'description' => [
                 'required',
