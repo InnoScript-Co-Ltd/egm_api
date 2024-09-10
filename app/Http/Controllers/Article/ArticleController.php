@@ -8,6 +8,9 @@ use App\Http\Requests\Article\ArticleUpdateRequest;
 use App\Models\Article;
 use Exception;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
+
+const ARTICLE_IMAGE_FOLDER = "articles";
 
 class ArticleController extends Controller
 {
@@ -38,9 +41,9 @@ class ArticleController extends Controller
         $payload = collect($request->validated());
 
         try {
-            if (!empty($payload->photos)) {
-                $articlePhotos = collect($payload->photos)->map(function ($articlePhoto) {
-                    $articlePhotoPath = $articlePhoto->store('articles', 'public');
+            if (!empty($payload['photos'])) {
+                $articlePhotos = collect($payload['photos'])->map(function ($articlePhoto) {
+                    $articlePhotoPath = Storage::disk('public')->putFile(ARTICLE_IMAGE_FOLDER, $articlePhoto);
                     return explode('/', $articlePhotoPath)[1];
                 });
 
@@ -78,12 +81,20 @@ class ArticleController extends Controller
         try {
             $article = Article::findOrFail($id);
 
-            if (!empty($payload->photos)) {
+            if (!empty($payload['photos'])) {
 
-                $article->photos->each(fn($articlePhoto) => $articlePhoto->delete());
+                // delete existing images
+                foreach ($article->photos as $articlePhoto) {
+                    $articlePhotoPath = ARTICLE_IMAGE_FOLDER . "/" . $articlePhoto;
 
-                $articlePhotos = collect($payload->photos)->map(function ($articlePhoto) {
-                    $articlePhotoPath = $articlePhoto->store('articles', 'public');
+                    if (Storage::disk('public')->exists($articlePhotoPath)) {
+                        Storage::disk('public')->delete($articlePhotoPath);
+                    }
+                }
+
+                // store new images
+                $articlePhotos = collect($payload['photos'])->map(function ($articlePhoto) {
+                    $articlePhotoPath = Storage::disk('public')->putFile(ARTICLE_IMAGE_FOLDER, $articlePhoto);
                     return explode('/', $articlePhotoPath)[1];
                 });
 
@@ -104,8 +115,15 @@ class ArticleController extends Controller
     {
         try {
             $article = Article::findOrFail($id);
-            
-            $article->photos->each(fn($articlePhoto) => $articlePhoto->delete());
+
+            // delete images
+            foreach ($article->photos as $articlePhoto) {
+                $articlePhotoPath = ARTICLE_IMAGE_FOLDER . "/" . $articlePhoto;
+
+                if (Storage::disk('public')->exists($articlePhotoPath)) {
+                    Storage::disk('public')->delete($articlePhotoPath);
+                }
+            }
 
             $article->delete();
             return $this->success('Article deleted successfully');
