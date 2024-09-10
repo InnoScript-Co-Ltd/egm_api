@@ -57,9 +57,11 @@ class ArticleController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(Article $article)
+    public function show($id)
     {
         try {
+            $article = Article::findOrFail($id);
+
             return $this->success('Article retrieved successfully', $article);
         } catch (Exception $e) {
             throw $e;
@@ -69,11 +71,13 @@ class ArticleController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(ArticleUpdateRequest $request, Article $article)
+    public function update(ArticleUpdateRequest $request, $id)
     {
         $payload = collect($request->validated());
 
         try {
+            $article = Article::findOrFail($id);
+
             if (!empty($payload->photos)) {
 
                 $article->photos->each(fn($articlePhoto) => $articlePhoto->delete());
@@ -96,9 +100,11 @@ class ArticleController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Article $article)
+    public function destroy($id)
     {
         try {
+            $article = Article::findOrFail($id);
+            
             $article->photos->each(fn($articlePhoto) => $articlePhoto->delete());
 
             $article->delete();
