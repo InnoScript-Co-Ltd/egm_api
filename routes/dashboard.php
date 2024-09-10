@@ -188,12 +188,12 @@ Route::middleware('jwt')->group(function () {
     });
 
     // article
-    Route::group(['prefix' => 'article', function () {
+    Route::group(['prefix' => 'article'], function () {
         Route::get('/', [ArticleController::class, 'index'])->permission(PermissionEnum::ARTICLE_INDEX->value);
         Route::post('/', [ArticleController::class, 'store'])->permission(PermissionEnum::ARTICLE_STORE->value);
         Route::get('/{id}', [ArticleController::class, 'show'])->permission(PermissionEnum::ARTICLE_SHOW->value);
         Route::put('/{id}', [ArticleController::class, 'update'])->permission(PermissionEnum::ARTICLE_UPDATE->value);
         Route::delete('/{id}', [ArticleController::class, 'destroy'])->permission(PermissionEnum::ARTICLE_DESTROY->value);
-    }]);
-    
+    });
+
 });
