@@ -2,6 +2,7 @@
 
 use App\Enums\PermissionEnum;
 use App\Http\Controllers\Article\ArticleController;
+use App\Http\Controllers\Article\ArticleLikeController;
 use App\Http\Controllers\Article\ArticleTypeController;
 use App\Http\Controllers\Article\CommentController;
 use Illuminate\Support\Facades\Route;
@@ -214,6 +215,14 @@ Route::middleware('jwt')->group(function () {
         Route::get('/{id}', [CommentController::class, 'show'])->permission(PermissionEnum::COMMENT_SHOW->value);
         Route::put('/{id}', [CommentController::class, 'update'])->permission(PermissionEnum::COMMENT_UPDATE->value);
         Route::delete('/{id}', [CommentController::class, 'destroy'])->permission(PermissionEnum::COMMENT_DESTROY->value);
+    });
+
+    // article like
+    Route::group(['prefix' => 'article-like'], function () {
+        Route::get('/', [ArticleLikeController::class, 'index'])->permission(PermissionEnum::ARTICLE_LIKE_INDEX->value);
+        Route::post('/', [ArticleLikeController::class, 'store'])->permission(PermissionEnum::ARTICLE_LIKE_STORE->value);
+        Route::get('/{id}', [ArticleLikeController::class, 'show'])->permission(PermissionEnum::ARTICLE_LIKE_SHOW->value);
+        Route::delete('/{id}', [ArticleLikeController::class, 'destroy'])->permission(PermissionEnum::ARTICLE_LIKE_DESTROY->value);
     });
 
 });
