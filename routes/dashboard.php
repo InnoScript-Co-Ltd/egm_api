@@ -2,6 +2,7 @@
 
 use App\Enums\PermissionEnum;
 use App\Http\Controllers\Article\ArticleController;
+use App\Http\Controllers\Article\ArticleTypeController;
 use App\Http\Controllers\Article\CommentController;
 use Illuminate\Support\Facades\Route;
 
@@ -186,6 +187,15 @@ Route::middleware('jwt')->group(function () {
             Route::put('/{id}', 'TownshipController@update')->permission(PermissionEnum::TOWNSHIP_UPDATE->value);
             Route::delete('/{id}', 'TownshipController@destroy')->permission(PermissionEnum::TOWNSHIP_DESTROY->value);
         });
+    });
+
+    // article Type
+    Route::group(['prefix' => 'article'], function () {
+        Route::get('/', [ArticleTypeController::class, 'index'])->permission(PermissionEnum::ARTICLE_TYPE_INDEX->value);
+        Route::post('/', [ArticleTypeController::class, 'store'])->permission(PermissionEnum::ARTICLE_TYPE_STORE->value);
+        Route::get('/{id}', [ArticleTypeController::class, 'show'])->permission(PermissionEnum::ARTICLE_TYPE_SHOW->value);
+        Route::put('/{id}', [ArticleTypeController::class, 'update'])->permission(PermissionEnum::ARTICLE_TYPE_UPDATE->value);
+        Route::delete('/{id}', [ArticleTypeController::class, 'destroy'])->permission(PermissionEnum::ARTICLE_TYPE_DESTROY->value);
     });
 
     // article
