@@ -2,6 +2,7 @@
 
 use App\Enums\PermissionEnum;
 use App\Http\Controllers\Article\ArticleController;
+use App\Http\Controllers\Article\CommentController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -194,6 +195,15 @@ Route::middleware('jwt')->group(function () {
         Route::get('/{id}', [ArticleController::class, 'show'])->permission(PermissionEnum::ARTICLE_SHOW->value);
         Route::put('/{id}', [ArticleController::class, 'update'])->permission(PermissionEnum::ARTICLE_UPDATE->value);
         Route::delete('/{id}', [ArticleController::class, 'destroy'])->permission(PermissionEnum::ARTICLE_DESTROY->value);
+    });
+
+    // comment
+    Route::group(['prefix' => 'comment'], function () {
+        Route::get('/', [CommentController::class, 'index'])->permission(PermissionEnum::COMMENT_INDEX->value);
+        Route::post('/', [CommentController::class, 'store'])->permission(PermissionEnum::COMMENT_STORE->value);
+        Route::get('/{id}', [CommentController::class, 'show'])->permission(PermissionEnum::COMMENT_SHOW->value);
+        Route::put('/{id}', [CommentController::class, 'update'])->permission(PermissionEnum::COMMENT_UPDATE->value);
+        Route::delete('/{id}', [CommentController::class, 'destroy'])->permission(PermissionEnum::COMMENT_DESTROY->value);
     });
 
 });
