@@ -17,11 +17,13 @@ return new class extends Migration
             $table->snowflakeId('article_type_id');
             $table->string('language')->default('EN');
             $table->string('title')->unique();
-            $table->longText('description');
+            $table->longText('description')->nullable();
             $table->json('photos');
-            $table->longText('content');
+            $table->longText('content')->nullable();
             $table->string('status')->default(GeneralStatusEnum::ACTIVE->value);
             $table->auditColumns();
+
+            $table->foreign('article_type_id')->references('id')->on('article_types')->onDelete('cascade');
         });
     }
 
