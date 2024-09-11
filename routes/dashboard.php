@@ -191,7 +191,7 @@ Route::middleware('jwt')->group(function () {
     });
 
     // article Type
-    Route::group(['prefix' => 'article'], function () {
+    Route::group(['prefix' => 'article-type'], function () {
         Route::get('/', [ArticleTypeController::class, 'index'])->permission(PermissionEnum::ARTICLE_TYPE_INDEX->value);
         Route::post('/', [ArticleTypeController::class, 'store'])->permission(PermissionEnum::ARTICLE_TYPE_STORE->value);
         Route::get('/{id}', [ArticleTypeController::class, 'show'])->permission(PermissionEnum::ARTICLE_TYPE_SHOW->value);
