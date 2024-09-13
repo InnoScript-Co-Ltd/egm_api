@@ -35,6 +35,7 @@ return new class extends Migration
             $table->float('package_deposit_amount', 15, 2);
             $table->string('transaction_screenshoot');
             $table->string('transaction_type');
+            $table->string('sender_type');
             $table->dateTime('expired_at')->nullable();
             $table->string('status');
             $table->auditColumns();

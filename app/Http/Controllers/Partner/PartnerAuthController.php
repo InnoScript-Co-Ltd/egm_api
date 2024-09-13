@@ -66,7 +66,10 @@ class PartnerAuthController extends Controller
 
     public function profile()
     {
-        $partner = auth('partner')->user();
+        $auth = auth('partner')->user();
+
+        $partner = Partner::with(['deposit'])->findOrFail($auth->id);
+        $partner['make_payment'] = $partner->payment_password !== null ? true : false;
 
         return $this->success('Partner profile is retrived successfully', $partner);
     }

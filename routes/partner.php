@@ -16,11 +16,17 @@ use Illuminate\Support\Facades\Route;
 Route::middleware(['partner'])->group(function () {
 
     Route::get('/status', 'StatusController@index');
+    Route::get('/deposit-package', 'PartnerDepositPackageController@index');
+    Route::get('/merchant-bank-account', 'PartnerMerchantBankAccountController@index');
 
     Route::group(['prefix' => 'auth'], function () {
         Route::post('/login', 'PartnerAuthController@login');
         Route::post('/change-password', 'PartnerAuthController@changePassword');
         Route::post('/payment-password', 'PartnerAuthController@updatePaymentPassword');
+    });
+
+    Route::group(['prefix' => 'transaction'], function () {
+        Route::post('/', 'PartnerTransactionController@store');
     });
 
     Route::post('/reference-link', 'PartnerController@referenceLink');

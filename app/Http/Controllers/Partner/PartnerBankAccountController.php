@@ -20,7 +20,13 @@ class PartnerBankAccountController extends Controller
             DB::beginTransaction();
 
             try {
-                $partnerBankAccounts = PartnerBankAccount::where(['partner_id' => $id])->get();
+                $partnerBankAccounts = PartnerBankAccount::where(['partner_id' => $id])
+                    ->searchQuery()
+                    ->sortingQuery()
+                    ->filterQuery()
+                    ->filterDateQuery()
+                    ->paginationQuery();
+
                 DB::commit();
 
                 return $this->success('Partner bank account list is successfully retrived', $partnerBankAccounts);

@@ -37,6 +37,7 @@ class Transaction extends Model
         'package_deposit_amount',
         'transaction_screenshoot',
         'transaction_type',
+        'sender_type',
         'expired_at',
         'status',
     ];

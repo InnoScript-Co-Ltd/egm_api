@@ -70,4 +70,9 @@ class Partner extends Authenticatable implements JWTSubject
     {
         return [];
     }
+
+    public function deposit()
+    {
+        return $this->hasMany(Deposit::class, 'partner_id', 'id');
+    }
 }
