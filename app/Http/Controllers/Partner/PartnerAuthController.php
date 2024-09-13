@@ -6,10 +6,10 @@ use App\Enums\AgentStatusEnum;
 use App\Enums\KycStatusEnum;
 use App\Enums\PartnerStatusEnum;
 use App\Http\Controllers\Dashboard\Controller;
-use App\Http\Requests\Agents\AgentChangePasswordRequest;
-use App\Http\Requests\Agents\AgentPaymentPasswordUpdateRequest;
 use App\Http\Requests\Agents\ConfrimPaymentPasswordRequest;
+use App\Http\Requests\Partner\PartnerChangePasswordRequest;
 use App\Http\Requests\Partner\PartnerLoginRequest;
+use App\Http\Requests\Partner\PartnerPaymentPasswordUpdateRequest;
 use App\Models\Partner;
 use Exception;
 use Illuminate\Support\Facades\DB;
@@ -64,16 +64,23 @@ class PartnerAuthController extends Controller
         }
     }
 
-    public function changePassword(AgentChangePasswordRequest $request)
+    public function profile()
     {
-        $agent = auth('agent')->user();
+        $partner = auth('partner')->user();
+
+        return $this->success('Partner profile is retrived successfully', $partner);
+    }
+
+    public function changePassword(PartnerChangePasswordRequest $request)
+    {
+        $partner = auth('partner')->user();
         $payload = collect($request->validated());
 
-        if ($agent && $agent->status === 'ACTIVE' && $agent->kyc_status === 'FULL_KYC') {
+        if ($partner && $partner->status === 'ACTIVE') {
             DB::beginTransaction();
 
             try {
-                $check = Hash::check($payload['old_password'], $agent->password);
+                $check = Hash::check($payload['old_password'], $partner->password);
 
                 if ($check === false) {
                     DB::commit();
@@ -81,7 +88,7 @@ class PartnerAuthController extends Controller
                     return $this->badRequest('Old password does not match');
                 }
 
-                $agent->update([
+                $partner->update([
                     'password' => $payload['password'],
                 ]);
 
@@ -98,19 +105,19 @@ class PartnerAuthController extends Controller
         return $this->badRequest('Your account is not active');
     }
 
-    public function updatePaymentPassword(AgentPaymentPasswordUpdateRequest $request)
+    public function updatePaymentPassword(PartnerPaymentPasswordUpdateRequest $request)
     {
-        $agent = auth('agent')->user();
+        $partner = auth('partner')->user();
         $payload = collect($request->validated());
 
-        if ($agent && $agent->status === 'ACTIVE' && $agent->kyc_status === 'FULL_KYC') {
+        if ($partner && $partner->status === 'ACTIVE') {
             DB::beginTransaction();
 
             try {
-                $agent->update($payload->toArray());
+                $partner->update($payload->toArray());
                 DB::commit();
 
-                return $this->success('Agent payment password is updated successfully', null);
+                return $this->success('Partner payment password is updated successfully', null);
 
             } catch (Exception $e) {
                 DB::rollBack();

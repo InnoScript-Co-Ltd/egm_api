@@ -15,19 +15,37 @@ use Illuminate\Support\Facades\Route;
 
 Route::middleware(['partner'])->group(function () {
 
+    Route::get('/status', 'StatusController@index');
+
     Route::group(['prefix' => 'auth'], function () {
         Route::post('/login', 'PartnerAuthController@login');
+        Route::post('/change-password', 'PartnerAuthController@changePassword');
+        Route::post('/payment-password', 'PartnerAuthController@updatePaymentPassword');
     });
 
-    Route::post('/register', 'PartnerController@store');
     Route::post('/reference-link', 'PartnerController@referenceLink');
-    // Route::post('verification', 'AccountController@emailVerify');
-    // Route::post('verification-code', 'AccountController@resendVerifyCode');
-
-    // Route::post('/auth/login', 'AgentAuthController@login');
 
     Route::middleware('jwt')->group(function () {
-        // Route::get('/auth/profile', 'AgentAuthController@profile');
+
+        Route::group(['prefix' => 'auth'], function () {
+            Route::get('/profile', 'PartnerAuthController@profile');
+            Route::put('/profile', 'PartnerController@updateInfo');
+        });
+
+        Route::group(['prefix' => 'account'], function () {
+            Route::put('/', 'PartnerController@updateAccount');
+            Route::put('/info', 'PartnerController@updateInfo');
+            Route::post('/kyc', 'PartnerController@updateKYC');
+        });
+
+        Route::group(['prefix' => 'bank-account'], function () {
+            Route::post('/', 'PartnerBankAccountController@store');
+            Route::get('/', 'PartnerBankAccountController@index');
+            Route::get('/{id}', 'PartnerBankAccountController@show');
+            Route::put('/{id}', 'PartnerBankAccountController@update');
+        });
+
+        Route::get('/status', 'StatusController@index');
 
         // Route::group(['prefix' => 'package'], function () {
         //     Route::get('/', 'PackageController@index');

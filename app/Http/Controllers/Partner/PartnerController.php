@@ -6,14 +6,14 @@ use App\Enums\KycStatusEnum;
 use App\Enums\PartnerStatusEnum;
 use App\Http\Controllers\Dashboard\Controller;
 use App\Http\Requests\Partner\GenerateReferenceLinkRequest;
-use App\Http\Requests\Partner\PartnerStoreRequest;
-use App\Mail\EmailVerifyCode;
+use App\Http\Requests\Partner\PartnerAccountUpdateRequest;
+use App\Http\Requests\Partner\PartnerInfoUpdateRequest;
+use App\Http\Requests\Partner\PartnerKYCUpdateRequest;
 use App\Models\Partner;
 use Carbon\Carbon;
 use Exception;
 use Illuminate\Support\Facades\Crypt;
 use Illuminate\Support\Facades\DB;
-use Mail;
 
 class PartnerController extends Controller
 {
@@ -42,25 +42,48 @@ class PartnerController extends Controller
             return $this->badRequest('Reference link is generated failed');
 
         } catch (Exception $e) {
-            dd($e);
             DB::rollBack();
             throw $e;
         }
 
     }
 
-    public function store(PartnerStoreRequest $request)
+    public function updateInfo(PartnerInfoUpdateRequest $request)
     {
+        $partner = auth('partner')->user();
         $payload = collect($request->validated());
 
-        DB::beginTransaction();
+        if ($partner->status === PartnerStatusEnum::ACTIVE->value) {
+            $partner->update($payload->toArray());
+            DB::commit();
 
-        try {
-            if (isset($payload['profile'])) {
-                $profileImagePath = $payload['profile']->store('images', 'public');
-                $profileImage = explode('/', $profileImagePath)[1];
-                $payload['profile'] = $profileImage;
-            }
+            return $this->success('Partner info is updated successfully', $partner);
+        }
+
+        return $this->badRequest('Your account is not active');
+    }
+
+    public function updateAccount(PartnerAccountUpdateRequest $request)
+    {
+        $partner = auth('partner')->user();
+        $payload = collect($request->validated());
+
+        if ($partner->status === PartnerStatusEnum::ACTIVE->value) {
+            $partner->update($payload->toArray());
+            DB::commit();
+
+            return $this->success('Partner account is updated successfully', $partner);
+        }
+
+        return $this->badRequest('Your account is not active');
+    }
+
+    public function updateKYC(PartnerKYCUpdateRequest $request)
+    {
+        $partner = auth('partner')->user();
+        $payload = collect($request->validated());
+
+        if ($partner->status === PartnerStatusEnum::ACTIVE->value && $partner->kyc_status === KycStatusEnum::CHECKING->value) {
 
             if (isset($payload['nrc_front'])) {
                 $nrcFrontImagePath = $payload['nrc_front']->store('images', 'public');
@@ -74,18 +97,12 @@ class PartnerController extends Controller
                 $payload['nrc_back'] = $nrcBackImage;
             }
 
-            $payload['email_verify_code'] = rand(100000, 999999);
-            $payload['email_expired_at'] = Carbon::now()->addMinutes(5);
-
-            Mail::to($payload['email'])->send(new EmailVerifyCode($payload['email_verify_code']));
-
-            $partner = Partner::create($payload->toArray());
+            $partner->update($payload->toArray());
             DB::commit();
 
-            return $this->success('Partner account is successfully created', $partner);
-        } catch (Exception $e) {
-            DB::rollBack();
-            throw $e;
+            return $this->success('Partner kyc info is updated successfully', $partner);
         }
+
+        return $this->badRequest('Your account is not active');
     }
 }

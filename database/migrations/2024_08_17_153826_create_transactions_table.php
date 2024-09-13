@@ -13,19 +13,19 @@ return new class extends Migration
     {
         Schema::create('transactions', function (Blueprint $table) {
             $table->snowflakeIdAndPrimary();
-            $table->snowflakeId('agent_id');
-            $table->snowflakeId('bank_account_id');
+            $table->snowflakeId('sender_id');
+            $table->snowflakeId('sender_account_id');
             $table->snowflakeId('merchant_account_id');
             $table->snowflakeId('package_id');
-            $table->string('agent_name');
-            $table->string('agent_email');
-            $table->string('agent_phone');
-            $table->string('agent_nrc');
-            $table->string('agent_address');
-            $table->string('agent_account_name');
-            $table->string('agent_account_number');
-            $table->string('agent_bank_branch');
-            $table->string('agent_bank_address');
+            $table->string('sender_name');
+            $table->string('sender_email');
+            $table->string('sender_phone');
+            $table->string('sender_nrc');
+            $table->string('sender_address');
+            $table->string('sender_account_name');
+            $table->string('sender_account_number');
+            $table->string('sender_bank_branch');
+            $table->string('sender_bank_address');
             $table->string('merchant_account_name');
             $table->string('merchant_account_number');
             $table->string('bank_type');
@@ -39,9 +39,7 @@ return new class extends Migration
             $table->string('status');
             $table->auditColumns();
 
-            $table->foreign('agent_id')->references('id')->on('agents')->onDelete('cascade');
             $table->foreign('package_id')->references('id')->on('packages')->onDelete('cascade');
-            $table->foreign('bank_account_id')->references('id')->on('agent_bank_accounts')->onDelete('cascade');
             $table->foreign('merchant_account_id')->references('id')->on('merchant_bank_accounts')->onDelete('cascade');
         });
     }
