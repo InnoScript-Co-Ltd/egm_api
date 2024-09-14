@@ -27,6 +27,7 @@ Route::middleware(['partner'])->group(function () {
 
     Route::group(['prefix' => 'transaction'], function () {
         Route::post('/', 'PartnerTransactionController@store');
+        Route::get('/', 'PartnerTransactionController@index');
     });
 
     Route::post('/reference-link', 'PartnerController@referenceLink');

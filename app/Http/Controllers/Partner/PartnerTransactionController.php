@@ -16,6 +16,36 @@ use Illuminate\Support\Facades\DB;
 
 class PartnerTransactionController extends Controller
 {
+    public function index()
+    {
+        $partner = auth('partner')->user();
+
+        if ($partner->kyc_status === 'FULL_KYC' && $partner->status === 'ACTIVE') {
+            DB::beginTransaction();
+
+            try {
+                $partnerTransactions = Transaction::where([
+                    'sender_id' => $partner->id,
+                    'sender_type' => 'PARTNER',
+                ])
+                    ->searchQuery()
+                    ->sortingQuery()
+                    ->filterQuery()
+                    ->filterDateQuery()
+                    ->paginationQuery();
+
+                DB::commit();
+
+                return $this->success('Partner transaction list is successfully retrived', $partnerTransactions);
+            } catch (Exception $e) {
+                DB::rollback();
+                throw $e;
+            }
+        }
+
+        return $this->badRequest('You does not have permission right now.');
+    }
+
     public function store(PartnerTransactionStoreRequest $request)
     {
         $partner = auth('partner')->user();
