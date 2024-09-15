@@ -33,6 +33,7 @@ return new class extends Migration
             $table->snowflakeId('township_id')->nullable()->default(null);
             $table->string('address')->nullable()->default(null);
             $table->string('password')->nullable()->default(null);
+            $table->string('payment_password')->nullable()->default(null);
             $table->datetime('email_verified_at')->nullable()->default(null);
             $table->datetime('phone_verified_at')->nullable()->default(null);
             $table->string('kyc_status')->default(KycStatusEnum::CHECKING->value);

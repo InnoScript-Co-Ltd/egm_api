@@ -13,7 +13,8 @@ return new class extends Migration
     {
         Schema::create('deposits', function (Blueprint $table) {
             $table->snowflakeIdAndPrimary();
-            $table->snowflakeId('agent_id');
+            $table->snowflakeId('agent_id')->nullable()->default(null);
+            $table->snowflakeId('partner_id')->nullable()->default(null);
             $table->float('deposit_amount', 12, 2)->default(0);
             $table->float('roi_amount', 12, 2)->default(0);
             $table->float('commission_amount', 12, 2)->default(0);
@@ -21,6 +22,7 @@ return new class extends Migration
             $table->auditColumns();
 
             $table->foreign('agent_id')->references('id')->on('agents')->onDelete('cascade');
+            $table->foreign('partner_id')->references('id')->on('partners')->onDelete('cascade');
         });
     }
 

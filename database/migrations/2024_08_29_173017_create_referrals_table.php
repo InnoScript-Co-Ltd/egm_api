@@ -18,7 +18,7 @@ return new class extends Migration
             $table->snowflakeId('reference_id')->nullable()->default(null);
             $table->snowflakeId('partner_id')->nullable()->default(null);
             $table->json('register_agents')->nullable()->default(null);
-            $table->string('agent_type');
+            $table->string('agent_type')->nullable()->default(null);
             $table->string('link');
             $table->integer('count')->unsigned();
             $table->date('expired_at')->nullable();

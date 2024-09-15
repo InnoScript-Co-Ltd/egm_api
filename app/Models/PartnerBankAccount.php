@@ -8,17 +8,18 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
-class Deposit extends Model
+class PartnerBankAccount extends Model
 {
     use BasicAudit,HasFactory,SnowflakeID,SoftDeletes;
 
-    protected $table = 'deposits';
+    protected $table = 'partner_bank_accounts';
 
     protected $fillable = [
-        'agent_id', 'partner_id', 'deposit_amount', 'roi_amount', 'commission_amount', 'expired_at',
+        'partner_id', 'account_name', 'account_number', 'bank_type', 'bank_type_label', 'branch', 'branch_address', 'status',
     ];
 
-    protected $casts = [
-        'expired_at' => 'datetime',
-    ];
+    public function deposit()
+    {
+        return $this->hasMany(Deposit::class, 'partner_id', 'id');
+    }
 }
