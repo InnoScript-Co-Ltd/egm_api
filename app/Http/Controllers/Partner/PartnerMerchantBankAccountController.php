@@ -12,7 +12,6 @@ class PartnerMerchantBankAccountController extends Controller
     public function index()
     {
         $partner = auth('partner')->user();
-        $id = $partner->id;
 
         if ($partner->kyc_status === 'FULL_KYC' && $partner->status === 'ACTIVE') {
             DB::beginTransaction();

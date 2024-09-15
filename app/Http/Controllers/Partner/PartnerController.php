@@ -5,49 +5,13 @@ namespace App\Http\Controllers\Partner;
 use App\Enums\KycStatusEnum;
 use App\Enums\PartnerStatusEnum;
 use App\Http\Controllers\Dashboard\Controller;
-use App\Http\Requests\Partner\GenerateReferenceLinkRequest;
 use App\Http\Requests\Partner\PartnerAccountUpdateRequest;
 use App\Http\Requests\Partner\PartnerInfoUpdateRequest;
 use App\Http\Requests\Partner\PartnerKYCUpdateRequest;
-use App\Models\Partner;
-use Carbon\Carbon;
-use Exception;
-use Illuminate\Support\Facades\Crypt;
 use Illuminate\Support\Facades\DB;
 
 class PartnerController extends Controller
 {
-    public function referenceLink(GenerateReferenceLinkRequest $request)
-    {
-        $payload = collect($request->validated());
-
-        DB::beginTransaction();
-
-        try {
-
-            $partner = Partner::findOrFail($payload['partner_id']);
-
-            if ($partner->kyc_status === KycStatusEnum::FULL_KYC->value && $partner->status === PartnerStatusEnum::ACTIVE->value) {
-                $referenceLink['partner_id'] = $partner->id;
-                $referenceLink['expired_at'] = Carbon::now()->addMonths(6);
-                $token = Crypt::encrypt(json_encode($referenceLink));
-
-                DB::commit();
-
-                return $this->success('Reference link is generated successfully', $token);
-            }
-
-            DB::commit();
-
-            return $this->badRequest('Reference link is generated failed');
-
-        } catch (Exception $e) {
-            DB::rollBack();
-            throw $e;
-        }
-
-    }
-
     public function updateInfo(PartnerInfoUpdateRequest $request)
     {
         $partner = auth('partner')->user();
