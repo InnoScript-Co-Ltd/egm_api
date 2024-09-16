@@ -54,6 +54,10 @@ Route::middleware(['partner'])->group(function () {
             Route::get('/', 'PartnerTransactionController@index');
         });
 
+        Route::group(['prefix' => 'agent'], function () {
+            Route::get('/', 'PartnerAgentController@index');
+        });
+
         Route::group(['prefix' => 'dashboard'], function () {
             Route::get('/', 'PartnerDashboardController@index');
         });
