@@ -7,7 +7,7 @@ use App\Models\Transaction;
 use Exception;
 use Illuminate\Support\Facades\DB;
 
-class TransactionController extends Controller
+class AgentTransactionController extends Controller
 {
     public function index()
     {
@@ -18,7 +18,7 @@ class TransactionController extends Controller
             DB::beginTransaction();
 
             try {
-                $transactions = Transaction::where(['agent_id' => $agent->id])
+                $transactions = Transaction::where(['sender_id' => $agent->id])
                     ->searchQuery()
                     ->sortingQuery()
                     ->filterQuery()

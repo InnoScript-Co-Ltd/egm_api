@@ -15,16 +15,18 @@ use Illuminate\Support\Facades\Route;
 
 Route::middleware(['agent'])->group(function () {
 
+    Route::group(['prefix' => 'auth'], function () {
+        Route::post('/verify', 'AccountController@emailVerify');
+        Route::post('resend', 'AccountController@resendVerifyCode');
+        Route::post('/login', 'AgentAuthController@login');
+    });
+
     Route::group(['prefix' => 'account'], function () {
         Route::post('/create', 'AccountController@store');
     });
 
     Route::get('/level/{level}', 'SubAgentController@level');
     Route::get('/profile/{id}', 'AgentController@show');
-
-    Route::post('/verify', 'AccountController@emailVerify');
-    Route::post('resend', 'AccountController@resendVerifyCode');
-    Route::post('/auth/login', 'AgentAuthController@login');
 
     Route::middleware('jwt')->group(function () {
 
@@ -42,30 +44,22 @@ Route::middleware(['agent'])->group(function () {
             Route::get('/profile', 'AgentAuthController@profile');
         });
 
-        Route::group(['prefix' => 'sub'], function () {
-            Route::get('/reference-link', 'SubAgentController@referenceLink');
-        });
-
-        Route::group(['prefix' => 'main'], function () {
-            Route::get('/reference-link', 'MainAgentController@referenceLink');
+        Route::group(['prefix' => 'package'], function () {
+            Route::get('/', 'PackageController@index');
+            Route::get('/{id}', 'PackageController@show');
         });
 
         Route::group(['prefix' => 'deposit'], function () {
-            Route::post('/', 'DepositController@store');
+            Route::post('/', 'AgentDepositController@store');
         });
 
         Route::group(['prefix' => 'transaction'], function () {
-            Route::get('/', 'TransactionController@index');
-            Route::get('/{id}', 'TransactionController@show');
+            Route::get('/', 'AgentTransactionController@index');
+            Route::get('/{id}', 'AgentTransactionController@show');
         });
 
         Route::group(['prefix' => 'dashboard'], function () {
             Route::get('/', 'DashboardController@index');
-        });
-
-        Route::group(['prefix' => 'package'], function () {
-            Route::get('/', 'PackageController@index');
-            Route::get('/{id}', 'PackageController@show');
         });
 
         Route::group(['prefix' => 'agent-bank-account'], function () {
@@ -77,6 +71,11 @@ Route::middleware(['agent'])->group(function () {
 
         Route::group(['prefix' => 'merchant-bank-account'], function () {
             Route::get('/', 'MerchantBankAccountController@index');
+        });
+
+        Route::group(['prefix' => 'referral'], function () {
+            Route::get('/', 'AgentReferralController@index');
+            Route::post('/', 'AgentReferralController@store');
         });
     });
 });

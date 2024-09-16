@@ -18,7 +18,6 @@ use App\Models\Referral;
 use Carbon\Carbon;
 use Exception;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Str;
 use Mail;
 
 class AccountController extends Controller
@@ -53,6 +52,19 @@ class AccountController extends Controller
                 }
 
                 Mail::to($payload['email'])->send(new EmailVerifyCode($payload['email_verify_code']));
+
+                if ($referralAgent['agent_type'] === 'PARTNER') {
+                    $payload['agent_type'] = AgentTypeEnum::MAIN_AGENT->value;
+                    $agent = Agent::create($payload->toArray());
+
+                    $updateReferralAgent['count'] = $referralAgent['count'] + 1;
+                    $updateReferralAgent['register_agents'] = $referralAgent['register_agents'] === null ? [$agent->id] : array_push($referralAgent['register_agents'], $agent->id);
+                    Referral::where(['id' => $referralAgent['id']])->update($updateReferralAgent);
+
+                    DB::commit();
+
+                    return $this->success('Agent is successfully created', $agent);
+                }
 
                 $agent = Agent::create($payload->toArray());
 
@@ -307,42 +319,5 @@ class AccountController extends Controller
         }
 
         return $this->badRequest('Your account is not active');
-    }
-
-    public function generateLink()
-    {
-        $agent = auth('agent')->user();
-
-        DB::beginTransaction();
-
-        try {
-            if ($agent->status === AgentStatusEnum::ACTIVE->value && $agent->kyc_status === KycStatusEnum::FULL_KYC->value) {
-
-                $linkArray = explode('-', Str::uuid());
-                $link = implode('', $linkArray);
-
-                $referral = Referral::create([
-                    'main_agent_id' => $agent->main_agent_id,
-                    'reference_id' => $agent->id,
-                    'partner_id' => $agent->partner_id,
-                    'agent_id' => $agent->id,
-                    'agent_type' => $agent->agent_type === AgentTypeEnum::MAIN_AGENT->value ? AgentTypeEnum::SUB_AGENT->value : $agent->agent_type,
-                    'expired_at' => Carbon::now()->addMonths(1),
-                    'link' => strtoupper($link),
-                    'count' => 0,
-                ]);
-
-                DB::commit();
-
-                return $this->success('Reference link is generated successfully', $referral);
-            }
-
-            DB::commit();
-
-            return $this->badRequest('Reference link is generated fail');
-
-        } catch (Exception $e) {
-            throw $e;
-        }
     }
 }
