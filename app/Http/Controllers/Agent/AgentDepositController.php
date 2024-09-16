@@ -5,7 +5,7 @@ namespace App\Http\Controllers\Agent;
 use App\Enums\DepositStatusEnum;
 use App\Enums\TransactionTypeEnum;
 use App\Http\Controllers\Dashboard\Controller;
-use App\Http\Requests\Agents\DepositStoreRequest;
+use App\Http\Requests\Agents\AgentDepositStoreRequest;
 use App\Models\AgentBankAccount;
 use App\Models\Deposit;
 use App\Models\MerchantBankAccount;
@@ -14,7 +14,7 @@ use App\Models\Transaction;
 use Exception;
 use Illuminate\Support\Facades\DB;
 
-class DepositController extends Controller
+class AgentDepositController extends Controller
 {
     public function index()
     {
@@ -43,31 +43,30 @@ class DepositController extends Controller
 
     }
 
-    public function store(DepositStoreRequest $request)
+    public function store(AgentDepositStoreRequest $request)
     {
         $agent = auth('agent')->user();
-        $id = $agent->id;
 
         if ($agent->kyc_status === 'FULL_KYC' && $agent->status === 'ACTIVE') {
             $payload = collect($request->validated());
-            $payload['agent_id'] = $id;
 
             DB::beginTransaction();
 
             try {
-                $payload['agent_name'] = $agent->first_name.' '.$agent->last_name;
-                $payload['agent_email'] = $agent->email;
-                $payload['agent_phone'] = $agent->phone;
-                $payload['agent_nrc'] = $agent->nrc;
-                $payload['agent_address'] = $agent->address;
-                $payload['agent_account_name'] = $agent->agent_account_name;
+                $payload['sender_name'] = $agent->first_name.' '.$agent->last_name;
+                $payload['sender_email'] = $agent->email;
+                $payload['sender_phone'] = $agent->phone;
+                $payload['sender_nrc'] = $agent->nrc;
+                $payload['sender_address'] = $agent->address;
+                $payload['sender_account_name'] = $agent->agent_account_name;
 
                 $bankAccount = AgentBankAccount::findOrFail($payload['bank_account_id']);
 
-                $payload['agent_account_name'] = $bankAccount->account_name;
-                $payload['agent_account_number'] = $bankAccount->account_number;
-                $payload['agent_bank_branch'] = $bankAccount->branch;
-                $payload['agent_bank_address'] = $bankAccount->branch_address;
+                $payload['sender_account_name'] = $bankAccount->account_name;
+                $payload['sender_account_number'] = $bankAccount->account_number;
+                $payload['sender_bank_branch'] = $bankAccount->branch;
+                $payload['sender_bank_address'] = $bankAccount->branch_address;
+                $payload['sender_account_id'] = $bankAccount->id;
 
                 $merchantBankAccount = MerchantBankAccount::findOrFail($payload['merchant_account_id']);
 
@@ -88,6 +87,9 @@ class DepositController extends Controller
 
                 $payload['transaction_type'] = TransactionTypeEnum::DEPOSIT->value;
                 $payload['status'] = DepositStatusEnum::DEPOSIT_PENDING->value;
+                $payload['sender_type'] = $agent->agent_type;
+                $payload['sender_id'] = $agent->id;
+                $payload['bank_type'] = $merchantBankAccount->bank_type;
 
                 $deposit = Transaction::create($payload->toArray());
                 DB::commit();

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Agent;
 
 use App\Enums\GeneralStatusEnum;
+use App\Enums\PackageTypeEnum;
 use App\Http\Controllers\Dashboard\Controller;
 use App\Models\Package;
 use Exception;
@@ -14,7 +15,10 @@ class PackageController extends Controller
     {
         DB::beginTransaction();
         try {
-            $packages = Package::where(['status' => GeneralStatusEnum::ACTIVE->value])
+            $packages = Package::where([
+                'status' => GeneralStatusEnum::ACTIVE->value,
+                'package_type' => PackageTypeEnum::AGENT->value,
+            ])
                 ->searchQuery()
                 ->sortingQuery()
                 ->filterQuery()

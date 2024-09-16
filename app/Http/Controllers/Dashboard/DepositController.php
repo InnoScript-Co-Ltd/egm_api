@@ -61,7 +61,7 @@ class DepositController extends Controller
                 $payload['deposit_amount'] = $transaction->package_deposit_amount;
                 $payload['roi_amount'] = $transaction->package_deposit_amount * $transaction->package_roi_rate / 100;
                 $payload['commission_amount'] = $transaction->package_deposit_amount * 1 / 100;
-                $payload['agent_id'] = $transaction->agent_id;
+                $payload['agent_id'] = $transaction->sender_id;
 
                 Deposit::create($payload->toArray());
 

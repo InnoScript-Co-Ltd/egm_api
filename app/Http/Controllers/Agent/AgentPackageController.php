@@ -6,7 +6,6 @@ use App\Enums\GeneralStatusEnum;
 use App\Enums\PackageBuyStatusEnum;
 use App\Http\Controllers\Dashboard\Controller;
 use App\Http\Requests\Agents\AgentPackageRequestStoreRequest;
-use App\Models\AgentPackage;
 use App\Models\Package;
 use Exception;
 use Illuminate\Support\Facades\DB;
@@ -22,7 +21,7 @@ class AgentPackageController extends Controller
             DB::beginTransaction();
 
             try {
-                $agentPackage = AgentPackage::where(['agent_id' => $agent->id])
+                $agentPackage = Package::where(['agent_id' => $agent->id])
                     ->searchQuery()
                     ->sortingQuery()
                     ->filterQuery()
