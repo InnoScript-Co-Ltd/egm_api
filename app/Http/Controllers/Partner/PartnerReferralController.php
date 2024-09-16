@@ -41,7 +41,7 @@ class PartnerReferralController extends Controller
         return $this->badRequest('You does not have permission right now.');
     }
 
-    public function referenceLink()
+    public function store()
     {
         $auth = auth('partner')->user();
 
