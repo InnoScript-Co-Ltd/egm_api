@@ -2,9 +2,6 @@
 
 namespace App\Http\Requests\Dashboard;
 
-use App\Enums\KycStatusEnum;
-use App\Enums\PartnerStatusEnum;
-use App\Helpers\Enum;
 use App\Models\Partner;
 use Illuminate\Foundation\Http\FormRequest;
 
@@ -28,9 +25,6 @@ class PartnerUpdateRequest extends FormRequest
         $partner = Partner::findOrFail(request('id'));
         $partnerId = $partner->id;
 
-        $partnerStatus = implode(',', (new Enum(PartnerStatusEnum::class))->values());
-        $kycStatus = implode(',', (new Enum(KycStatusEnum::class))->values());
-
         return [
             'first_name' => 'nullable | string',
             'last_name' => 'nullable | string',
@@ -39,9 +33,7 @@ class PartnerUpdateRequest extends FormRequest
             'phone' => "nullable | unique:partners,phone,$partnerId",
             'address' => 'nullable | string',
             'nrc' => "nullable | string | unique:partners,nrc,$partnerId",
-            'dob' => 'nullable | date',
-            'kyc_status' => "nullable | in:$kycStatus",
-            'status' => "nullable | in:$partnerStatus",
+            'dob' => 'nullable | date'
         ];
     }
 }
