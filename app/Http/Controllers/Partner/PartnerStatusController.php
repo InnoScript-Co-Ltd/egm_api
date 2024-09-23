@@ -7,11 +7,12 @@ use App\Enums\KycStatusEnum;
 use App\Enums\PackageTypeEnum;
 use App\Enums\PartnerStatusEnum;
 use App\Enums\PaymentTypeEnum;
+use App\Enums\ReferralTypeEnm;
 use App\Helpers\Enum;
 use App\Http\Controllers\Dashboard\Controller;
 use Illuminate\Http\Request;
 
-class StatusController extends Controller
+class PartnerStatusController extends Controller
 {
     public function index(Request $request)
     {
@@ -25,6 +26,7 @@ class StatusController extends Controller
                 'payment_type' => (new Enum(PaymentTypeEnum::class))->values(),
                 'partner' => (new Enum(PartnerStatusEnum::class))->values(),
                 'package' => (new Enum(PackageTypeEnum::class))->values(),
+                'referral_type' => (new Enum(ReferralTypeEnm::class))->values(),
             ];
 
             $statusTypes = collect($allowableStatus)->filter(function ($value, $index) use ($requestStatus) {

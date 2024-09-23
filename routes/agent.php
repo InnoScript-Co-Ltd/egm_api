@@ -22,7 +22,12 @@ Route::middleware(['agent'])->group(function () {
     });
 
     Route::group(['prefix' => 'account'], function () {
+        Route::post('/commission', 'AccountController@commissionStore');
         Route::post('/create', 'AccountController@store');
+    });
+
+    Route::group(['prefix' => 'referral'], function () {
+        Route::get('/check/{referral}', 'AgentReferralController@check');
     });
 
     Route::get('/level/{level}', 'SubAgentController@level');

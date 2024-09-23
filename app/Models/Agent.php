@@ -52,6 +52,8 @@ class Agent extends Authenticatable implements JWTSubject
         'email_expired_at',
         'email_verify_code',
         'agent_type',
+        'referral_type',
+        'commission',
     ];
 
     protected $casts = [

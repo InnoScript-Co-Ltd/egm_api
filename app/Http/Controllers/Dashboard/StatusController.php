@@ -4,7 +4,6 @@ namespace App\Http\Controllers\Dashboard;
 
 use App\Enums\AdminStatusEnum;
 use App\Enums\AgentStatusEnum;
-use App\Enums\AppTypeEnum;
 use App\Enums\EmailContentTypeEnum;
 use App\Enums\GeneralStatusEnum;
 use App\Enums\KycStatusEnum;
@@ -31,7 +30,6 @@ class StatusController extends Controller
             'admin' => (new Enum(AdminStatusEnum::class))->values(),
             'general' => (new Enum(GeneralStatusEnum::class))->values(),
             'payment_type' => (new Enum(PaymentTypeEnum::class))->values(),
-            'apptype' => (new Enum(AppTypeEnum::class))->values(),
             'agent' => (new Enum(AgentStatusEnum::class))->values(),
             'kyc' => (new Enum(KycStatusEnum::class))->values(),
             'partner' => (new Enum(PartnerStatusEnum::class))->values(),

@@ -33,7 +33,7 @@ class PartnerUpdateRequest extends FormRequest
             'phone' => "nullable | unique:partners,phone,$partnerId",
             'address' => 'nullable | string',
             'nrc' => "nullable | string | unique:partners,nrc,$partnerId",
-            'dob' => 'nullable | date'
+            'dob' => 'nullable | date',
         ];
     }
 }

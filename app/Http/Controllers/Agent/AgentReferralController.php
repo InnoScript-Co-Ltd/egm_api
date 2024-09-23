@@ -14,6 +14,37 @@ use Illuminate\Support\Str;
 
 class AgentReferralController extends Controller
 {
+    public function check($referral)
+    {
+        DB::beginTransaction();
+        try {
+
+            $referralLink = Referral::where(['link' => $referral])->first();
+
+            if ($referralLink === null) {
+                DB::commit();
+
+                return $this->badRequest('Referral link does not found');
+            }
+
+            $checkExpired = Carbon::parse($referralLink->expired_at)->isPast();
+
+            if ($checkExpired === true) {
+                DB::commit();
+
+                return $this->badRequest('Referral link is expired');
+            }
+
+            DB::commit();
+
+            return $this->success('Referral link is aviliable', $referralLink);
+
+        } catch (Exception $e) {
+            DB::rollBack();
+            throw $e;
+        }
+    }
+
     public function store()
     {
         $agent = auth('agent')->user();

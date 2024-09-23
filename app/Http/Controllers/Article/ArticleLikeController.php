@@ -6,7 +6,6 @@ use App\Http\Controllers\Dashboard\Controller;
 use App\Http\Requests\ArticleLike\ArticleLikeStoreRequest;
 use App\Models\ArticleLike;
 use Exception;
-use Illuminate\Http\Request;
 
 class ArticleLikeController extends Controller
 {

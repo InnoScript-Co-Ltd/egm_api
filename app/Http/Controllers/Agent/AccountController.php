@@ -22,6 +22,64 @@ use Mail;
 
 class AccountController extends Controller
 {
+    public function commissionStore(AccountStoreRequest $request)
+    {
+        $payload = collect($request->validated());
+        DB::beginTransaction();
+
+        try {
+
+            $referralLink = Referral::where(['link' => $payload['referral']])->first();
+
+            $payload['main_agent_id'] = $referralLink['main_agent_id'];
+            $payload['reference_id'] = $referralLink['reference_id'];
+            $payload['partner_id'] = $referralLink['partner_id'];
+            $payload['email_verify_code'] = rand(100000, 999999);
+            $payload['email_expired_at'] = Carbon::now()->addMinutes(5);
+            $payload['referral_type'] = $referralLink['referral_type'];
+            $payload['agent_type'] = $referralLink['agent_type'] === 'PARTNER' ? 'MAIN_AGENT' : 'SUB_AGENT';
+            $payload['commission'] = $referralLink['commission'];
+
+            if (isset($payload['nrc_front'])) {
+                $nrcFrontImagePath = $payload['nrc_front']->store('images', 'public');
+                $nrcFrontImage = explode('/', $nrcFrontImagePath)[1];
+                $payload['nrc_front'] = $nrcFrontImage;
+            }
+
+            if (isset($payload['nrc_back'])) {
+                $nrcBackImagePath = $payload['nrc_back']->store('images', 'public');
+                $nrcBackImage = explode('/', $nrcBackImagePath)[1];
+                $payload['nrc_back'] = $nrcBackImage;
+            }
+
+            Mail::to($payload['email'])->send(new EmailVerifyCode($payload['email_verify_code']));
+
+            $agent = Agent::create($payload->toArray());
+            $updateReferralLink = [
+                'count' => 0,
+                'register_agents' => $referralLink['register_agents'],
+            ];
+
+            $updateReferralLink['count'] = $referralLink['count'] + 1;
+
+            if ($updateReferralLink['register_agents'] === null) {
+                $updateReferralLink['register_agents'] = [$agent->id];
+            } else {
+                array_push($updateReferralLink['register_agents'], $agent->id);
+            }
+
+            Referral::where(['id' => $referralLink['id']])->update($updateReferralLink);
+
+            DB::commit();
+
+            return $this->success('Main agent account is successfully created', $agent);
+
+        } catch (Exception $e) {
+            DB::rollBack();
+            throw $e;
+        }
+    }
+
     public function store(AccountStoreRequest $request)
     {
         $payload = collect($request->validated());

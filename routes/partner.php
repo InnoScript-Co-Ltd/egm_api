@@ -45,7 +45,8 @@ Route::middleware(['partner'])->group(function () {
         });
 
         Route::group(['prefix' => 'referral'], function () {
-            Route::post('/', 'PartnerReferralController@store');
+            Route::post('/commission', 'PartnerReferralController@commissionReferralStore');
+            Route::post('/level-four', 'PartnerReferralController@levelFourReferralStore');
             Route::get('/', 'PartnerReferralController@index');
         });
 
