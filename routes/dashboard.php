@@ -107,7 +107,7 @@ Route::middleware('jwt')->group(function () {
     });
 
     Route::group(['prefix' => 'transaction'], function () {
-        Route::post('/make-payment', 'TransactionController@makePayment');
+        Route::post('/{id}/make-payment', 'TransactionController@makePayment');
         Route::get('/', 'TransactionController@index');
         Route::get('/{id}', 'TransactionController@show');
     });

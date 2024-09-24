@@ -59,6 +59,7 @@ Route::middleware(['agent'])->group(function () {
         });
 
         Route::group(['prefix' => 'transaction'], function () {
+            Route::post('/', 'AgentTransactionController@store');
             Route::get('/', 'AgentTransactionController@index');
             Route::get('/{id}', 'AgentTransactionController@show');
         });

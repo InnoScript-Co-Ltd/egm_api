@@ -8,7 +8,7 @@ use App\Models\MerchantBankAccount;
 use App\Models\Package;
 use Illuminate\Foundation\Http\FormRequest;
 
-class AgentDepositStoreRequest extends FormRequest
+class AgentTransactionStoreRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.

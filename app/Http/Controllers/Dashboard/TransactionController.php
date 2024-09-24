@@ -3,7 +3,6 @@
 namespace App\Http\Controllers\Dashboard;
 
 use App\Enums\TransactionStatusEnum;
-use App\Http\Requests\Dashboard\MakePaymentRequest;
 use App\Models\Deposit;
 use App\Models\Transaction;
 use Exception;
@@ -16,7 +15,6 @@ class TransactionController extends Controller
     {
         DB::beginTransaction();
         try {
-
             $transactions = Transaction::searchQuery()
                 ->sortingQuery()
                 ->filterQuery()
@@ -47,30 +45,29 @@ class TransactionController extends Controller
         }
     }
 
-    public function makePayment(MakePaymentRequest $request)
+    public function makePayment($id)
     {
-        $payload = collect($request->validated());
-
         DB::beginTransaction();
 
         try {
-            $transaction = Transaction::findOrFail($payload['transaction_id']);
+            $transaction = Transaction::findOrFail($id);
 
-            if ($payload['status'] === TransactionStatusEnum::DEPOSIT_PENDING->value) {
-                $payload['expired_at'] = Carbon::now()->addMonths(6);
-                $payload['deposit_amount'] = $transaction->package_deposit_amount;
-                $payload['agent_id'] = $transaction->agent_id;
-
-                Deposit::create($payload->toArray());
-
-                $transaction->update(['status' => TransactionStatusEnum::DEPOSIT_PAYMENT_ACCEPTED->value]);
-                DB::commit();
-
-                return $this->success('Payment deposit is successfully', null);
+            if ($transaction->sender_type === 'MAIN_AGENT' || $transaction->sender_type === 'SUB_AGENT') {
+                $payload['agent_id'] = $transaction->sender_id;
+            } else {
+                $payload['partner_id'] = $transaction->sender_id;
             }
+
+            $payload['status'] = TransactionStatusEnum::DEPOSIT_PAYMENT_ACCEPTED->value;
+            $payload['expired_at'] = Carbon::now()->addMonths(6);
+            $payload['deposit_amount'] = $transaction->package_deposit_amount;
+
+            Deposit::create($payload);
+            $transaction->update(['status' => TransactionStatusEnum::DEPOSIT_PAYMENT_ACCEPTED->value]);
+
             DB::commit();
 
-            return $this->badRequest('Payment deposit process is failed, Please try again');
+            return $this->success('Payment deposit is successfully', $payload);
         } catch (Exception $e) {
             DB::rollback();
             throw $e;
