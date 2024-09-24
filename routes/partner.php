@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Partner\PartnerArticleTypeController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -62,4 +63,6 @@ Route::middleware(['partner'])->group(function () {
             Route::get('/', 'PartnerDashboardController@index');
         });
     });
+
+    Route::get('article-type', [PartnerArticleTypeController::class, 'index']);
 });
