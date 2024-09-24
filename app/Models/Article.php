@@ -25,10 +25,16 @@ class Article extends Model
         'photos',
         'content',
         'status',
+        'is_popular_news',
+        'is_latest_news',
+        'is_breaking_news',
     ];
 
     protected $casts = [
         'photos' => 'array',
+        'is_popular_news' => 'boolean',
+        'is_latest_news' =>  'boolean',
+        'is_breaking_news' =>  'boolean',
     ];
 
     public function scopeActive()
