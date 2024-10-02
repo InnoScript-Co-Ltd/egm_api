@@ -2,55 +2,33 @@
 
 namespace App\Http\Controllers\Dashboard;
 
-use App\Enums\GeneralStatusEnum;
-use App\Enums\OrderStatusEnum;
-use App\Enums\UserStatusEnum;
-use App\Helpers\Enum;
-use App\Models\Item;
-use App\Models\Order;
-use App\Models\User;
+use App\Enums\AgentTypeEnum;
+use App\Models\Agent;
+use App\Models\Partner;
 
 class DashboardController extends Controller
 {
-    public function countByStatus($modelClass, $enumClass, $statusColumn)
+    public function counts()
     {
-        $statusEnums = (new Enum($enumClass))->values();
-        $response = ['total' => $modelClass::count()];
+        $partners = Partner::count();
+        $agnets = Agent::all();
 
-        foreach ($statusEnums as $status) {
-            $response[strtolower($status)] = $modelClass::where($statusColumn, $status)->count();
-        }
+        $main_agents = collect($agnets)->filter(function ($agent) {
+            if ($agent->agent_type === AgentTypeEnum::MAIN_AGENT->value) {
+                return $agent;
+            }
+        });
 
-        return $response;
-    }
+        $sub_agents = collect($agnets)->filter(callback: function ($agent) {
+            if ($agent->agent_type === AgentTypeEnum::SUB_AGENT->value) {
+                return $agent;
+            }
+        });
 
-    public function orderCount()
-    {
-        return $this->countByStatus(Order::class, OrderStatusEnum::class, 'status');
-    }
-
-    public function itemCount()
-    {
-        return $this->countByStatus(Item::class, GeneralStatusEnum::class, 'status');
-    }
-
-    public function userCount()
-    {
-        return $this->countByStatus(User::class, UserStatusEnum::class, 'status');
-    }
-
-    public function count()
-    {
-        $item = $this->itemCount();
-        $order = $this->orderCount();
-        $user = $this->userCount();
-
-        $response = [
-            'item' => $item,
-            'order' => $order,
-            'user' => $user,
-        ];
-
-        return $this->success('Count list is successfully retrieved', $response);
+        return $this->success('static count are retrived successfully', [
+            'partners' => $partners,
+            'main_agents' => count($main_agents),
+            'sub_agents' => count($sub_agents),
+        ]);
     }
 }

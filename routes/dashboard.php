@@ -24,6 +24,8 @@ Route::group(['prefix' => 'auth'], function () {
 
 Route::middleware('jwt')->group(function () {
 
+    Route::get('/counts', 'DashboardController@counts');
+
     Route::group(['prefix' => 'status'], function () {
         Route::get('/', 'StatusController@index');
     });
@@ -107,6 +109,7 @@ Route::middleware('jwt')->group(function () {
     });
 
     Route::group(['prefix' => 'transaction'], function () {
+        Route::get('/partner', 'TransactionController@partnerIndex');
         Route::post('/{id}/make-payment', 'TransactionController@makePayment');
         Route::get('/', 'TransactionController@index');
         Route::get('/{id}', 'TransactionController@show');

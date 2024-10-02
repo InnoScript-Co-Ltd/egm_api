@@ -65,7 +65,7 @@ Route::middleware(['agent'])->group(function () {
         });
 
         Route::group(['prefix' => 'dashboard'], function () {
-            Route::get('/', 'DashboardController@index');
+            Route::get('/', 'AgentDashboardController@index');
         });
 
         Route::group(['prefix' => 'agent-bank-account'], function () {

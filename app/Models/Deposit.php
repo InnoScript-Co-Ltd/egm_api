@@ -21,4 +21,9 @@ class Deposit extends Model
     protected $casts = [
         'expired_at' => 'datetime',
     ];
+
+    public function repayments()
+    {
+        return $this->hasMany(Repayment::class, 'deposit_id', 'id');
+    }
 }
