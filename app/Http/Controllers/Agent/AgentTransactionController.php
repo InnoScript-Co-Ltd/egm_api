@@ -8,7 +8,6 @@ use App\Http\Controllers\Dashboard\Controller;
 use App\Http\Requests\Agents\AgentTransactionStoreRequest;
 use App\Models\AgentBankAccount;
 use App\Models\MerchantBankAccount;
-use App\Models\Package;
 use App\Models\Transaction;
 use Exception;
 use Illuminate\Support\Facades\DB;
@@ -74,11 +73,9 @@ class AgentTransactionController extends Controller
                 $payload['merchant_account_name'] = $merchantBankAccount->holder_name;
                 $payload['merchant_account_number'] = $merchantBankAccount->account_number;
 
-                $package = Package::findOrFail($payload['package_id']);
-
-                $payload['package_name'] = $package->name;
-                $payload['package_roi_rate'] = $package->roi_rate;
-                $payload['package_duration'] = $package->duration;
+                $payload['package_name'] = 'LOCAL_COMMISSION_PACKAGE';
+                $payload['package_roi_rate'] = $agent->commission;
+                $payload['package_duration'] = 6;
 
                 if (isset($payload['transaction_screenshoot'])) {
                     $ImagePath = $payload['transaction_screenshoot']->store('images', 'public');

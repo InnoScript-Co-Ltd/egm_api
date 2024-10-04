@@ -10,6 +10,7 @@ use App\Http\Requests\Agents\AgentChangePasswordRequest;
 use App\Http\Requests\Agents\AgentPaymentPasswordUpdateRequest;
 use App\Http\Requests\Agents\ConfrimPaymentPasswordRequest;
 use App\Models\Agent;
+use App\Models\AgentBankAccount;
 use App\Models\Deposit;
 use Exception;
 use Illuminate\Support\Carbon;
@@ -71,6 +72,12 @@ class AgentAuthController extends Controller
 
                 if (count($deposits) > 0 || $agent->kyc_status === KycStatusEnum::FULL_KYC->value || $agent->status === AgentStatusEnum::ACTIVE->value) {
                     $agent['allow_deposit'] = true;
+                }
+
+                $bankAccounts = AgentBankAccount::where(['agent_id' => $agent->id])->get();
+
+                if (count($bankAccounts) > 0) {
+                    $agent['add_bank_account'] = false;
                 }
 
                 return $this->success('Agent is successfully signed in', $agent);

@@ -38,7 +38,6 @@ class Transaction extends Model
         'transaction_screenshoot',
         'transaction_type',
         'sender_type',
-        'expired_at',
         'status',
     ];
 

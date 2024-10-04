@@ -14,6 +14,8 @@ return new class extends Migration
     {
         Schema::create('repayments', function (Blueprint $table) {
             $table->snowflakeIdAndPrimary();
+            $table->snowflakeId('agent_id')->nullable(null);
+            $table->snowflakeId('partner_id')->nullable(null);
             $table->snowflakeId('deposit_id');
             $table->snowflakeId('transaction_id');
             $table->date('date');
@@ -27,6 +29,8 @@ return new class extends Migration
 
             $table->foreign('transaction_id')->references('id')->on('transactions')->onDelete('cascade');
             $table->foreign('deposit_id')->references('id')->on('deposits')->onDelete('cascade');
+            $table->foreign('agent_id')->references('id')->on('agents')->onDelete('cascade');
+            $table->foreign('partner_id')->references('id')->on('partners')->onDelete('cascade');
         });
     }
 

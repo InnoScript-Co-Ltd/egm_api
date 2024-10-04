@@ -80,7 +80,7 @@ class TransactionController extends Controller
             }
 
             $payload['status'] = TransactionStatusEnum::DEPOSIT_PAYMENT_ACCEPTED->value;
-            $payload['expired_at'] = Carbon::now()->addMonths(6);
+            $payload['expired_at'] = Carbon::now()->addMonths(5);
             $payload['deposit_amount'] = $transaction->package_deposit_amount;
             $payload['roi_amount'] = $transaction->package_deposit_amount * $transaction->package_roi_rate / 100;
 
@@ -107,6 +107,8 @@ class TransactionController extends Controller
                 $repaymentPayload['total_amount'] = $deposit->roi_amount;
                 $repaymentPayload['oneday_amount'] = $deposit->roi_amount / 30;
                 $repaymentPayload['total_days'] = 30;
+
+                $repaymentPayload['agent_id'] = $deposit->agent_id;
 
                 if ($depositYearMonth === $month) {
                     $repaymentPayload['date'] = $month.'-25';

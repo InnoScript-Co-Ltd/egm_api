@@ -16,13 +16,13 @@ return new class extends Migration
             $table->snowflakeId('sender_id');
             $table->snowflakeId('sender_account_id');
             $table->snowflakeId('merchant_account_id');
-            $table->snowflakeId('package_id');
+            $table->snowflakeId('package_id')->nullable(null);
             $table->string('sender_name');
             $table->string('sender_email');
             $table->string('sender_phone');
             $table->string('sender_nrc');
-            $table->string('sender_address');
-            $table->string('sender_account_name');
+            $table->string('sender_address')->nullable();
+            $table->string('sender_account_name')->nullable();
             $table->string('sender_account_number');
             $table->string('sender_bank_branch');
             $table->string('sender_bank_address');
@@ -36,7 +36,6 @@ return new class extends Migration
             $table->string('transaction_screenshoot');
             $table->string('transaction_type');
             $table->string('sender_type');
-            $table->dateTime('expired_at')->nullable();
             $table->string('status');
             $table->auditColumns();
 
