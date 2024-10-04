@@ -15,7 +15,7 @@ class Deposit extends Model
     protected $table = 'deposits';
 
     protected $fillable = [
-        'agent_id', 'partner_id', 'deposit_amount', 'roi_amount', 'commission_amount', 'expired_at',
+        'agent_id', 'partner_id', 'transaction_id', 'deposit_amount', 'roi_amount', 'commission_amount', 'expired_at',
     ];
 
     protected $casts = [

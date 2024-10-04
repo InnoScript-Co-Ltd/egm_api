@@ -110,7 +110,8 @@ class AgentTransactionController extends Controller
             DB::beginTransaction();
 
             try {
-                $transaction = Transaction::where(['id' => $id])->first();
+                $transaction = Transaction::with(['deposit'])
+                    ->where(['id' => $id])->first();
                 DB::commit();
 
                 return $this->success('Agent transaction is retrived successfully', $transaction);

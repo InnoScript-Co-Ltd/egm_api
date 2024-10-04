@@ -44,4 +44,9 @@ class Transaction extends Model
     protected $casts = [
         'expired_at' => 'datetime',
     ];
+
+    public function deposit()
+    {
+        return $this->hasOne(Deposit::class, 'transaction_id', 'id');
+    }
 }

@@ -19,4 +19,8 @@ class Repayment extends Model
     protected $fillable = [
         'deposit_id', 'transaction_id', 'agent_id', 'partner_id', 'date', 'amount', 'total_amount', 'total_days', 'count_days', 'oneday_amount', 'status',
     ];
+
+    protected $casts = [
+        'date' => 'date',
+    ];
 }

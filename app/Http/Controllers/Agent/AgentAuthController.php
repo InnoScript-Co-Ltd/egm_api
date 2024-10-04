@@ -19,6 +19,28 @@ use Illuminate\Support\Facades\Hash;
 
 class AgentAuthController extends Controller
 {
+    protected $selected = [
+        'id',
+        'address',
+        'agent_type',
+        'commission',
+        'dob',
+        'email',
+        'first_name',
+        'last_name',
+        'kyc_status',
+        'nrc',
+        'nrc_back',
+        'nrc_front',
+        'partner_id',
+        'phone',
+        'point',
+        'referral_type',
+        'profile',
+        'status',
+        'username',
+    ];
+
     protected function createNewToken($token)
     {
         $id = auth('agent')->user()->id;
@@ -40,47 +62,27 @@ class AgentAuthController extends Controller
         $id = auth('agent')->user()->id;
 
         try {
-            $agent = Agent::select([
-                'id',
-                'address',
-                'agent_type',
-                'commission',
-                'dob',
-                'email',
-                'first_name',
-                'last_name',
-                'kyc_status',
-                'nrc',
-                'nrc_back',
-                'nrc_front',
-                'partner_id',
-                'phone',
-                'point',
-                'referral_type',
-                'profile',
-                'status',
-                'username',
-            ])->findOrFail($id);
+            $agent = Agent::select($this->selected)->findOrFail($id);
 
             if ($agent) {
                 $deposits = Deposit::where(['agent_id' => $agent->id])
                     ->whereDate('expired_at', '>', Carbon::now()->toDateString())
-                    ->get()
-                    ->toArray();
+                    ->count();
 
+                $agent['allow_referral'] = false;
                 $agent['allow_deposit'] = false;
 
-                if (count($deposits) > 0 || $agent->kyc_status === KycStatusEnum::FULL_KYC->value || $agent->status === AgentStatusEnum::ACTIVE->value) {
+                if ($deposits > 0 || $agent->kyc_status === KycStatusEnum::FULL_KYC->value || $agent->status === AgentStatusEnum::ACTIVE->value) {
+                    $agent['allow_referral'] = true;
+                }
+
+                $bankAccounts = AgentBankAccount::where(['agent_id' => $agent->id])->count();
+
+                if ($bankAccounts > 0 || $agent->kyc_status === KycStatusEnum::FULL_KYC->value || $agent->status === AgentStatusEnum::ACTIVE->value) {
                     $agent['allow_deposit'] = true;
                 }
 
-                $bankAccounts = AgentBankAccount::where(['agent_id' => $agent->id])->get();
-
-                if (count($bankAccounts) > 0) {
-                    $agent['add_bank_account'] = false;
-                }
-
-                return $this->success('Agent is successfully signed in', $agent);
+                return $this->success('Agent profile is successfully retrived', $agent);
             }
 
             return $this->unauthenticated('Unauthorized');
