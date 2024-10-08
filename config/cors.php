@@ -15,7 +15,7 @@ return [
     |
     */
 
-    'paths' => ['https://dashboard.evanglobalmanagement.com/*', 'https://agent.evanglobalmanagement.com/*', 'https://partner.evanglobalmanagement.com/*'],
+    'paths' => ['*'],
 
     'allowed_methods' => ['*'],
 
