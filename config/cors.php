@@ -13,16 +13,17 @@ return [
     |
     | To learn more: https://developer.mozilla.org/en-US/docs/Web/HTTP/CORS
     |
+    | 'paths' => ['api/*', 'agent/*', 'dashboard/*', 'partner/*'],
+    | 'allowed_origins' => ['evanglobalmanagement.com', '*.evanglobalmanagement.com'],
+
     */
 
-    'paths' => ['api/*', 'agent/*', 'dashboard/*', 'partner/*'],
 
-    // 'paths' => ['*'],
+    'paths' => ['*'],
 
     'allowed_methods' => ['*'],
 
-    'allowed_origins' => ['evanglobalmanagement.com', '*.evanglobalmanagement.com'],
-    // 'allowed_origins' => ['*'],
+    'allowed_origins' => ['*'],
 
     'allowed_origins_patterns' => [],
 
