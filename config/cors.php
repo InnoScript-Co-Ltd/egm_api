@@ -15,11 +15,11 @@ return [
     |
     */
 
-    'paths' => ['api/*', 'agent/*', 'dashboard/*', 'partner/*'],
+    'paths' => ['/*'],
 
     'allowed_methods' => ['*'],
 
-    'allowed_origins' => ['dashboard.evanglobalmanagement.com', 'partner.evanglobalmanagement.com', 'agent.evanglobalmanagement.com'],
+    'allowed_origins' => ['https://dashboard.evanglobalmanagement.com', 'https://partner.evanglobalmanagement.com', 'https://agent.evanglobalmanagement.com'],
 
     'allowed_origins_patterns' => [],
 
