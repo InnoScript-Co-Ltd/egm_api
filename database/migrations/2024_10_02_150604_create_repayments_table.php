@@ -14,14 +14,14 @@ return new class extends Migration
     {
         Schema::create('repayments', function (Blueprint $table) {
             $table->snowflakeIdAndPrimary();
-            $table->snowflakeId('agent_id')->nullable(null);
-            $table->snowflakeId('partner_id')->nullable(null);
+            $table->snowflakeId('agent_id')->nullable(null)->default(null);
+            $table->snowflakeId('partner_id')->nullable(null)->deffault(null);
             $table->snowflakeId('deposit_id');
             $table->snowflakeId('transaction_id');
             $table->date('date');
-            $table->float('amount', 9, 2);
-            $table->float('total_amount', 9, 2);
-            $table->float('oneday_amount', 9, 2);
+            $table->float('amount', 12, 2);
+            $table->float('total_amount', 12, 2);
+            $table->float('oneday_amount', 12, 2);
             $table->bigInteger('count_days')->unsigned();
             $table->bigInteger('total_days')->unsigned();
             $table->string('status')->default(RepaymentStatusEnum::AVAILABLE_WITHDRAW->value);
