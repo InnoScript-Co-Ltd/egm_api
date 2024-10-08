@@ -11,11 +11,6 @@
 |
 */
 
-header('Access-Control-Allow-Origin', '*');
-header('Access-Control-Allow-Methods', '*');
-header('Access-Control-Allow-Headers','*');
-header('Access-Control-Allow-Credentials',' false');
-
 $app = new Illuminate\Foundation\Application(
     $_ENV['APP_BASE_PATH'] ?? dirname(__DIR__)
 );
@@ -56,5 +51,10 @@ $app->singleton(
 | from the actual running of the application and sending responses.
 |
 */
+
+header('Access-Control-Allow-Origin', '*');
+header('Access-Control-Allow-Methods', '*');
+header('Access-Control-Allow-Headers','*');
+header('Access-Control-Allow-Credentials',' false');
 
 return $app;
