@@ -15,6 +15,8 @@ use Illuminate\Support\Facades\Route;
 
 Route::middleware(['agent'])->group(function () {
 
+    Route::get("test", 'AccountController@test');
+
     Route::group(['prefix' => 'auth'], function () {
         Route::post('/verify', 'AccountController@emailVerify');
         Route::post('resend', 'AccountController@resendVerifyCode');
