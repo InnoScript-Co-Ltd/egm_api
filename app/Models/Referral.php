@@ -23,6 +23,8 @@ class Referral extends Model
         'agent_type',
         'link',
         'count',
+        'commission',
+        'referral_type',
         'expired_at',
     ];
 

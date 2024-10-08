@@ -2,6 +2,8 @@
 
 namespace App\Http\Requests\Dashboard;
 
+use App\Enums\TransactionStatusEnum;
+use App\Helpers\Enum;
 use App\Models\Transaction;
 use Illuminate\Foundation\Http\FormRequest;
 
@@ -23,9 +25,12 @@ class MakePaymentRequest extends FormRequest
     public function rules(): array
     {
         $transactionIds = implode(',', Transaction::pluck('id')->toArray());
+        $transactionStatus = implode(',', (new Enum(TransactionStatusEnum::class))->values());
 
         return [
             'transaction_id' => "required | in:$transactionIds",
+            'sender_type' => 'required | string',
+            'status' => "required | string | in:$transactionStatus",
         ];
     }
 }

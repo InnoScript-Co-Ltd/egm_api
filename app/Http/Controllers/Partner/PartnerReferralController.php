@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Partner;
 
 use App\Enums\KycStatusEnum;
 use App\Enums\PartnerStatusEnum;
+use App\Enums\ReferralTypeEnm;
 use App\Http\Controllers\Dashboard\Controller;
 use App\Models\Partner;
 use App\Models\Referral;
@@ -41,7 +42,7 @@ class PartnerReferralController extends Controller
         return $this->badRequest('You does not have permission right now.');
     }
 
-    public function store()
+    public function levelFourReferralStore()
     {
         $auth = auth('partner')->user();
 
@@ -62,6 +63,49 @@ class PartnerReferralController extends Controller
                     'expired_at' => Carbon::now()->addMonths(1),
                     'link' => strtoupper($link),
                     'count' => 0,
+                    'commission' => 0,
+                    'referral_type' => ReferralTypeEnm::LEVEL_FOUR_REFERRAL->value,
+                ]);
+
+                DB::commit();
+
+                return $this->success('Reference link is generated successfully', $referral);
+            }
+
+            DB::commit();
+
+            return $this->badRequest('Reference link is generated failed');
+
+        } catch (Exception $e) {
+            DB::rollBack();
+            throw $e;
+        }
+
+    }
+
+    public function commissionReferralStore()
+    {
+        $auth = auth('partner')->user();
+
+        DB::beginTransaction();
+
+        try {
+
+            $partner = Partner::with(['deposit'])->findOrFail($auth->id)->toArray();
+
+            if (count($partner['deposit']) > 0 && $partner['kyc_status'] === KycStatusEnum::FULL_KYC->value && $partner['status'] === PartnerStatusEnum::ACTIVE->value) {
+
+                $linkArray = explode('-', Str::uuid());
+                $link = implode('', $linkArray);
+
+                $referral = Referral::create([
+                    'partner_id' => $partner['id'],
+                    'agent_type' => 'PARTNER',
+                    'expired_at' => Carbon::now()->addMonths(1),
+                    'link' => strtoupper($link),
+                    'count' => 0,
+                    'commission' => 15,
+                    'referral_type' => ReferralTypeEnm::COMMISSION_REFERRAL->value,
                 ]);
 
                 DB::commit();

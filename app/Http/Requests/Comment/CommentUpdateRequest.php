@@ -33,7 +33,7 @@ class CommentUpdateRequest extends FormRequest
             'article_id' => [
                 'nullable',
                 'integer',
-                Rule::exists('articles', 'id')
+                Rule::exists('articles', 'id'),
             ],
             'title' => [
                 'nullable',

@@ -10,12 +10,37 @@ use App\Http\Requests\Agents\AgentChangePasswordRequest;
 use App\Http\Requests\Agents\AgentPaymentPasswordUpdateRequest;
 use App\Http\Requests\Agents\ConfrimPaymentPasswordRequest;
 use App\Models\Agent;
+use App\Models\AgentBankAccount;
+use App\Models\Deposit;
 use Exception;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 
 class AgentAuthController extends Controller
 {
+    protected $selected = [
+        'id',
+        'address',
+        'agent_type',
+        'commission',
+        'dob',
+        'email',
+        'first_name',
+        'last_name',
+        'kyc_status',
+        'nrc',
+        'nrc_back',
+        'nrc_front',
+        'partner_id',
+        'phone',
+        'point',
+        'referral_type',
+        'profile',
+        'status',
+        'username',
+    ];
+
     protected function createNewToken($token)
     {
         $id = auth('agent')->user()->id;
@@ -34,15 +59,33 @@ class AgentAuthController extends Controller
     {
         DB::beginTransaction();
 
+        $id = auth('agent')->user()->id;
+
         try {
-            $agent = auth('agent')->user();
+            $agent = Agent::select($this->selected)->findOrFail($id);
 
             if ($agent) {
-                return $this->success('Agent is successfully signed in', $agent->toArray());
-            } else {
-                $this->unauthenticated('Please login again');
+                $deposits = Deposit::where(['agent_id' => $agent->id])
+                    ->whereDate('expired_at', '>', Carbon::now()->toDateString())
+                    ->count();
+
+                $agent['allow_referral'] = false;
+                $agent['allow_deposit'] = false;
+
+                if ($deposits > 0 || $agent->kyc_status === KycStatusEnum::FULL_KYC->value || $agent->status === AgentStatusEnum::ACTIVE->value) {
+                    $agent['allow_referral'] = true;
+                }
+
+                $bankAccounts = AgentBankAccount::where(['agent_id' => $agent->id])->count();
+
+                if ($bankAccounts > 0 || $agent->kyc_status === KycStatusEnum::FULL_KYC->value || $agent->status === AgentStatusEnum::ACTIVE->value) {
+                    $agent['allow_deposit'] = true;
+                }
+
+                return $this->success('Agent profile is successfully retrived', $agent);
             }
 
+            return $this->unauthenticated('Unauthorized');
         } catch (Exception $e) {
             DB::rollBack();
             throw $e;

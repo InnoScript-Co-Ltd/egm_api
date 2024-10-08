@@ -52,6 +52,8 @@ class Agent extends Authenticatable implements JWTSubject
         'email_expired_at',
         'email_verify_code',
         'agent_type',
+        'referral_type',
+        'commission',
     ];
 
     protected $casts = [
@@ -77,7 +79,7 @@ class Agent extends Authenticatable implements JWTSubject
         return $this->hasMany(AgentBankAccount::class, 'agent_id', 'id');
     }
 
-    public function deposit()
+    public function deposits()
     {
         return $this->hasMany(Deposit::class, 'agent_id', 'id');
     }

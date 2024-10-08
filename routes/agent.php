@@ -22,7 +22,12 @@ Route::middleware(['agent'])->group(function () {
     });
 
     Route::group(['prefix' => 'account'], function () {
+        Route::post('/commission', 'AccountController@commissionStore');
         Route::post('/create', 'AccountController@store');
+    });
+
+    Route::group(['prefix' => 'referral'], function () {
+        Route::get('/check/{referral}', 'AgentReferralController@check');
     });
 
     Route::get('/level/{level}', 'SubAgentController@level');
@@ -50,16 +55,17 @@ Route::middleware(['agent'])->group(function () {
         });
 
         Route::group(['prefix' => 'deposit'], function () {
-            Route::post('/', 'AgentDepositController@store');
+            Route::get('/', 'AgentDepositController@index');
         });
 
         Route::group(['prefix' => 'transaction'], function () {
+            Route::post('/', 'AgentTransactionController@store');
             Route::get('/', 'AgentTransactionController@index');
             Route::get('/{id}', 'AgentTransactionController@show');
         });
 
         Route::group(['prefix' => 'dashboard'], function () {
-            Route::get('/', 'DashboardController@index');
+            Route::get('/', 'AgentDashboardController@index');
         });
 
         Route::group(['prefix' => 'agent-bank-account'], function () {
@@ -76,6 +82,11 @@ Route::middleware(['agent'])->group(function () {
         Route::group(['prefix' => 'referral'], function () {
             Route::get('/', 'AgentReferralController@index');
             Route::post('/', 'AgentReferralController@store');
+        });
+
+        Route::group(['prefix' => 'repayment'], routes: function () {
+            Route::get('/deposit/{id}', 'AgentRepaymentController@index');
+            Route::get('/month/{month}', 'AgentRepaymentController@indexThisMonth');
         });
     });
 });

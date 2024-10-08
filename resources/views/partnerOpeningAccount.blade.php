@@ -5,7 +5,7 @@
 
 <head>
     <meta charset="UTF-8">
-    <title> {{$emailContent['title']}} </title>
+    <title> Partner Account Opening </title>
     <style>
         /* Inline styles for simplicity, consider using CSS classes for larger templates */
         body {

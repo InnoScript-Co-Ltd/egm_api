@@ -7,10 +7,9 @@ use App\Http\Requests\Comment\CommentStoreRequest;
 use App\Http\Requests\Comment\CommentUpdateRequest;
 use App\Models\Comment;
 use Exception;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 
-const COMMENT_IMAGE_FOLDER = "comments";
+const COMMENT_IMAGE_FOLDER = 'comments';
 
 class CommentController extends Controller
 {
@@ -41,9 +40,10 @@ class CommentController extends Controller
         $payload = collect($request->validated());
 
         try {
-            if (!empty($payload['photos'])) {
+            if (! empty($payload['photos'])) {
                 $commentPhotos = collect($payload['photos'])->map(function ($commentPhoto) {
                     $commentPhotoPath = Storage::disk('public')->putFile(COMMENT_IMAGE_FOLDER, $commentPhoto);
+
                     return explode('/', $commentPhotoPath)[1];
                 });
 
@@ -51,6 +51,7 @@ class CommentController extends Controller
             }
 
             $comment = Comment::create($payload->toArray());
+
             return $this->success('Comment created successfully', $comment);
         } catch (Exception $e) {
             throw $e;
@@ -81,11 +82,11 @@ class CommentController extends Controller
         try {
             $comment = Comment::findOrFail($id);
 
-            if (!empty($payload['photos'])) {
+            if (! empty($payload['photos'])) {
 
                 // delete existing images
                 foreach ($comment->photos as $commentPhoto) {
-                    $commentPhotoPath = COMMENT_IMAGE_FOLDER . "/" . $commentPhoto;
+                    $commentPhotoPath = COMMENT_IMAGE_FOLDER.'/'.$commentPhoto;
 
                     if (Storage::disk('public')->exists($commentPhotoPath)) {
                         Storage::disk('public')->delete($commentPhotoPath);
@@ -95,6 +96,7 @@ class CommentController extends Controller
                 // store new images
                 $commentPhotos = collect($payload['photos'])->map(function ($commentPhoto) {
                     $commentPhotoPath = Storage::disk('public')->putFile(COMMENT_IMAGE_FOLDER, $commentPhoto);
+
                     return explode('/', $commentPhotoPath)[1];
                 });
 
@@ -102,6 +104,7 @@ class CommentController extends Controller
             }
 
             $comment->update($payload->toArray());
+
             return $this->success('Comment updated successfully', $comment);
         } catch (Exception $e) {
             throw $e;
@@ -118,7 +121,7 @@ class CommentController extends Controller
 
             // delete images
             foreach ($comment->photos as $commentPhoto) {
-                $commentPhotoPath = COMMENT_IMAGE_FOLDER . "/" . $commentPhoto;
+                $commentPhotoPath = COMMENT_IMAGE_FOLDER.'/'.$commentPhoto;
 
                 if (Storage::disk('public')->exists($commentPhotoPath)) {
                     Storage::disk('public')->delete($commentPhotoPath);
@@ -126,6 +129,7 @@ class CommentController extends Controller
             }
 
             $comment->delete();
+
             return $this->success('Comment deleted successfully');
         } catch (Exception $e) {
             throw $e;

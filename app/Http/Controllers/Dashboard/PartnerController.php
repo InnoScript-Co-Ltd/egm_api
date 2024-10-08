@@ -61,14 +61,14 @@ class PartnerController extends Controller
             $payload['password'] = str()->random();
             $payload['status'] = GeneralStatusEnum::ACTIVE->value;
 
-            $emailContent = EmailContent::where([
-                'status' => GeneralStatusEnum::ACTIVE->value,
-                'content_type' => EmailContentTypeEnum::PARTNER_ACCOUNT_OPENING->value,
-            ])->first()->toArray();
+            // $emailContent = EmailContent::where([
+            //     'status' => GeneralStatusEnum::ACTIVE->value,
+            //     'content_type' => EmailContentTypeEnum::PARTNER_ACCOUNT_OPENING->value,
+            // ])->first()->toArray();
 
-            $emailContent['content'] = new HtmlString($emailContent['content']);
+            // $emailContent['content'] = new HtmlString($emailContent['content']);
 
-            Mail::to($payload['email'])->send(new PartnerAccountEmailTemplate($payload, $emailContent));
+            // Mail::to($payload['email'])->send(new PartnerAccountEmailTemplate($payload, $emailContent));
 
             $partner = Partner::create($payload->toArray());
             DB::commit();
@@ -104,23 +104,23 @@ class PartnerController extends Controller
 
             $partner = Partner::findOrFail($id);
 
-            if ($payload['kyc_status'] === KycStatusEnum::REJECT->value) {
-                $emailContent = EmailContent::where([
-                    'status' => GeneralStatusEnum::ACTIVE->value,
-                    'content_type' => EmailContentTypeEnum::PARTNER_KYC_REJECT->value,
-                ])->first()->toArray();
-            }
+            // if ($payload['kyc_status'] === KycStatusEnum::REJECT->value) {
+            //     $emailContent = EmailContent::where([
+            //         'status' => GeneralStatusEnum::ACTIVE->value,
+            //         'content_type' => EmailContentTypeEnum::PARTNER_KYC_REJECT->value,
+            //     ])->first()->toArray();
+            // }
 
-            if ($payload['kyc_status'] === KycStatusEnum::FULL_KYC->value) {
-                $emailContent = EmailContent::where([
-                    'status' => GeneralStatusEnum::ACTIVE->value,
-                    'content_type' => EmailContentTypeEnum::PARTNER_KYC_APPROVE->value,
-                ])->first()->toArray();
-            }
+            // if ($payload['kyc_status'] === KycStatusEnum::FULL_KYC->value) {
+            //     $emailContent = EmailContent::where([
+            //         'status' => GeneralStatusEnum::ACTIVE->value,
+            //         'content_type' => EmailContentTypeEnum::PARTNER_KYC_APPROVE->value,
+            //     ])->first()->toArray();
+            // }
 
-            $emailContent['content'] = new HtmlString($emailContent['content']);
+            // $emailContent['content'] = new HtmlString($emailContent['content']);
 
-            Mail::to($payload['email'])->send(new PartnerAccountEmailTemplate($payload, $emailContent));
+            // Mail::to($payload['email'])->send(new PartnerAccountEmailTemplate($payload, $emailContent));
 
             $partner->update($payload->toArray());
             DB::commit();

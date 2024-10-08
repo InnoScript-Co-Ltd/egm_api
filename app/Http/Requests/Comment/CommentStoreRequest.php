@@ -33,7 +33,7 @@ class CommentStoreRequest extends FormRequest
             'article_id' => [
                 'required',
                 'integer',
-                Rule::exists('articles', 'id')
+                Rule::exists('articles', 'id'),
             ],
             'title' => [
                 'required',

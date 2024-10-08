@@ -3,13 +3,10 @@
 namespace App\Http\Controllers\Article;
 
 use App\Http\Controllers\Dashboard\Controller;
-use App\Http\Requests\Article\ArticleStoreRequest;
-use App\Http\Requests\Article\ArticleUpdateRequest;
 use App\Http\Requests\ArticleType\ArticleTypeStoreRequest;
 use App\Http\Requests\ArticleType\ArticleTypeUpdateRequest;
 use App\Models\ArticleType;
 use Exception;
-use Illuminate\Http\Request;
 
 class ArticleTypeController extends Controller
 {
@@ -89,6 +86,7 @@ class ArticleTypeController extends Controller
             $articleType = ArticleType::findOrFail($id);
 
             $articleType->delete();
+
             return $this->success('Article type deleted successfully');
         } catch (Exception $e) {
             throw $e;

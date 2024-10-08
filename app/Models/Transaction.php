@@ -38,11 +38,15 @@ class Transaction extends Model
         'transaction_screenshoot',
         'transaction_type',
         'sender_type',
-        'expired_at',
         'status',
     ];
 
     protected $casts = [
         'expired_at' => 'datetime',
     ];
+
+    public function deposit()
+    {
+        return $this->hasOne(Deposit::class, 'transaction_id', 'id');
+    }
 }
