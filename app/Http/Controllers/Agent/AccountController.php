@@ -22,13 +22,6 @@ use Mail;
 
 class AccountController extends Controller
 {
-    public function test()
-    {
-        return $this->success('sdsd', [
-            'dad' => 'sdsfsd',
-        ]);
-    }
-
     public function commissionStore(AccountStoreRequest $request)
     {
         $payload = collect($request->validated());
