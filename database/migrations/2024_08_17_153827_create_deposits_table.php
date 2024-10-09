@@ -18,7 +18,7 @@ return new class extends Migration
             $table->snowflakeId('transaction_id');
             $table->float('deposit_amount', 12, 2)->default(0);
             $table->float('roi_amount', 12, 2)->default(0);
-            $table->float('commission_amount', 12, 2)->default(0);
+            $table->float('commission', 12, 2)->default(0);
             $table->dateTime('expired_at')->nullable();
             $table->auditColumns();
 

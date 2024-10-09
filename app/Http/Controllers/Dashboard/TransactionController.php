@@ -83,7 +83,7 @@ class TransactionController extends Controller
             $payload['expired_at'] = Carbon::now()->addMonths(5);
             $payload['deposit_amount'] = $transaction->package_deposit_amount;
             $payload['roi_amount'] = $transaction->package_deposit_amount * $transaction->package_roi_rate / 100;
-
+            $payload['commission'] = $transaction->$transaction->package_roi_rate;
             $deposit = Deposit::create($payload);
 
             $created_at = Carbon::parse($deposit->created_at);
@@ -111,12 +111,12 @@ class TransactionController extends Controller
                 $repaymentPayload['agent_id'] = $deposit->agent_id;
 
                 if ($depositYearMonth === $month) {
-                    $repaymentPayload['date'] = $month.'-25';
+                    $repaymentPayload['date'] = $month.'-26';
                     $repaymentDays = Carbon::parse($deposit->created_at)->diffInDays($repaymentPayload['date']);
                     $repaymentPayload['amount'] = $oneDayROI * $repaymentDays;
                     $repaymentPayload['count_days'] = $repaymentDays;
                 } else {
-                    $repaymentPayload['date'] = $month.'-25';
+                    $repaymentPayload['date'] = $month.'-26';
                     $previousMonth = Carbon::parse($repaymentPayload['date'])->addMonths(-1);
                     $repaymentDays = Carbon::parse($previousMonth)->diffInDays($repaymentPayload['date']);
                     $repaymentPayload['amount'] = $oneDayROI * $repaymentDays;
