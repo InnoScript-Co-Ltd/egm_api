@@ -72,13 +72,13 @@ class AgentAuthController extends Controller
                 $agent['allow_referral'] = false;
                 $agent['allow_deposit'] = false;
 
-                if ($deposits > 0 || $agent->kyc_status === KycStatusEnum::FULL_KYC->value || $agent->status === AgentStatusEnum::ACTIVE->value) {
+                if ($deposits > 0 && $agent->kyc_status === KycStatusEnum::FULL_KYC->value && $agent->status === AgentStatusEnum::ACTIVE->value) {
                     $agent['allow_referral'] = true;
                 }
 
                 $bankAccounts = AgentBankAccount::where(['agent_id' => $agent->id])->count();
 
-                if ($bankAccounts > 0 || $agent->kyc_status === KycStatusEnum::FULL_KYC->value || $agent->status === AgentStatusEnum::ACTIVE->value) {
+                if ($bankAccounts > 0 && $agent->kyc_status === KycStatusEnum::FULL_KYC->value && $agent->status === AgentStatusEnum::ACTIVE->value) {
                     $agent['allow_deposit'] = true;
                 }
 
