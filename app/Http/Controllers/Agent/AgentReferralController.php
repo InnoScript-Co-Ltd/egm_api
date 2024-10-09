@@ -61,9 +61,7 @@ class AgentReferralController extends Controller
 
             if ($payload['commission'] > $agent['commission'] || $payload['commission'] < 5) {
                 return $this->validationError('commission percentage does not match', [
-                    'errors' => [
-                        'commission' => ['invalid commission percentage'],
-                    ],
+                    'commission' => ['invalid commission percentage']
                 ]);
             }
 
