@@ -59,10 +59,10 @@ class AgentReferralController extends Controller
 
             $agent = Agent::with(['deposits'])->findOrFail($auth->id)->toArray();
 
-            if ($payload['comission'] > $agent['commission'] || $payload['commission'] < 5) {
+            if ($payload['commission'] > $agent['commission'] || $payload['commission'] < 5) {
                 return $this->validationError('commission percentage does not match', [
                     'errors' => [
-                        'comission' => ['invalid commission percentage'],
+                        'commission' => ['invalid commission percentage'],
                     ],
                 ]);
             }
