@@ -65,7 +65,7 @@ class AgentReferralController extends Controller
                 ]);
             }
 
-            if (count($agent['deposit']) > 0 && $agent['kyc_status'] === KycStatusEnum::FULL_KYC->value && $agent['status'] === AgentStatusEnum::ACTIVE->value) {
+            if (count($agent['deposits']) > 0 && $agent['kyc_status'] === KycStatusEnum::FULL_KYC->value && $agent['status'] === AgentStatusEnum::ACTIVE->value) {
 
                 $linkArray = explode('-', Str::uuid());
                 $link = implode('', $linkArray);
