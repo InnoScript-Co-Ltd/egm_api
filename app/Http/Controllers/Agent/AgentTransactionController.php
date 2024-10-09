@@ -88,6 +88,7 @@ class AgentTransactionController extends Controller
                 $payload['sender_type'] = $agent->agent_type;
                 $payload['sender_id'] = $agent->id;
                 $payload['bank_type'] = $merchantBankAccount->bank_type;
+                $payload['package_id'] = "00000001";
 
                 $deposit = Transaction::create($payload->toArray());
                 DB::commit();
