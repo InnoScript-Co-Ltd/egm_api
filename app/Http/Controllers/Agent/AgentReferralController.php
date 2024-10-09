@@ -5,7 +5,10 @@ namespace App\Http\Controllers\Agent;
 use App\Enums\AgentStatusEnum;
 use App\Enums\AgentTypeEnum;
 use App\Enums\KycStatusEnum;
+use App\Enums\ReferralTypeEnm;
 use App\Http\Controllers\Dashboard\Controller;
+use App\Http\Requests\Agents\ReferralStoreRequest;
+use App\Models\Agent;
 use App\Models\Referral;
 use Carbon\Carbon;
 use Exception;
@@ -45,42 +48,42 @@ class AgentReferralController extends Controller
         }
     }
 
-    public function store()
+    public function storeCommissionReferral(ReferralStoreRequest $request)
     {
-        $agent = auth('agent')->user();
+        $auth = auth('agent')->user();
+
         DB::beginTransaction();
+        $payload = $request->validated();
+
         try {
-            if ($agent->status === AgentStatusEnum::ACTIVE->value && $agent->kyc_status === KycStatusEnum::FULL_KYC->value) {
+
+            $agent = Agent::with(['deposit'])->findOrFail($auth->id)->toArray();
+
+            if ($payload['comission'] > $agent['commission'] || $payload['commission'] < 5) {
+                return $this->validationError('commission percentage does not match', [
+                    'errors' => [
+                        'comission' => ['invalid commission percentage'],
+                    ],
+                ]);
+            }
+
+            if (count($agent['deposit']) > 0 && $agent['kyc_status'] === KycStatusEnum::FULL_KYC->value && $agent['status'] === AgentStatusEnum::ACTIVE->value) {
 
                 $linkArray = explode('-', Str::uuid());
                 $link = implode('', $linkArray);
 
-                if ($agent->agent_type === AgentTypeEnum::MAIN_AGENT->value) {
-                    $payload['main_agent_id'] = $agent->id;
-                    $payload['reference_id'] = $agent->id;
-                    $payload['partner_id'] = $agent->partner_id;
-                    $payload['agent_id'] = $agent->id;
-                    $payload['agent_type'] = $agent->agent_type;
-                    $payload['expired_at'] = Carbon::now()->addMonths(6);
-                    $payload['link'] = strtoupper($link);
-                    $payload['count'] = 0;
-
-                    $referral = Referral::create($payload);
-                    DB::commit();
-
-                    return $this->success('Reference link is generated successfully', $referral);
-                }
-
                 $referral = Referral::create([
-                    'main_agent_id' => $agent->main_agent_id,
-                    'reference_id' => $agent->id,
-                    'partner_id' => $agent->partner_id,
-                    'agent_id' => $agent->id,
-                    'agent_type' => $agent->agent_type,
-                    'expired_at' => Carbon::now()->addMonths(6),
+                    'main_agent_id' => $agent['agent_type'] === AgentTypeEnum::MAIN_AGENT->value ? $agent['id'] : null,
+                    'agent_id' => $agent['agent_type'] === AgentTypeEnum::SUB_AGENT->value ? $agent['id'] : null,
+                    'partner_id' => null,
+                    'agent_type' => $agent['agent_type'],
+                    'expired_at' => Carbon::now()->addMonths(1),
                     'link' => strtoupper($link),
                     'count' => 0,
+                    'commission' => $payload['commission'],
+                    'referral_type' => ReferralTypeEnm::COMMISSION_REFERRAL->value,
                 ]);
+
                 DB::commit();
 
                 return $this->success('Reference link is generated successfully', $referral);
@@ -88,9 +91,10 @@ class AgentReferralController extends Controller
 
             DB::commit();
 
-            return $this->badRequest('Reference link is generated fail');
+            return $this->badRequest('Reference link is generated failed');
 
         } catch (Exception $e) {
+            DB::rollBack();
             throw $e;
         }
     }

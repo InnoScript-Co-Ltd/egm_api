@@ -81,7 +81,7 @@ Route::middleware(['agent'])->group(function () {
 
         Route::group(['prefix' => 'referral'], function () {
             Route::get('/', 'AgentReferralController@index');
-            Route::post('/', 'AgentReferralController@store');
+            Route::post('/', 'AgentReferralController@storeCommissionReferral');
         });
 
         Route::group(['prefix' => 'repayment'], routes: function () {
