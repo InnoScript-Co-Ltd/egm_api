@@ -7,7 +7,7 @@ use App\Enums\AgentTypeEnum;
 use App\Enums\KycStatusEnum;
 use App\Enums\ReferralTypeEnm;
 use App\Http\Controllers\Dashboard\Controller;
-use App\Http\Requests\Agents\ReferralStoreRequest;
+use App\Http\Requests\Agents\AgentReferralStoreRequest;
 use App\Models\Agent;
 use App\Models\Referral;
 use Carbon\Carbon;
@@ -48,7 +48,7 @@ class AgentReferralController extends Controller
         }
     }
 
-    public function storeCommissionReferral(ReferralStoreRequest $request)
+    public function storeCommissionReferral(AgentReferralStoreRequest $request)
     {
         $auth = auth('agent')->user();
 
@@ -105,8 +105,14 @@ class AgentReferralController extends Controller
 
             DB::beginTransaction();
 
+            $agentType = $agent->agent_type === AgentTypeEnum::MAIN_AGENT->value ? [
+                'main_agent_id' => $agent->id,
+            ] : [
+                'agent_id' => $agent->id,
+            ];
+
             try {
-                $agentPackage = Referral::where(['agent_id' => $agent->id])
+                $referrals = Referral::where($agentType)
                     ->searchQuery()
                     ->sortingQuery()
                     ->filterQuery()
@@ -115,7 +121,7 @@ class AgentReferralController extends Controller
 
                 DB::commit();
 
-                return $this->success('agent package list is successfully retrived', $agentPackage);
+                return $this->success('referral link list is successfully retrived', $referrals);
             } catch (Exception $e) {
                 DB::rollback();
                 throw $e;

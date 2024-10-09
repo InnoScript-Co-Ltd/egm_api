@@ -17,7 +17,6 @@ class Referral extends Model
     protected $fillable = [
         'agent_id',
         'main_agent_id',
-        'reference_id',
         'partner_id',
         'register_agents',
         'agent_type',
