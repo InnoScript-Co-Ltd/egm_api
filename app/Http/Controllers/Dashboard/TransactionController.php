@@ -83,7 +83,7 @@ class TransactionController extends Controller
             $payload['expired_at'] = Carbon::now()->addMonths(5);
             $payload['deposit_amount'] = $transaction->package_deposit_amount;
             $payload['roi_amount'] = $transaction->package_deposit_amount * $transaction->package_roi_rate / 100;
-            $payload['commission'] = $transaction->$transaction->package_roi_rate;
+            $payload['commission'] = $transaction->package_roi_rate;
             $deposit = Deposit::create($payload);
 
             $created_at = Carbon::parse($deposit->created_at);
