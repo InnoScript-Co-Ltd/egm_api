@@ -63,13 +63,7 @@ Route::middleware('jwt')->group(function () {
     });
 
     Route::group(['prefix' => 'agent'], function () {
-        Route::get('/', 'AgentController@index');
-        Route::get('/{id}', 'AgentController@show');
-        // Route::get('/', 'AgentController@index')->permission(PermissionEnum::AGENT_INDEX->value);;
-        // Route::get('/{id}', 'AgentController@show')->permission(PermissionEnum::AGENT_SHOW->value);;
-        Route::post('/', 'AgentController@store')->permission(PermissionEnum::AGENT_STORE->value);
-        Route::post('/{id}', 'AgentController@update')->permission(PermissionEnum::AGENT_UPDATE->value);
-        Route::delete('/{id}', 'AgentController@destroy')->permission(PermissionEnum::AGENT_DESTROY->value);
+        Route::get('/{type}', 'DashboardAgentController@index');
     });
 
     Route::group(['prefix' => 'sub-agent'], function () {

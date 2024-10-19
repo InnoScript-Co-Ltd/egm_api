@@ -8,24 +8,21 @@ use App\Models\Agent;
 use Exception;
 use Illuminate\Support\Facades\DB;
 
-class AgentController extends Controller
+class DashboardAgentController extends Controller
 {
-    public function index()
+    public function index($type)
     {
-        DB::beginTransaction();
-
         try {
-            $agents = Agent::searchQuery()
+            $agents = Agent::where(['agent_type' => $type])
+                ->searchQuery()
                 ->sortingQuery()
                 ->filterQuery()
                 ->filterDateQuery()
                 ->paginationQuery();
-            DB::commit();
 
             return $this->success('agent list is successfully retrived', $agents);
 
         } catch (Exception $e) {
-            DB::rollback();
             throw $e;
         }
     }
