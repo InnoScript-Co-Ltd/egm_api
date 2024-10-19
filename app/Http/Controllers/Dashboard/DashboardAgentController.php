@@ -76,18 +76,18 @@ class DashboardAgentController extends Controller
         }
     }
 
-    public function show($id)
+    public function show($type, $id)
     {
-        DB::beginTransaction();
-
         try {
-            $agent = Agent::with(['bankAccounts'])->findOrFail($id);
+            $agent = Agent::where([
+                'agent_type' => $type,
+                'id' => $id,
+            ])->first();
             DB::commit();
 
             return $this->success('Agent info is retrived successfully retrived', $agent);
 
         } catch (Exception $e) {
-            DB::rollback();
             throw $e;
         }
     }
