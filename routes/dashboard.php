@@ -64,16 +64,7 @@ Route::middleware('jwt')->group(function () {
 
     Route::group(['prefix' => 'agent'], function () {
         Route::get('/{type}', 'DashboardAgentController@index');
-    });
-
-    Route::group(['prefix' => 'sub-agent'], function () {
-        Route::get('/', 'SubAgentController@index');
-        Route::get('/{id}', 'SubAgentController@show');
-        // Route::get('/', 'SubAgentController@index')->permission(PermissionEnum::Agent_INDEX->value);;
-        // Route::get('/{id}', 'SubAgentController@show')->permission(PermissionEnum::Agent_SHOW->value);;
-        Route::post('/', 'SubAgentController@store')->permission(PermissionEnum::SUB_AGENT_STORE->value);
-        Route::post('/{id}', 'SubAgentController@update')->permission(PermissionEnum::SUB_AGENT_UPDATE->value);
-        Route::delete('/{id}', 'SubAgentController@destroy')->permission(PermissionEnum::SUB_AGENT_DESTROY->value);
+        Route::get('/{type}/{id}', 'DashboardAgentController@show');
     });
 
     Route::group(['prefix' => 'agent-bank-account'], function () {
