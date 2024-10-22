@@ -31,10 +31,7 @@ Route::middleware('jwt')->group(function () {
     });
 
     Route::group(['prefix' => 'count'], function () {
-        Route::get('/order', 'DashboardController@orderCount');
-        Route::get('/item', 'DashboardController@itemCount');
-        Route::get('/user', 'DashboardController@userCount');
-        Route::get('/', 'DashboardController@count');
+        Route::get('/', 'DashboardController@counts');
     });
 
     Route::group(['prefix' => 'merchant-bank-account'], function () {
