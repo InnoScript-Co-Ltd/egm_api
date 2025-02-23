@@ -23,6 +23,7 @@ class Partner extends Authenticatable implements JWTSubject
         'profile',
         'country_id',
         'username',
+        'roi',
         'point',
         'first_name',
         'last_name',

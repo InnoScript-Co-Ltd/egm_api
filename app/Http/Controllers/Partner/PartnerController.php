@@ -6,12 +6,52 @@ use App\Enums\KycStatusEnum;
 use App\Enums\PartnerStatusEnum;
 use App\Http\Controllers\Dashboard\Controller;
 use App\Http\Requests\Partner\PartnerAccountUpdateRequest;
+use App\Http\Requests\Partner\PartnerCreateRequest;
 use App\Http\Requests\Partner\PartnerInfoUpdateRequest;
 use App\Http\Requests\Partner\PartnerKYCUpdateRequest;
+use App\Models\Partner;
+use App\Models\Referral;
+use Exception;
 use Illuminate\Support\Facades\DB;
 
 class PartnerController extends Controller
 {
+    public function store(PartnerCreateRequest $request)
+    {
+        $payload = collect($request->validated());
+
+        DB::beginTransaction();
+
+        try {
+            if ($payload['referral'] === null) {
+                $payload['rol'] = 16;
+            } else {
+                $referral = Referral::where(['link' => $payload['referral']])->first();
+                $payload['roi'] = $referral->commission;
+            }
+
+            $partner = Partner::create($payload->toArray());
+
+            if ($referral->register_agents === null) {
+                $referralPayload['register_agents'] = [$partner->id];
+            } else {
+                $referralPayload['register_agents'] = $referral->register_agents;
+                array_push($referralPayload['register_agents'], $partner->id);
+            }
+
+            $referralPayload['count'] = $referral->count + 1;
+            $referral->update($referralPayload);
+
+            DB::commit();
+
+            return $this->success('Partner account is created successfully', $partner);
+        } catch (Exception $e) {
+            DB::rollBack();
+
+            return $this->internalServerError();
+        }
+    }
+
     public function updateInfo(PartnerInfoUpdateRequest $request)
     {
         $partner = auth('partner')->user();

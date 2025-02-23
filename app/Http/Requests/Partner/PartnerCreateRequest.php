@@ -1,11 +1,10 @@
 <?php
 
-namespace App\Http\Requests\Dashboard;
+namespace App\Http\Requests\Partner;
 
-use App\Enums\REGXEnum;
 use Illuminate\Foundation\Http\FormRequest;
 
-class PartnerStoreRequest extends FormRequest
+class PartnerCreateRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -22,15 +21,13 @@ class PartnerStoreRequest extends FormRequest
      */
     public function rules(): array
     {
-        $mobileRule = REGXEnum::MOBILE_NUMBER->value;
-
         return [
-            'username' => 'required | string | unique:partners,username',
-            'first_name' => 'required | string | min:2 | max:18',
-            'last_name' => 'required | string | min:2 | max:18',
+            'first_name' => 'required | string',
+            'last_name' => 'required | string',
             'email' => 'required | email | unique:partners,email',
-            'phone' => ['required', 'unique:agents,phone', "regex:$mobileRule"],
-            'roi' => 'required | numeric',
+            'phone' => 'required | unique:partners,phone',
+            'referral' => 'nullable | string',
+            'password' => 'required | confirmed | min:6 | max:18',
         ];
     }
 }

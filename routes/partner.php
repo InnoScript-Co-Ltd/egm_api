@@ -17,6 +17,7 @@ Route::middleware(['partner'])->group(function () {
 
     Route::group(['prefix' => 'auth'], function () {
         Route::post('/login', 'PartnerAuthController@login');
+        Route::post('/register', 'PartnerController@store');
     });
 
     Route::middleware('jwt')->group(function () {
