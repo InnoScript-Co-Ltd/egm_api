@@ -11,6 +11,8 @@ use App\Http\Requests\Partner\PartnerChangePasswordRequest;
 use App\Http\Requests\Partner\PartnerLoginRequest;
 use App\Http\Requests\Partner\PartnerPaymentPasswordUpdateRequest;
 use App\Http\Requests\Partner\PartnerForgetPasswordRequest;
+use App\Http\Requests\Partner\PartnerResetPassword;
+use App\Http\Requests\Partner\PartnerVerifiedOtp;
 use App\Models\Partner;
 use Exception;
 use Illuminate\Support\Facades\DB;
@@ -82,11 +84,11 @@ class PartnerAuthController extends Controller
         try {
             $partner = Partner::where('email', $payload['email'])->first();
 
-            if($partner === null) {
+            if ($partner === null) {
                 return $this->badRequest("Email does not exist");
             }
             $otp = rand(100000, 999999);
-            
+
             $partner->update([
                 'otp' => $otp
             ]);
@@ -96,9 +98,63 @@ class PartnerAuthController extends Controller
                 "otp_code" => $otp
             ]);
         } catch (Exception $e) {
-         //   dd($e); 
+            //   dd($e); 
             DB::rollBack();
             return $this->internalServerError();
+        }
+    }
+    public function verifiedOtp(PartnerVerifiedOtp $request)
+    {
+        $payload = collect($request->validated());
+        DB::beginTransaction();
+
+        try {
+            $partner = Partner::where('email', $request->email)
+                ->where('otp', $request->otp)
+                ->first();
+
+            if (!$partner) {
+                return $this->badRequest('Invalid');
+            }
+
+            DB::commit();
+
+            return $this->success('OTP verified successfully. You can now reset your password.', [
+                'email' => $partner->email
+            ]);
+        } catch (Exception $e) {
+            DB::rollBack();
+            throw $e;
+        }
+    }
+
+    public function resetPassword(PartnerResetPassword $request)
+    {
+        DB::beginTransaction();
+
+        try {
+            $payload = collect($request->validated());
+
+            $partner = Partner::where('email', $payload['email'])->first();
+
+            if (!$partner) {
+                return $this->badRequest("Email not found.");
+            }
+
+            $partner->update([
+                'password' => Hash::make($payload['new_password']),
+                'otp' => null
+            ]);
+
+            DB::commit();
+
+            return $this->success("Password reset successfully. You can now log in.", [
+                "email" => $partner->email,
+                "new_password" => $payload['new_password'] 
+            ]);
+        } catch (Exception $e) {
+            DB::rollBack();
+            throw $e;
         }
     }
 
