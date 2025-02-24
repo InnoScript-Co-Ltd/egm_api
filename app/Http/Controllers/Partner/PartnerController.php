@@ -24,7 +24,7 @@ class PartnerController extends Controller
 
         try {
             if ($payload['referral'] === null) {
-                $payload['rol'] = 16;
+                $payload['roi'] = 16;
             } else {
                 $referral = Referral::where(['link' => $payload['referral']])->first();
                 $payload['roi'] = $referral->commission;
@@ -32,15 +32,15 @@ class PartnerController extends Controller
 
             $partner = Partner::create($payload->toArray());
 
-            if ($referral->register_agents === null) {
-                $referralPayload['register_agents'] = [$partner->id];
-            } else {
-                $referralPayload['register_agents'] = $referral->register_agents;
-                array_push($referralPayload['register_agents'], $partner->id);
-            }
+            // if ($referral->register_agents === null) {
+            //     $referralPayload['register_agents'] = [$partner->id];
+            // } else {
+            //     $referralPayload['register_agents'] = $referral->register_agents;
+            //     array_push($referralPayload['register_agents'], $partner->id);
+            // }
 
-            $referralPayload['count'] = $referral->count + 1;
-            $referral->update($referralPayload);
+            // $referralPayload['count'] = $referral->count + 1;
+            // $referral->update($referralPayload);
 
             DB::commit();
 
