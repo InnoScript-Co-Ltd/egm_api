@@ -10,6 +10,7 @@ use App\Http\Requests\Agents\ConfrimPaymentPasswordRequest;
 use App\Http\Requests\Partner\PartnerChangePasswordRequest;
 use App\Http\Requests\Partner\PartnerLoginRequest;
 use App\Http\Requests\Partner\PartnerPaymentPasswordUpdateRequest;
+use App\Http\Requests\Partner\PartnerForgetPasswordRequest;
 use App\Models\Partner;
 use Exception;
 use Illuminate\Support\Facades\DB;
@@ -57,7 +58,6 @@ class PartnerAuthController extends Controller
             }
 
             return $this->badRequest('Incorrect email and passwrod');
-
         } catch (Exception $e) {
             DB::rollBack();
             throw $e;
@@ -72,6 +72,34 @@ class PartnerAuthController extends Controller
         $partner['make_payment'] = $partner->payment_password !== null ? true : false;
 
         return $this->success('Partner profile is retrived successfully', $partner);
+    }
+    public function forgetPassword(PartnerForgetPasswordRequest $request)
+    {
+        $payload = collect($request->validated());
+
+        DB::beginTransaction();
+
+        try {
+            $partner = Partner::where('email', $payload['email'])->first();
+
+            if($partner === null) {
+                return $this->badRequest("Email does not exist");
+            }
+            $otp = rand(100000, 999999);
+            
+            $partner->update([
+                'otp' => $otp
+            ]);
+            DB::commit();
+
+            return $this->success('OTP is sent to your email', [
+                "otp_code" => $otp
+            ]);
+        } catch (Exception $e) {
+         //   dd($e); 
+            DB::rollBack();
+            return $this->internalServerError();
+        }
     }
 
     public function changePassword(PartnerChangePasswordRequest $request)
@@ -98,7 +126,6 @@ class PartnerAuthController extends Controller
                 DB::commit();
 
                 return $this->success('Password is changed successfully', null);
-
             } catch (Exception $e) {
                 DB::rollBack();
                 throw $e;
@@ -121,7 +148,6 @@ class PartnerAuthController extends Controller
                 DB::commit();
 
                 return $this->success('Partner payment password is updated successfully', null);
-
             } catch (Exception $e) {
                 DB::rollBack();
                 throw $e;
@@ -147,7 +173,6 @@ class PartnerAuthController extends Controller
                 $agent->update($payload->toArray());
 
                 return $this->success('payment password is match', true);
-
             } catch (Exception $e) {
                 throw $e;
             }
