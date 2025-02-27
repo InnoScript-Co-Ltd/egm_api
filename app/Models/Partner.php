@@ -47,7 +47,7 @@ class Partner extends Authenticatable implements JWTSubject
         'status',
         'email_expired_at',
         'email_verify_code',
-        'otp'
+        'otp',
     ];
 
     protected $casts = [
@@ -61,7 +61,7 @@ class Partner extends Authenticatable implements JWTSubject
 
     protected $hidden = [
         'password', 'payment_password',
-            'otp'
+        'otp',
     ];
 
     public function getJWTIdentifier()

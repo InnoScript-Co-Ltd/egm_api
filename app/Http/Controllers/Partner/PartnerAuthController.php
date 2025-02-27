@@ -8,9 +8,9 @@ use App\Enums\PartnerStatusEnum;
 use App\Http\Controllers\Dashboard\Controller;
 use App\Http\Requests\Agents\ConfrimPaymentPasswordRequest;
 use App\Http\Requests\Partner\PartnerChangePasswordRequest;
+use App\Http\Requests\Partner\PartnerForgetPasswordRequest;
 use App\Http\Requests\Partner\PartnerLoginRequest;
 use App\Http\Requests\Partner\PartnerPaymentPasswordUpdateRequest;
-use App\Http\Requests\Partner\PartnerForgetPasswordRequest;
 use App\Http\Requests\Partner\PartnerResetPassword;
 use App\Http\Requests\Partner\PartnerVerifiedOtp;
 use App\Models\Partner;
@@ -75,7 +75,8 @@ class PartnerAuthController extends Controller
 
         return $this->success('Partner profile is retrived successfully', $partner);
     }
-    public function forgetPassword(PartnerForgetPasswordRequest $request)
+
+    public function forgotPassword(PartnerForgetPasswordRequest $request)
     {
         $payload = collect($request->validated());
 
@@ -85,45 +86,45 @@ class PartnerAuthController extends Controller
             $partner = Partner::where('email', $payload['email'])->first();
 
             if ($partner === null) {
-                return $this->badRequest("Email does not exist");
+                return $this->badRequest('Email does not exist');
             }
             $otp = rand(100000, 999999);
 
             $partner->update([
-                'otp' => $otp
+                'otp' => $otp,
             ]);
             DB::commit();
 
             return $this->success('OTP is sent to your email', [
-                "otp_code" => $otp
+                'otp_code' => $otp,
+                'email' => $payload['email'],
             ]);
         } catch (Exception $e) {
-            //   dd($e); 
             DB::rollBack();
+
             return $this->internalServerError();
         }
     }
+
     public function verifiedOtp(PartnerVerifiedOtp $request)
     {
         $payload = collect($request->validated());
-        DB::beginTransaction();
 
         try {
-            $partner = Partner::where('email', $request->email)
-                ->where('otp', $request->otp)
-                ->first();
+            $partner = Partner::where('email', $request->email)->first();
 
-            if (!$partner) {
+            if ($partner !== null && $partner->otp !== $payload['otp']) {
+                return $this->badRequest('invalid otp code');
+            }
+
+            if (! $partner) {
                 return $this->badRequest('Invalid');
             }
 
-            DB::commit();
-
             return $this->success('OTP verified successfully. You can now reset your password.', [
-                'email' => $partner->email
+                'email' => $partner->email,
             ]);
         } catch (Exception $e) {
-            DB::rollBack();
             throw $e;
         }
     }
@@ -137,21 +138,18 @@ class PartnerAuthController extends Controller
 
             $partner = Partner::where('email', $payload['email'])->first();
 
-            if (!$partner) {
-                return $this->badRequest("Email not found.");
+            if (! $partner) {
+                return $this->badRequest('Email not found.');
             }
 
             $partner->update([
-                'password' => Hash::make($payload['new_password']),
-                'otp' => null
+                'password' => Hash::make($payload['password']),
+                'otp' => null,
             ]);
 
             DB::commit();
 
-            return $this->success("Password reset successfully. You can now log in.", [
-                "email" => $partner->email,
-                "new_password" => $payload['new_password'] 
-            ]);
+            return $this->success('Password reset successfully. You can now log in.', null);
         } catch (Exception $e) {
             DB::rollBack();
             throw $e;

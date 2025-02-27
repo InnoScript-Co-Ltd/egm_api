@@ -17,11 +17,10 @@ Route::middleware(['partner'])->group(function () {
 
     Route::group(['prefix' => 'auth'], function () {
         Route::post('/login', 'PartnerAuthController@login');
-        Route::post( '/register', action: 'PartnerController@store');
-        Route::post('/forget-password', 'PartnerAuthController@forgetPassword'); 
-        Route::post('/verified-otp', 'PartnerAuthController@verifiedOtp'); 
-        Route::post('/reset-password', 'PartnerAuthController@resetPassword'); 
-
+        Route::post('/register', action: 'PartnerController@store');
+        Route::post('/forgot-password', 'PartnerAuthController@forgotPassword');
+        Route::post('/verified-otp', 'PartnerAuthController@verifiedOtp');
+        Route::post('/reset-password', 'PartnerAuthController@resetPassword');
 
     });
 

@@ -22,9 +22,9 @@ class PartnerResetPassword extends FormRequest
     public function rules(): array
     {
         return [
-            'email' => 'required|email', 
-            'new_password' => 'required|confirmed', 
- 
+            'email' => 'required|email',
+            'password' => 'required|confirmed',
+
         ];
     }
 }
