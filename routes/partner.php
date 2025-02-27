@@ -68,5 +68,10 @@ Route::middleware(['partner'])->group(function () {
         Route::group(['prefix' => 'dashboard'], function () {
             Route::get('/', 'PartnerDashboardController@index');
         });
+        Route::group(['prefix' => 'trade-record'], function () {
+            Route::get('/', 'PartnerTradeRecordController@index');
+            Route::get('/{id}', 'PartnerTradeRecordController@show');
+        });
     });
+
 });

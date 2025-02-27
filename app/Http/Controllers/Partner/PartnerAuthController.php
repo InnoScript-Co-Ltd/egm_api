@@ -52,14 +52,13 @@ class PartnerAuthController extends Controller
             }
 
             $token = auth()->guard('partner')->attempt($payload->toArray());
-
             DB::commit();
 
             if ($token) {
+
                 return $this->createNewToken($token);
             }
-
-            return $this->badRequest('Incorrect email and passwrod');
+            return $this->badRequest('Incorrect email and password');
         } catch (Exception $e) {
             DB::rollBack();
             throw $e;
@@ -98,7 +97,6 @@ class PartnerAuthController extends Controller
                 "otp_code" => $otp
             ]);
         } catch (Exception $e) {
-            //   dd($e); 
             DB::rollBack();
             return $this->internalServerError();
         }
@@ -109,8 +107,8 @@ class PartnerAuthController extends Controller
         DB::beginTransaction();
 
         try {
-            $partner = Partner::where('email', $request->email)
-                ->where('otp', $request->otp)
+            $partner = Partner::where('email', $payload['email'])
+                ->where('otp', $payload['otp'])
                 ->first();
 
             if (!$partner) {
@@ -150,7 +148,7 @@ class PartnerAuthController extends Controller
 
             return $this->success("Password reset successfully. You can now log in.", [
                 "email" => $partner->email,
-                "new_password" => $payload['new_password'] 
+                "new_password" => $payload['new_password']
             ]);
         } catch (Exception $e) {
             DB::rollBack();

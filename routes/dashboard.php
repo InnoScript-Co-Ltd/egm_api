@@ -209,5 +209,14 @@ Route::middleware('jwt')->group(function () {
         Route::get('/{id}', [ArticleLikeController::class, 'show'])->permission(PermissionEnum::ARTICLE_LIKE_SHOW->value);
         Route::delete('/{id}', [ArticleLikeController::class, 'destroy'])->permission(PermissionEnum::ARTICLE_LIKE_DESTROY->value);
     });
+    // trade record
+    Route::group(['prefix' => 'trade-record'], function () {
+        Route::get('/', 'AdminTradeRecordController@index')->permission(PermissionEnum::TRADE_RECORD_INDEX->value);
+        Route::post('/', 'AdminTradeRecordController@store')->permission(PermissionEnum::TRADE_RECORD_STORE->value);
+        Route::get('/{id}', 'AdminTradeRecordController@show')->permission(PermissionEnum::TRADE_RECORD_SHOW->value);
+        Route::post('/{id}', 'AdminTradeRecordController@update')->permission(PermissionEnum::TRADE_RECORD_UPDATE->value);
+        Route::delete('/{id}', 'AdminTradeRecordController@destroy')->permission(PermissionEnum::TRADE_RECORD_DESTROY->value);
+    });
+    
 
 });
