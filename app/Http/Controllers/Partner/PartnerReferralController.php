@@ -6,6 +6,7 @@ use App\Enums\KycStatusEnum;
 use App\Enums\PartnerStatusEnum;
 use App\Enums\ReferralTypeEnm;
 use App\Http\Controllers\Dashboard\Controller;
+use App\Http\Requests\Partner\PartnerReferralStoreRequest;
 use App\Models\Partner;
 use App\Models\Referral;
 use Carbon\Carbon;
@@ -83,9 +84,14 @@ class PartnerReferralController extends Controller
 
     }
 
-    public function commissionReferralStore()
+    public function commissionReferralStore(PartnerReferralStoreRequest $request)
     {
         $auth = auth('partner')->user();
+        $payload = collect($request->validated());
+
+        if ($payload['percentage'] > $auth->roi) {
+            return $this->badRequest('does not allow your percentage amount');
+        }
 
         DB::beginTransaction();
 
@@ -101,10 +107,10 @@ class PartnerReferralController extends Controller
                 $referral = Referral::create([
                     'partner_id' => $partner['id'],
                     'agent_type' => 'PARTNER',
-                    'expired_at' => Carbon::now()->addMonths(1),
+                    'expired_at' => Carbon::now()->addMonths(12),
                     'link' => strtoupper($link),
                     'count' => 0,
-                    'commission' => 15,
+                    'commission' => $payload['percentage'],
                     'referral_type' => ReferralTypeEnm::COMMISSION_REFERRAL->value,
                 ]);
 
