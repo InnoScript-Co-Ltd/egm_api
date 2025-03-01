@@ -83,8 +83,8 @@ class PartnerTransactionController extends Controller
                 $package = Package::findOrFail($payload['package_id']);
 
                 $payload['package_name'] = $package->name;
-                $payload['package_roi_rate'] = $package->roi_rate;
-                $payload['package_duration'] = $package->duration;
+                $payload['package_roi_rate'] = $partner->roi;
+                $payload['package_duration'] = 6;
 
                 if (isset($payload['transaction_screenshoot'])) {
                     $ImagePath = $payload['transaction_screenshoot']->store('images', 'public');
