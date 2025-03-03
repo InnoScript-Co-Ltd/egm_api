@@ -279,5 +279,6 @@ enum PermissionEnum: string
     case BANK_TYPE_STORE = 'BANK_TYPE_STORE';
     case BANK_TYPE_SHOW = 'BANK_TYPE_SHOW';
     case BANK_TYPE_DESTROY = 'BANK_TYPE_DESTROY';
+    case BANK_TYPE_UPDATE = 'BANK_TYPE_UPDATE';
 
 }
