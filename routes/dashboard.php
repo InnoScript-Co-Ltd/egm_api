@@ -173,6 +173,14 @@ Route::middleware('jwt')->group(function () {
             Route::put('/{id}', 'TownshipController@update')->permission(PermissionEnum::TOWNSHIP_UPDATE->value);
             Route::delete('/{id}', 'TownshipController@destroy')->permission(PermissionEnum::TOWNSHIP_DESTROY->value);
         });
+
+        Route::group(['prefix' => 'bank-type'], function () {
+            Route::get('/', 'BankTypeController@index')->permission(PermissionEnum::BANK_TYPE_INDEX->value);
+            Route::post('/', 'BankTypeController@store')->permission(PermissionEnum::BANK_TYPE_STORE->value);
+            Route::get('/{id}', 'BankTypeController@show')->permission(PermissionEnum::BANK_TYPE_SHOW->value);
+            Route::post('/{id}', 'BankTypeController@update')->permission(PermissionEnum::BANK_TYPE_UPDATE->value);
+            Route::delete('/{id}', 'BankTypeController@destroy')->permission(PermissionEnum::BANK_TYPE_DESTROY->value);
+        });
     });
 
     // article Type
