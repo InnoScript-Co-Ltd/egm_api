@@ -31,6 +31,12 @@ class AdminBankTypeController extends Controller
         $payload = collect($request->validated());
         DB::beginTransaction();
 
+        if (isset($payload['logo'])) {
+            $ImagePath = $payload['logo']->store('images', 'public');
+            $image = explode('/', $ImagePath)[1];
+            $payload['logo'] = $image;
+        }
+
         try {
             $bankType = BankType::create($payload->toArray());
             DB::commit();
@@ -57,9 +63,15 @@ class AdminBankTypeController extends Controller
     public function update(AdminBankTypeUpdateRequest $request, $id)
     {
         $payload = collect($request->validated());
+
+        if (isset($payload['logo'])) {
+            $ImagePath = $payload['logo']->store('images', 'public');
+            $image = explode('/', $ImagePath)[1];
+            $payload['logo'] = $image;
+        }
+
         DB::beginTransaction();
         try {
-
             $bankType = BankType::findOrFail($id);
             $bankType->update($payload->toArray());
 
