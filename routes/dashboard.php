@@ -176,11 +176,11 @@ Route::middleware('jwt')->group(function () {
     });
 
     Route::group(['prefix' => 'bank-type'], function () {
-        Route::get('/', 'BankTypeController@index')->permission(PermissionEnum::BANK_TYPE_INDEX->value);
-        Route::post('/', 'BankTypeController@store')->permission(PermissionEnum::BANK_TYPE_STORE->value);
-        Route::get('/{id}', 'BankTypeController@show')->permission(PermissionEnum::BANK_TYPE_SHOW->value);
-        Route::post('/{id}', 'BankTypeController@update')->permission(PermissionEnum::BANK_TYPE_UPDATE->value);
-        Route::delete('/{id}', 'BankTypeController@destroy')->permission(PermissionEnum::BANK_TYPE_DESTROY->value);
+        Route::get('/', 'AdminBankTypeController@index')->permission(PermissionEnum::BANK_TYPE_INDEX->value);
+        Route::post('/', 'AdminBankTypeController@store')->permission(PermissionEnum::BANK_TYPE_STORE->value);
+        Route::get('/{id}', 'AdminBankTypeController@show')->permission(PermissionEnum::BANK_TYPE_SHOW->value);
+        Route::post('/{id}', 'AdminBankTypeController@update')->permission(PermissionEnum::BANK_TYPE_UPDATE->value);
+        Route::delete('/{id}', 'AdminBankTypeController@destroy')->permission(PermissionEnum::BANK_TYPE_DESTROY->value);
     });
 
     // article Type
