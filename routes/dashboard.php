@@ -49,6 +49,9 @@ Route::middleware('jwt')->group(function () {
         Route::get('/{id}', 'PartnerController@show');
         Route::put('/{id}', 'PartnerController@update');
         Route::delete('/{id}', 'PartnerController@destroy');
+        Route::post('/{id}/kyc-approve', 'PartnerController@approve');
+
+
     });
 
     Route::group(['prefix' => 'email-content'], function () {
@@ -62,15 +65,18 @@ Route::middleware('jwt')->group(function () {
     Route::group(['prefix' => 'agent'], function () {
         Route::get('/{type}', 'DashboardAgentController@index');
         Route::get('/{type}/{id}', 'DashboardAgentController@show');
+        Route::post('/', 'DashboardAgentController@store');
+        Route::put('/{id}', 'DashboardAgentController@update');
+        Route::post('/{id}/kyc-approve', 'DashboardAgentController@approve');
     });
 
-    Route::group(['prefix' => 'agent-bank-account'], function () {
-        Route::get('/', 'AgentBankAccountController@index')->permission(PermissionEnum::AGENT_BANK_ACCOUNT_INDEX->value);
-        Route::post('/', 'AgentBankAccountController@store')->permission(PermissionEnum::AGENT_BANK_ACCOUNT_STORE->value);
-        Route::get('/{id}', 'AgentBankAccountController@show')->permission(PermissionEnum::AGENT_BANK_ACCOUNT_SHOW->value);
-        Route::put('/{id}', 'AgentBankAccountController@update')->permission(PermissionEnum::AGENT_BANK_ACCOUNT_UPDATE->value);
-        Route::delete('/{id}', 'AgentBankAccountController@destroy')->permission(PermissionEnum::AGENT_BANK_ACCOUNT_DESTROY->value);
-    });
+    // Route::group(['prefix' => 'agent-bank-account'], function () {
+    //     Route::get('/', 'AgentBankAccountController@index')->permission(PermissionEnum::AGENT_BANK_ACCOUNT_INDEX->value);
+    //     Route::post('/', 'AgentBankAccountController@store')->permission(PermissionEnum::AGENT_BANK_ACCOUNT_STORE->value);
+    //     Route::get('/{id}', 'AgentBankAccountController@show')->permission(PermissionEnum::AGENT_BANK_ACCOUNT_SHOW->value);
+    //     Route::put('/{id}', 'AgentBankAccountController@update')->permission(PermissionEnum::AGENT_BANK_ACCOUNT_UPDATE->value);
+    //     Route::delete('/{id}', 'AgentBankAccountController@destroy')->permission(PermissionEnum::AGENT_BANK_ACCOUNT_DESTROY->value);
+    // });
 
     Route::group(['prefix' => 'package'], function () {
         Route::get('/', 'PackageController@index');

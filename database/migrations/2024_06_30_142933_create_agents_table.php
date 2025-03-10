@@ -45,7 +45,7 @@ return new class extends Migration
             $table->datetime('phone_verified_at')->nullable()->default(null);
             $table->string('kyc_status')->default(KycStatusEnum::CHECKING->value);
             $table->string('status')->default(AgentStatusEnum::PENDING->value);
-            $table->string('agent_type');
+            $table->string('agent_type')->nullable()->default(null);
             $table->string('email_verify_code')->nullable()->default(null);
             $table->datetime('email_expired_at')->nullable()->default(null);
             $table->auditColumns();

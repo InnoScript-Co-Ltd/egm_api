@@ -15,7 +15,6 @@ class PartnerTradeRecordController extends Controller
     public function index()
     {
         $partner = auth('partner')->user();
-        $id = $partner->id;
         if (in_array($partner->kyc_status, ['FULL_KYC', 'CHECKING']) && $partner->status === 'ACTIVE') {
             
             DB::beginTransaction();

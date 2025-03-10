@@ -47,10 +47,10 @@ class AgentStoreRequest extends FormRequest
             'nrc_back' => 'nullable | file',
             // "passport_front" => "nullable | file",
             // "passport_back" => "nullable | file",
-            'country_id' => "required | in:$countriesId",
-            'region_or_state_id' => "required | in:$regionOrStateId",
-            'city_id' => "required | in:$citiesId",
-            'township_id' => "required | in:$townshipsId",
+            'country_id' => "nullable | in:$countriesId",
+            'region_or_state_id' => "nullable | in:$regionOrStateId",
+            'city_id' => "nullable | in:$citiesId",
+            'township_id' => "nullable | in:$townshipsId",
             'address' => 'required | string',
         ];
     }

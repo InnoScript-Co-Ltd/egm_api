@@ -21,7 +21,7 @@ return new class extends Migration
             $table->bigInteger('commission')->unsigned()->nullable()->default(null);
             $table->string('link');
             $table->integer('count')->unsigned();
-            $table->string('referral_type');
+            $table->string('referral_type')->nullable()->default(null);
             $table->date('expired_at')->nullable();
             $table->auditColumns();
 

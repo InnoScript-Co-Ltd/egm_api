@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Dashboard;
 use App\Enums\EmailContentTypeEnum;
 use App\Enums\GeneralStatusEnum;
 use App\Enums\KycStatusEnum;
+use App\Http\Requests\Dashboard\PartnerApproveRequest;
 use App\Http\Requests\Dashboard\PartnerStoreRequest;
 use App\Http\Requests\Dashboard\PartnerUpdateRequest;
 use App\Mail\Dashboard\PartnerAccountEmailTemplate;
@@ -44,7 +45,6 @@ class PartnerController extends Controller
             DB::commit();
 
             return $this->success('partner list is successfully retrived', $partner);
-
         } catch (Exception $e) {
             DB::rollback();
             throw $e;
@@ -89,13 +89,28 @@ class PartnerController extends Controller
             DB::commit();
 
             return $this->success('partner account detail is successfully retrived', $partner);
-
         } catch (Exception $e) {
             DB::rollback();
             throw $e;
         }
     }
+    public function approve(PartnerApproveRequest $request,$id) {
 
+        $payload=collect($request->validated());
+        DB::beginTransaction();
+        try{
+            $partner = Partner::findOrFail($id);
+            $partner->update([
+                'kyc_status' => $payload['kyc_status'], 
+            ]);
+            DB::commit();
+
+            return $this->success('partner account is updated successfully', $partner);
+        } catch (Exception $e) {
+            DB::rollback();
+            throw $e;
+        }
+    }
     public function update(PartnerUpdateRequest $request, $id)
     {
         $payload = collect($request->validated());
@@ -126,10 +141,8 @@ class PartnerController extends Controller
             DB::commit();
 
             return $this->success('partner account is updated successfully', $partner);
-
         } catch (Exception $e) {
             DB::rollback();
-            dd($e);
             throw $e;
         }
     }
@@ -144,7 +157,6 @@ class PartnerController extends Controller
             DB::commit();
 
             return $this->success('partner account is deleted successfully', $partner);
-
         } catch (Exception $e) {
             DB::rollback();
             throw $e;

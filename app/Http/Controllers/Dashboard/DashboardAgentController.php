@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Dashboard;
 
+use App\Http\Requests\Agents\AgentApproveRequest;
 use App\Http\Requests\AgentStoreRequest;
 use App\Http\Requests\AgentUpdateRequest;
 use App\Models\Agent;
@@ -30,7 +31,6 @@ class DashboardAgentController extends Controller
     public function store(AgentStoreRequest $request)
     {
         $payload = collect($request->validated());
-
         DB::beginTransaction();
         try {
 
@@ -65,7 +65,6 @@ class DashboardAgentController extends Controller
             }
 
             $agent = Agent::create($payload->toArray());
-
             DB::commit();
 
             return $this->success('New agent is created successfully', $agent);
@@ -88,6 +87,23 @@ class DashboardAgentController extends Controller
             return $this->success('Agent info is retrived successfully retrived', $agent);
 
         } catch (Exception $e) {
+            throw $e;
+        }
+    }
+    public function approve(AgentApproveRequest $request,$id) {
+
+        $payload=collect($request->validated());
+        DB::beginTransaction();
+        try{
+            $agent = Agent::findOrFail($id);
+            $agent->update([
+                'kyc_status' => $payload['kyc_status'], 
+            ]);
+            DB::commit();
+
+            return $this->success('agent KYC approved successfully', $agent);
+        } catch (Exception $e) {
+            DB::rollback();
             throw $e;
         }
     }

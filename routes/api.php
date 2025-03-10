@@ -15,6 +15,16 @@ use Illuminate\Support\Facades\Route;
 
 Route::middleware(['api'])->group(function () {
 
-    Route::middleware('jwt')->group(function () {});
+    Route::middleware('jwt')->group(function () {
 
+        // Route::group(['prefix'=>'customer'], function(){
+        //     Route::get('/','CustomerController@index');
+        //     Route::post('/','CustomerController@store');
+        //     Route::get('/{id}','CustomerController@show');
+        //     Route::put('/{id}','CustomerController@update');
+        //     Route::delete('/{id}','CustomerController@destroy');
+
+        // });
+
+});
 });
