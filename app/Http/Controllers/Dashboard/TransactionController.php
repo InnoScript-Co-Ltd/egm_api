@@ -104,12 +104,12 @@ class TransactionController extends Controller
 
             collect($months)->map(function ($month) use ($repaymentPayload, $deposit) {
 
-                if(isset($deposit['agent_id'])) {
+                if (isset($deposit['agent_id'])) {
                     $repaymentPayload['agent_id'] = $deposit['agent_id'];
                     $repaymentPayload['partner_id'] = null;
                 }
 
-                if(isset($deposit['partner_id'])) {
+                if (isset($deposit['partner_id'])) {
                     $repaymentPayload['partner_id'] = $deposit['partner_id'];
                     $repaymentPayload['agent_id'] = null;
                 }
@@ -133,7 +133,7 @@ class TransactionController extends Controller
                     $repaymentPayload['amount'] = $oneDayROI * $repaymentDays;
                     $repaymentPayload['count_days'] = $repaymentDays;
                 }
-                
+
                 Repayment::create($repaymentPayload);
             });
 

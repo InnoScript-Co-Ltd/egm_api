@@ -2,9 +2,9 @@
 
 namespace App\Http\Controllers\Partner;
 
+use App\Enums\RepaymentStatusEnum;
 use App\Http\Controllers\Dashboard\Controller;
 use App\Models\Deposit;
-use App\Enums\RepaymentStatusEnum;
 use App\Models\Repayment;
 use Carbon\Carbon;
 use Exception;
@@ -12,7 +12,6 @@ use Illuminate\Support\Facades\DB;
 
 class PartnerDashboardController extends Controller
 {
-
     public function index()
     {
         $partner = auth('partner')->user();
