@@ -71,6 +71,7 @@ class TransactionController extends Controller
         DB::beginTransaction();
 
         try {
+
             $transaction = Transaction::findOrFail($id);
 
             if ($transaction->sender_type === 'MAIN_AGENT' || $transaction->sender_type === 'SUB_AGENT') {
@@ -84,6 +85,8 @@ class TransactionController extends Controller
             $payload['deposit_amount'] = $transaction->package_deposit_amount;
             $payload['roi_amount'] = $transaction->package_deposit_amount * $transaction->package_roi_rate / 100;
             $payload['commission'] = $transaction->package_roi_rate;
+            $payload['transaction_id'] = $transaction->id;
+
             $deposit = Deposit::create($payload);
 
             $created_at = Carbon::parse($deposit->created_at);
@@ -101,14 +104,22 @@ class TransactionController extends Controller
 
             collect($months)->map(function ($month) use ($repaymentPayload, $deposit) {
 
+                if(isset($deposit['agent_id'])) {
+                    $repaymentPayload['agent_id'] = $deposit['agent_id'];
+                    $repaymentPayload['partner_id'] = null;
+                }
+
+                if(isset($deposit['partner_id'])) {
+                    $repaymentPayload['partner_id'] = $deposit['partner_id'];
+                    $repaymentPayload['agent_id'] = null;
+                }
+
                 $depositYearMonth = Carbon::now()->year.'-'.Carbon::now()->month;
                 $oneDayROI = $deposit->roi_amount / 30;
 
                 $repaymentPayload['total_amount'] = $deposit->roi_amount;
                 $repaymentPayload['oneday_amount'] = $deposit->roi_amount / 30;
                 $repaymentPayload['total_days'] = 30;
-
-                $repaymentPayload['agent_id'] = $deposit->agent_id;
 
                 if ($depositYearMonth === $month) {
                     $repaymentPayload['date'] = $month.'-26';
@@ -122,7 +133,7 @@ class TransactionController extends Controller
                     $repaymentPayload['amount'] = $oneDayROI * $repaymentDays;
                     $repaymentPayload['count_days'] = $repaymentDays;
                 }
-
+                
                 Repayment::create($repaymentPayload);
             });
 

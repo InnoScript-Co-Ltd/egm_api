@@ -41,6 +41,7 @@ class Partner extends Authenticatable implements JWTSubject
         'township_id',
         'password',
         'payment_password',
+        'referral',
         'email_verified_at',
         'phone_verified_at',
         'kyc_status',

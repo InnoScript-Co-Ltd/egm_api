@@ -20,6 +20,7 @@ class PartnerController extends Controller
     {
         $payload = collect($request->validated());
 
+
         DB::beginTransaction();
 
         try {
@@ -29,7 +30,7 @@ class PartnerController extends Controller
                 $referral = Referral::where(['link' => $payload['referral']])->first();
                 $payload['roi'] = $referral->commission;
             }
-
+        
             $partner = Partner::create($payload->toArray());
 
             // if ($referral->register_agents === null) {
