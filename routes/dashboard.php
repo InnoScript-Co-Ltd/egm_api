@@ -217,4 +217,11 @@ Route::middleware('jwt')->group(function () {
         Route::get('/{id}', [ArticleLikeController::class, 'show'])->permission(PermissionEnum::ARTICLE_LIKE_SHOW->value);
         Route::delete('/{id}', [ArticleLikeController::class, 'destroy'])->permission(PermissionEnum::ARTICLE_LIKE_DESTROY->value);
     });
+
+    /** Repayment */
+    Route::group(['prefix' => 'repayment'], function () {
+        Route::get('/', 'DashboardRepaymentController@index')->permission(PermissionEnum::REPAYMENT_INDEX->value);
+        Route::get('/{id}', 'DashboardRepaymentController@show')->permission(PermissionEnum::REPAYMENT_SHOW->value);
+        Route::put('/{id}', 'DashboardRepaymentController@update')->permission(PermissionEnum::REPAYMENT_UPDATE->value);
+    });
 });
