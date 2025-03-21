@@ -32,16 +32,16 @@ class PartnerController extends Controller
 
             $partner = Partner::create($payload->toArray());
 
-            // if ($referral->register_agents === null) {
-            //     $referralPayload['register_agents'] = [$partner->id];
-            // } else {
-            //     $referralPayload['register_agents'] = $referral->register_agents;
-            //     array_push($referralPayload['register_agents'], $partner->id);
-            // }
+            if ($referral->register_agents === null) {
+                $referralPayload['register_agents'] = [$partner->id];
+                $referralPayload['count'] = 1;
+            } else {
+                $referralPayload['register_agents'] = $referral->register_agents;
+                array_push($referralPayload['register_agents'], $partner->id);
+                $referralPayload['count'] = $referral->count + 1;
+            }
 
-            // $referralPayload['count'] = $referral->count + 1;
-            // $referral->update($referralPayload);
-
+            $referral->update($referralPayload);
             DB::commit();
 
             return $this->success('Partner account is created successfully', $partner);

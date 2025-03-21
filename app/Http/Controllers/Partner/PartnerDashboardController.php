@@ -5,6 +5,8 @@ namespace App\Http\Controllers\Partner;
 use App\Enums\RepaymentStatusEnum;
 use App\Http\Controllers\Dashboard\Controller;
 use App\Models\Deposit;
+use App\Models\Partner;
+use App\Models\Referral;
 use App\Models\Repayment;
 use Carbon\Carbon;
 use Exception;
@@ -21,6 +23,26 @@ class PartnerDashboardController extends Controller
             DB::beginTransaction();
 
             try {
+
+                $referrals = Referral::select(['link'])
+                    ->where(['partner_id' => $partner->id])
+                    ->where('count', '>', -1)
+                    ->get();
+
+                $referralCodes = collect($referrals)->map(function ($referral) {
+                    return $referral['link'];
+                });
+
+                $partners = Partner::with(['deposit'])
+                    ->whereIn('referral', $referralCodes)
+                    ->get();
+
+                $totalCommission = collect($partners)->map(function ($partner) {
+                    $totalDeposit = $partner['deposit']->sum('deposit_amount');
+                    $commissionPercentage = 16 - $partner->roi;
+
+                    return $totalDeposit * $commissionPercentage / 100;
+                })->sum();
 
                 $deposits = Deposit::with(['repayments'])
                     ->select(['id', 'partner_id', 'deposit_amount', 'roi_amount', 'expired_at', 'created_at'])
@@ -52,6 +74,7 @@ class PartnerDashboardController extends Controller
                     'total_deposit_amount' => $totalDeposit,
                     'total_repayment' => $totalRepayment,
                     'this_month_repayment' => $thisMonthRepayment,
+                    'commission_amount' => $totalCommission,
                 ]);
 
             } catch (Exception $e) {
