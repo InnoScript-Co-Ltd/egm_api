@@ -221,6 +221,7 @@ Route::middleware('jwt')->group(function () {
     /** Repayment */
     Route::group(['prefix' => 'repayment'], function () {
         Route::get('/', 'DashboardRepaymentController@index')->permission(PermissionEnum::REPAYMENT_INDEX->value);
+        Route::get('/deposit/{id}', 'DashboardRepaymentController@showByDeposit')->permission(PermissionEnum::REPAYMENT_SHOW->value);
         Route::get('/{id}', 'DashboardRepaymentController@show')->permission(PermissionEnum::REPAYMENT_SHOW->value);
         Route::put('/{id}', 'DashboardRepaymentController@update')->permission(PermissionEnum::REPAYMENT_UPDATE->value);
     });
