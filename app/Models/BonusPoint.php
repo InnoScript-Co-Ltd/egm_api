@@ -14,5 +14,5 @@ class BonusPoint extends Model
 
     protected $table = 'bonus_points';
 
-    protected $fillable = ['label', 'limit_amount'];
+    protected $fillable = ['label', 'limit_amount', 'status'];
 }

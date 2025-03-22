@@ -225,4 +225,13 @@ Route::middleware('jwt')->group(function () {
         Route::get('/{id}', 'DashboardRepaymentController@show')->permission(PermissionEnum::REPAYMENT_SHOW->value);
         Route::put('/{id}', 'DashboardRepaymentController@update')->permission(PermissionEnum::REPAYMENT_UPDATE->value);
     });
+
+    /** Bonus Point */
+    Route::group(['prefix' => 'bonus-point'], function () {
+        Route::get('/', 'DashboardBonusPointController@index')->permission(PermissionEnum::BONUS_POINT_INDEX->value);
+        Route::post('/', 'DashboardBonusPointController@store')->permission(PermissionEnum::BONUS_POINT_STORE->value);
+        Route::get('/{id}', 'DashboardBonusPointController@show')->permission(PermissionEnum::BONUS_POINT_SHOW->value);
+        Route::put('/{id}', 'DashboardBonusPointController@update')->permission(PermissionEnum::BONUS_POINT_UPDATE->value);
+        Route::delete('/{id}', 'DashboardBonusPointController@destroy')->permission(PermissionEnum::BONUS_POINT_DESTROY->value);
+    });
 });
