@@ -28,12 +28,13 @@ class DashboardRepaymentController extends Controller
     {
         try {
             $repayments = Repayment::where(['deposit_id' => $id])->get();
+
             return $this->success('Repayment is retrived successfully by deposit', $repayments);
-        } catch(Exception $e) {
+        } catch (Exception $e) {
             throw $e;
         }
     }
-    
+
     public function show($id)
     {
         try {

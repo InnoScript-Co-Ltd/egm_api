@@ -12,8 +12,7 @@ class BonusPoint extends Model
 {
     use BasicAudit,HasFactory,SnowflakeID,SoftDeletes;
 
-    protected $table = "bonus_points";
+    protected $table = 'bonus_points';
 
-    protected $fillable = ["label", "limit_amount"];
-
+    protected $fillable = ['label', 'limit_amount'];
 }
