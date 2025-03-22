@@ -2,8 +2,10 @@
 
 namespace App\Http\Controllers\Partner;
 
+use App\Enums\GeneralStatusEnum;
 use App\Enums\RepaymentStatusEnum;
 use App\Http\Controllers\Dashboard\Controller;
+use App\Models\BonusPoint;
 use App\Models\Deposit;
 use App\Models\Partner;
 use App\Models\Referral;
@@ -24,9 +26,13 @@ class PartnerDashboardController extends Controller
 
             try {
 
+                $bonusPoint = BonusPoint::select(['limit_amount'])
+                    ->where(['status' => GeneralStatusEnum::ACTIVE->value])
+                    ->first();
+
                 $referrals = Referral::select(['link'])
                     ->where(['partner_id' => $partner->id])
-                    ->where('count', '>', -1)
+                    ->where('count', '>', 0)
                     ->get();
 
                 $referralCodes = collect($referrals)->map(function ($referral) {
@@ -37,12 +43,16 @@ class PartnerDashboardController extends Controller
                     ->whereIn('referral', $referralCodes)
                     ->get();
 
-                $totalCommission = collect($partners)->map(function ($partner) {
+                $referralPartnerDeposit = collect($partners)->map(function ($partner) {
                     $totalDeposit = $partner['deposit']->sum('deposit_amount');
                     $commissionPercentage = 16 - $partner->roi;
 
-                    return $totalDeposit * $commissionPercentage / 100;
-                })->sum();
+                    return [
+                        'referral_partner_deposit' => $totalDeposit,
+                        'commission' => $totalDeposit * $commissionPercentage / 100,
+                    ];
+
+                });
 
                 $deposits = Deposit::with(['repayments'])
                     ->select(['id', 'partner_id', 'deposit_amount', 'roi_amount', 'expired_at', 'created_at'])
@@ -74,7 +84,9 @@ class PartnerDashboardController extends Controller
                     'total_deposit_amount' => $totalDeposit,
                     'total_repayment' => $totalRepayment,
                     'this_month_repayment' => $thisMonthRepayment,
-                    'commission_amount' => $totalCommission,
+                    'commission_amount' => $referralPartnerDeposit->sum('commission'),
+                    'bonus_point' => $bonusPoint['limit_amount'],
+                    'progress_bonus_point' => $referralPartnerDeposit->sum('referral_partner_deposit'),
                 ]);
 
             } catch (Exception $e) {
