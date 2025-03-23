@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Dashboard;
 use App\Enums\EmailContentTypeEnum;
 use App\Enums\GeneralStatusEnum;
 use App\Enums\KycStatusEnum;
+use App\Enums\PartnerStatusEnum;
 use App\Http\Requests\Dashboard\PartnerStoreRequest;
 use App\Http\Requests\Dashboard\PartnerUpdateRequest;
 use App\Mail\Dashboard\PartnerAccountEmailTemplate;
@@ -147,6 +148,40 @@ class PartnerController extends Controller
 
         } catch (Exception $e) {
             DB::rollback();
+            throw $e;
+        }
+    }
+
+    public function approveAccount($id)
+    {
+        DB::beginTransaction();
+
+        try {
+            $partner = Partner::findOrFail($id);
+            $partner->update([
+                'status' => PartnerStatusEnum::ACTIVE->value,
+            ]);
+            DB::commit();
+
+            return $this->success('partner account is approve to ACTIVE status successfully', null);
+        } catch (Exception $e) {
+            throw $e;
+        }
+    }
+
+    public function approveKYC($id)
+    {
+        DB::beginTransaction();
+
+        try {
+            $partner = Partner::findOrFail($id);
+            $partner->update([
+                'kyc_status' => KycStatusEnum::FULL_KYC->value,
+            ]);
+            DB::commit();
+
+            return $this->success('partner account is approve to FULL_KYC status successfully', null);
+        } catch (Exception $e) {
             throw $e;
         }
     }
