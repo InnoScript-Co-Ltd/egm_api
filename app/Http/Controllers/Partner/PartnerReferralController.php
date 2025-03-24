@@ -43,6 +43,28 @@ class PartnerReferralController extends Controller
         return $this->badRequest('You does not have permission right now.');
     }
 
+    public function partnerIndex($id)
+    {
+        $partner = auth('partner')->user();
+
+        if ($partner->kyc_status === 'FULL_KYC' && $partner->status === 'ACTIVE') {
+
+            try {
+                $referralPartners = Referral::select(['register_agents'])
+                    ->where(['partner_id' => $partner->id, 'agent_type' => 'PARTNER'])
+                    ->get();
+
+                $partners = Partner::whereIn($referralPartners)->get();
+
+                return $this->success('Partner referral links are successfully retrived', $partners);
+            } catch (Exception $e) {
+                throw $e;
+            }
+        }
+
+        return $this->badRequest('You does not have permission right now.');
+    }
+
     public function levelFourReferralStore()
     {
         $auth = auth('partner')->user();

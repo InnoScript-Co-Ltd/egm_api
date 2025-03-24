@@ -33,8 +33,8 @@ class DashboardRepaymentUpdateRequest extends FormRequest
             'count_days' => 'nullable | numeric',
             'total_days' => 'nullable | numeric',
             'status' => "nullable | in:$repaymentStatus",
-            'created_at' => 'nullable | datetime',
-            'updated_at' => 'nullable | datetime',
+            'created_at' => 'nullable | date',
+            'updated_at' => 'nullable | date',
         ];
     }
 }
