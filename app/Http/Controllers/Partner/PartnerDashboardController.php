@@ -51,7 +51,6 @@ class PartnerDashboardController extends Controller
                         'referral_partner_deposit' => $totalDeposit,
                         'commission' => $totalDeposit * $commissionPercentage / 100,
                     ];
-
                 });
 
                 $deposits = Deposit::with(['repayments'])

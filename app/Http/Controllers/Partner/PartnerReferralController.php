@@ -54,7 +54,8 @@ class PartnerReferralController extends Controller
                     ->where(['partner_id' => $partner->id, 'agent_type' => 'PARTNER'])
                     ->get();
 
-                $partners = Partner::whereIn($referralPartners)->get();
+                $partners = Partner::with(['deposit'])
+                    ->whereIn('id', $referralPartners)->get();
 
                 return $this->success('Partner referral links are successfully retrived', $partners);
             } catch (Exception $e) {

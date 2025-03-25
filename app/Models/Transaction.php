@@ -49,4 +49,9 @@ class Transaction extends Model
     {
         return $this->hasOne(Deposit::class, 'transaction_id', 'id');
     }
+
+    public function repayments()
+    {
+        return $this->hasMany(Repayment::class, 'transaction_id', 'id');
+    }
 }

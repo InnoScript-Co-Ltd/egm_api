@@ -21,7 +21,6 @@ class PartnerTransactionController extends Controller
         $partner = auth('partner')->user();
 
         if ($partner->kyc_status === 'FULL_KYC' && $partner->status === 'ACTIVE') {
-            DB::beginTransaction();
 
             try {
                 $partnerTransactions = Transaction::where([
@@ -34,16 +33,25 @@ class PartnerTransactionController extends Controller
                     ->filterDateQuery()
                     ->paginationQuery();
 
-                DB::commit();
-
                 return $this->success('Partner transaction list is successfully retrived', $partnerTransactions);
             } catch (Exception $e) {
-                DB::rollback();
                 throw $e;
             }
         }
 
         return $this->badRequest('You does not have permission right now.');
+    }
+
+    public function show($id)
+    {
+        try {
+            $transaction = Transaction::with(['repayments'])
+                ->FindOrFail($id);
+
+            return $this->success('Partner transaction detail is successfully retrived', $transaction);
+        } catch (Exception $e) {
+            throw $e;
+        }
     }
 
     public function store(PartnerTransactionStoreRequest $request)

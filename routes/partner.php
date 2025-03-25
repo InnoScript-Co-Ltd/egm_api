@@ -59,6 +59,7 @@ Route::middleware(['partner'])->group(function () {
         Route::group(['prefix' => 'transaction'], function () {
             Route::post('/', 'PartnerTransactionController@store');
             Route::get('/', 'PartnerTransactionController@index');
+            Route::get('/{id}', 'PartnerTransactionController@show');
         });
 
         Route::group(['prefix' => 'agent'], function () {
