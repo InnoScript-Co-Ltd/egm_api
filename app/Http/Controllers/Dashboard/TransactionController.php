@@ -53,15 +53,12 @@ class TransactionController extends Controller
 
     public function show($id)
     {
-        DB::beginTransaction();
-
         try {
-            $transaction = Transaction::findOrFail($id);
-            DB::commit();
+            $transaction = Transaction::with(['repayments'])
+                ->findOrFail($id);
 
             return $this->success('Transaction is retrived successfully', $transaction);
         } catch (Exception $e) {
-            DB::rollback();
             throw $e;
         }
     }
