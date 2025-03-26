@@ -86,6 +86,7 @@ class TransactionController extends Controller
             $payload['roi_amount'] = $transaction->package_deposit_amount * $transaction->package_roi_rate / 100;
             $payload['commission'] = $transaction->package_roi_rate;
             $payload['transaction_id'] = $transaction->id;
+            $payload['roi_percentage'] = $transaction->package_roi_rate;
 
             $deposit = Deposit::create($payload);
 
