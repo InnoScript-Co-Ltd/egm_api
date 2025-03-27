@@ -135,6 +135,15 @@ enum PermissionEnum: string
     case POINT_INDEX = 'POINT_INDEX';
     case POINT_DESTROY = 'POINT_DESTROY';
 
+    /** Banner */
+
+    case BANNER_STORE = 'BANNER_STORE';
+    case BANNER_SHOW = 'BANNER_SHOW';
+    case BANNER_UPDATE = 'BANNER_UPDATE';
+    case BANNER_INDEX = 'BANNER_INDEX';
+    case BANNER_DESTROY = 'BANNER_DESTROY';
+
+
     /** Promotion */
     case PROMOTION_STORE = 'PROMOTION_STORE';
     case PROMOTION_SHOW = 'PROMOTION_SHOW';

@@ -26,7 +26,7 @@ Route::middleware(['partner'])->group(function () {
 
     Route::middleware('jwt')->group(function () {
 
-        Route::get('/status', 'StatusController@index');
+        Route::get('/status', 'PartnerStatusController@index');
         Route::get('/deposit-package', 'PartnerDepositPackageController@index');
         Route::get('/merchant-bank-account', 'PartnerMerchantBankAccountController@index');
 
@@ -68,6 +68,14 @@ Route::middleware(['partner'])->group(function () {
 
         Route::group(['prefix' => 'dashboard'], function () {
             Route::get('/', 'PartnerDashboardController@index');
+            Route::get('/{id}', 'PartnerDashboardController@show');
+
         });
+        Route::group(['prefix' => 'banner'], function () {
+            Route::get('/', 'PartnerBannerController@index');
+            Route::get('/{id}', 'PartnerBannerController@show');
+
+        });
+
     });
 });
