@@ -236,4 +236,11 @@ Route::middleware('jwt')->group(function () {
         Route::put('/{id}', 'DashboardBonusPointController@update')->permission(PermissionEnum::BONUS_POINT_UPDATE->value);
         Route::delete('/{id}', 'DashboardBonusPointController@destroy')->permission(PermissionEnum::BONUS_POINT_DESTROY->value);
     });
+    Route::group(['prefix' => 'banner'], function () {
+        Route::get('/', 'DashboardBannerController@index')->permission(PermissionEnum::BANNER_INDEX->value);
+        Route::post('/', 'DashboardBannerController@store')->permission(PermissionEnum::BANNER_STORE->value);
+        Route::get('/{id}', 'DashboardBannerController@show')->permission(PermissionEnum::BANNER_SHOW->value);
+        Route::put('/{id}', 'DashboardBannerController@update')->permission(PermissionEnum::BANNER_UPDATE->value);
+        Route::delete('/{id}', 'DashboardBannerController@destroy')->permission(PermissionEnum::BANNER_DESTROY->value);
+    });
 });

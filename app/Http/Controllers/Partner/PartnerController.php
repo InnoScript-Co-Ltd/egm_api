@@ -18,8 +18,8 @@ class PartnerController extends Controller
 {
     public function store(PartnerCreateRequest $request)
     {
-        $payload = collect($request->validated());
 
+        $payload = collect($request->validated());
         DB::beginTransaction();
 
         try {
@@ -31,23 +31,21 @@ class PartnerController extends Controller
             }
 
             $partner = Partner::create($payload->toArray());
+            // if ($referral->register_agents === null) {
+            //     $referralPayload['register_agents'] = [$partner->id];
+            //     $referralPayload['count'] = 1;
+            // } else {
+            //     $referralPayload['register_agents'] = $referral->register_agents;
+            //     array_push($referralPayload['register_agents'], $partner->id);
+            //     $referralPayload['count'] = $referral->count + 1;
+            // }
 
-            if ($referral->register_agents === null) {
-                $referralPayload['register_agents'] = [$partner->id];
-                $referralPayload['count'] = 1;
-            } else {
-                $referralPayload['register_agents'] = $referral->register_agents;
-                array_push($referralPayload['register_agents'], $partner->id);
-                $referralPayload['count'] = $referral->count + 1;
-            }
-
-            $referral->update($referralPayload);
+            // $referral->update($referralPayload);
             DB::commit();
 
             return $this->success('Partner account is created successfully', $partner);
         } catch (Exception $e) {
             DB::rollBack();
-
             return $this->internalServerError();
         }
     }
