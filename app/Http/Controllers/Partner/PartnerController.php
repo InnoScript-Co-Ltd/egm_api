@@ -46,6 +46,7 @@ class PartnerController extends Controller
             return $this->success('Partner account is created successfully', $partner);
         } catch (Exception $e) {
             DB::rollBack();
+
             return $this->internalServerError();
         }
     }

@@ -135,14 +135,12 @@ enum PermissionEnum: string
     case POINT_INDEX = 'POINT_INDEX';
     case POINT_DESTROY = 'POINT_DESTROY';
 
-    /** Banner */
-
+    /** BANNER */
     case BANNER_STORE = 'BANNER_STORE';
     case BANNER_SHOW = 'BANNER_SHOW';
     case BANNER_UPDATE = 'BANNER_UPDATE';
     case BANNER_INDEX = 'BANNER_INDEX';
     case BANNER_DESTROY = 'BANNER_DESTROY';
-
 
     /** Promotion */
     case PROMOTION_STORE = 'PROMOTION_STORE';
@@ -305,5 +303,4 @@ enum PermissionEnum: string
     case BONUS_POINT_SHOW = 'BONUS_POINT_SHOW';
     case BONUS_POINT_DESTROY = 'BONUS_POINT_DESTROY';
     case BONUS_POINT_UPDATE = 'BONUS_POINT_UPDATE';
-
 }

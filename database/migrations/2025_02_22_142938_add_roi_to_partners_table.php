@@ -12,7 +12,7 @@ return new class extends Migration
     public function up()
     {
         Schema::table('partners', function (Blueprint $table) {
-            if (!Schema::hasColumn('partners', 'roi')) {
+            if (! Schema::hasColumn('partners', 'roi')) {
                 $table->unsignedBigInteger('roi')->default(16);
             }
         });

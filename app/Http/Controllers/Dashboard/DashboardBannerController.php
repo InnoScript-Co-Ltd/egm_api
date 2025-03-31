@@ -6,7 +6,6 @@ use App\Http\Requests\Dashboard\BannerStoreRequest;
 use App\Http\Requests\Dashboard\BannerUpdateRequest;
 use App\Models\Banner;
 use Exception;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
 class DashboardBannerController extends Controller

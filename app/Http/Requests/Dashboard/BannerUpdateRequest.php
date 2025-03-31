@@ -23,7 +23,7 @@ class BannerUpdateRequest extends FormRequest
     {
         return [
             'title' => 'string',
-            'image' => 'file| max:1024', 
+            'image' => 'file| max:1024',
             'description' => 'nullable|string',
         ];
     }

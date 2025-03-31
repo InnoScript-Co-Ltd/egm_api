@@ -5,7 +5,6 @@ namespace App\Http\Controllers\Partner;
 use App\Http\Controllers\Dashboard\Controller;
 use App\Models\Banner;
 use Exception;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
 class PartnerBannerController extends Controller
@@ -34,6 +33,7 @@ class PartnerBannerController extends Controller
 
         return $this->badRequest('You does not have permission right now.');
     }
+
     public function show($id)
     {
         try {

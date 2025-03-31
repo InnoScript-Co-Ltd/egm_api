@@ -21,10 +21,10 @@ class BannerStoreRequest extends FormRequest
      */
     public function rules(): array
     {
-            return [
-                'title' => 'required|string|unique:banners',
-                'image' => 'required|file| max:1024', 
-                'description' => 'nullable|string'
-            ];
+        return [
+            'title' => 'required|string|unique:banners',
+            'image' => 'required|file| max:1024',
+            'description' => 'nullable|string',
+        ];
     }
 }
