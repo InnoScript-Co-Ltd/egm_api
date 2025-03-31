@@ -38,7 +38,8 @@ class DashboardRepaymentController extends Controller
     public function show($id)
     {
         try {
-            $repayment = Repayment::findOrFail($id);
+            $repayment = Repayment::with(['partner'])
+                ->findOrFail($id);
 
             return $this->success('Repayment is retrived successfully', $repayment);
         } catch (Exception $e) {

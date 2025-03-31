@@ -17,10 +17,18 @@ class Repayment extends Model
     protected $table = 'repayments';
 
     protected $fillable = [
-        'deposit_id', 'transaction_id', 'agent_id', 'partner_id', 'date', 'amount', 'total_amount', 'total_days', 'count_days', 'oneday_amount', 'status',
+        'deposit_id', 'transaction_id', 'agent_id', 'partner_id', 'date', 'amount', 'total_amount', 'total_days', 'count_days', 'oneday_amount', 'status', 'created_at', 'updated_at', 'deleted_at',
     ];
 
     protected $casts = [
         'date' => 'date',
+        'created_at' => 'date',
+        'updated_at' => 'date',
+        'deleted_at' => 'date',
     ];
+
+    public function partner()
+    {
+        return $this->hasOne(Partner::class, 'id', 'partner_id');
+    }
 }

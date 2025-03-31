@@ -21,19 +21,15 @@ class PartnerTransactionController extends Controller
         $partner = auth('partner')->user();
 
         if ($partner->kyc_status === 'FULL_KYC' && $partner->status === 'ACTIVE') {
-
             try {
                 $partnerTransactions = Transaction::where([
                     'sender_id' => $partner->id,
-                    'sender_type' => 'PARTNER',
-                ])
-                    ->searchQuery()
-                    ->sortingQuery()
-                    ->filterQuery()
-                    ->filterDateQuery()
-                    ->paginationQuery();
+                ]);
 
-                return $this->success('Partner transaction list is successfully retrived', $partnerTransactions);
+                return $this->success('Partner transaction list is successfully retrived', [
+                    'transactions' => $partnerTransactions->get(),
+                    'total_deposit' => $partnerTransactions->get()->sum('package_deposit_amount'),
+                ]);
             } catch (Exception $e) {
                 throw $e;
             }
