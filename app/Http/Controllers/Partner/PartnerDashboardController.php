@@ -6,10 +6,10 @@ use App\Enums\GeneralStatusEnum;
 use App\Enums\RepaymentStatusEnum;
 use App\Http\Controllers\Dashboard\Controller;
 use App\Models\BonusPoint;
-use App\Models\Deposit;
 use App\Models\Partner;
 use App\Models\Referral;
 use App\Models\Repayment;
+use App\Models\Transaction;
 use Carbon\Carbon;
 use Exception;
 use Illuminate\Support\Facades\DB;
@@ -53,13 +53,14 @@ class PartnerDashboardController extends Controller
                     ];
                 });
 
-                $deposits = Deposit::with(['repayments'])
-                    ->select(['id', 'partner_id', 'deposit_amount', 'roi_amount', 'expired_at', 'created_at'])
-                    ->where(['partner_id' => $partner->id])
-                    ->whereDate('expired_at', '>', Carbon::now()->toDateString())
+                $deposits = Transaction::with(['repayments'])
+                    ->where([
+                        'sender_id' => $partner->id,
+                        'sender_type' => 'PARTNER',
+                    ])
                     ->get();
 
-                $totalDeposit = collect($deposits)->sum('deposit_amount');
+                $totalDeposit = collect($deposits)->sum('package_deposit_amount');
 
                 $totalRepayment = collect($deposits)->map(function ($deposit) {
                     $deposit['total_repayment'] = collect($deposit->repayments)->filter(function ($repayment) {
