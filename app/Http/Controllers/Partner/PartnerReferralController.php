@@ -50,14 +50,27 @@ class PartnerReferralController extends Controller
         if ($partner->kyc_status === 'FULL_KYC' && $partner->status === 'ACTIVE') {
 
             try {
-                $referralPartners = Referral::select(['register_agents'])
-                    ->where(['partner_id' => $partner->id, 'agent_type' => 'PARTNER'])
-                    ->get();
 
-                $partners = Partner::with(['deposit'])
-                    ->whereIn('id', $referralPartners)->get();
+                $partners = Referral::where(['partner_id' => $partner->id])->get();
 
-                return $this->success('Partner referral links are successfully retrived', $partners);
+                $referralPartners = collect($partners)->map(function ($partner) {
+
+                    if ($partner['register_agents'] !== null) {
+                        $registerPartners = [];
+
+                        collect($partner['register_agents'])->map(function ($value) use ($registerPartners) {
+                            array_push($registerPartners, $value);
+                        });
+
+                        dd($registerPartners);
+                    }
+
+                });
+
+                // $partners = Partner::with(['deposit'])
+                //     ->whereIn('id', $referralPartners)->get();
+
+                return $this->success('Partner referral links are successfully retrived', $referralPartners);
             } catch (Exception $e) {
                 throw $e;
             }
