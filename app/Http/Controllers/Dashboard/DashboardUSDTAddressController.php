@@ -2,7 +2,8 @@
 
 namespace App\Http\Controllers\Dashboard;
 
-use App\Http\Controllers\Controller;
+use App\Http\Requests\Dashboard\DashboardUSDTAddressStoreRequest;
+use App\Http\Requests\Dashboard\DashboardUSDTAddressUpdateRequest;
 use App\Models\USDTAddress;
 use Exception;
 use Illuminate\Support\Facades\DB;
@@ -35,7 +36,7 @@ class DashboardUSDTAddressController extends Controller
         }
     }
 
-    public function update(USDTAddressUpdateRequest $request, $id)
+    public function update(DashboardUSDTAddressUpdateRequest $request, $id)
     {
         $payload = collect($request->validated());
         DB::beginTransaction();
@@ -52,9 +53,8 @@ class DashboardUSDTAddressController extends Controller
         }
     }
 
-    public function store(USDTAddressStoreRequest $request)
+    public function store(DashboardUSDTAddressStoreRequest $request)
     {
-
         $payload = collect($request->validated());
         DB::beginTransaction();
 

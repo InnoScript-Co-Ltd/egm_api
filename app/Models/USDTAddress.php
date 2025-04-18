@@ -20,6 +20,6 @@ class USDTAddress extends Model
 
     public function partner()
     {
-        return $this->hasOne(Partner::class, 'partner_id', 'id');
+        return $this->hasOne(Partner::class, 'id', 'partner_id');
     }
 }
