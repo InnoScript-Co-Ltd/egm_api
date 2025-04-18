@@ -93,10 +93,11 @@ Route::middleware('jwt')->group(function () {
     });
 
     Route::group(['prefix' => 'transaction'], function () {
-        Route::get('/partner', 'TransactionController@partnerIndex');
-        Route::post('/{id}/make-payment', 'TransactionController@makePayment');
-        Route::get('/', 'TransactionController@index');
-        Route::get('/{id}', 'TransactionController@show');
+        Route::post('/', 'DashboardTransactionController@store')->permission(PermissionEnum::TRANSACTION_STORE->value);
+        Route::get('/', 'DashboardTransactionController@index')->permission(PermissionEnum::TRANSACTION_INDEX->value);
+        Route::post('/{id}', 'DashboardTransactionController@update')->permission(PermissionEnum::TRANSACTION_UPDATE->value);
+        Route::get('/{id}', 'DashboardTransactionController@show')->permission(PermissionEnum::TRANSACTION_UPDATE->value);
+        Route::post('/{id}/make-payment', 'DashboardTransactionController@makePayment')->permission(PermissionEnum::TRANSACTION_MAKE_PAYMENT->value);
     });
 
     Route::group(['prefix' => 'permission'], function () {

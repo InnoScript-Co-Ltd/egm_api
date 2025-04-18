@@ -6,11 +6,12 @@ use App\Enums\TransactionStatusEnum;
 use App\Models\Deposit;
 use App\Models\Repayment;
 use App\Models\Transaction;
+use App\Http\Requests\Dashboard\DashboardTransactionUpdateRequest;
 use Exception;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\DB;
 
-class TransactionController extends Controller
+class DashboardTransactionController extends Controller
 {
     public function partnerIndex()
     {
@@ -58,6 +59,31 @@ class TransactionController extends Controller
                 ->findOrFail($id);
 
             return $this->success('Transaction is retrived successfully', $transaction);
+        } catch (Exception $e) {
+            throw $e;
+        }
+    }
+
+    public function update(DashboardTransactionUpdateRequest $request, $id)
+    {
+        $payload = collect($request->validated());
+
+        if (isset($payload['transaction_screenshoot'])) {
+            $ImagePath = $payload['transaction_screenshoot']->store('images', 'public');
+            $image = explode('/', $ImagePath)[1];
+            $payload['transaction_screenshoot'] = $image;
+        }
+
+        DB::beginTransaction();
+
+        try {
+            $transaction = Transaction::with(['repayments'])
+                ->findOrFail($id);
+            $transaction->update($payload->toArray());
+
+            DB::commit();
+            
+            return $this->success('Transaction is updated successfully', $transaction);
         } catch (Exception $e) {
             throw $e;
         }
