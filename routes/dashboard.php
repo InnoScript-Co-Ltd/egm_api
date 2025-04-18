@@ -237,6 +237,7 @@ Route::middleware('jwt')->group(function () {
         Route::put('/{id}', 'DashboardBonusPointController@update')->permission(PermissionEnum::BONUS_POINT_UPDATE->value);
         Route::delete('/{id}', 'DashboardBonusPointController@destroy')->permission(PermissionEnum::BONUS_POINT_DESTROY->value);
     });
+
     Route::group(['prefix' => 'banner'], function () {
         Route::get('/', 'DashboardBannerController@index')->permission(PermissionEnum::BANNER_INDEX->value);
         Route::post('/', 'DashboardBannerController@store')->permission(PermissionEnum::BANNER_STORE->value);
@@ -244,4 +245,17 @@ Route::middleware('jwt')->group(function () {
         Route::put('/{id}', 'DashboardBannerController@update')->permission(PermissionEnum::BANNER_UPDATE->value);
         Route::delete('/{id}', 'DashboardBannerController@destroy')->permission(PermissionEnum::BANNER_DESTROY->value);
     });
+
+    /** Wallets */
+    Route::group(['prefix' => 'wallet'], function () {
+
+        Route::group(['prefix' => 'usdt'], function () {
+            Route::get('/', 'DashboardUSDTAddressController@index')->permission(PermissionEnum::USDT_ADDRESS_INDEX->value);
+            Route::post('/', 'DashboardUSDTAddressController@store')->permission(PermissionEnum::USDT_ADDRESS_STORE->value);
+            Route::get('/{id}', 'DashboardUSDTAddressController@show')->permission(PermissionEnum::USDT_ADDRESS_SHOW->value);
+            Route::put('/{id}', 'DashboardUSDTAddressController@update')->permission(PermissionEnum::USDT_ADDRESS_UPDATE->value);
+            Route::delete('/{id}', 'DashboardUSDTAddressController@destroy')->permission(PermissionEnum::USDT_ADDRESS_DESTROY->value);
+        });
+    });
+
 });

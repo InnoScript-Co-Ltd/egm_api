@@ -81,7 +81,6 @@ class PartnerBankAccountController extends Controller
                 return $this->success('Partner bank account is updated successfully', $partnerBankAccount);
 
             } catch (Exception $e) {
-                dd($e);
                 DB::rollback();
                 throw $e;
             }

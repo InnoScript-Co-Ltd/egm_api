@@ -3,10 +3,10 @@
 namespace App\Http\Controllers\Dashboard;
 
 use App\Enums\TransactionStatusEnum;
+use App\Http\Requests\Dashboard\DashboardTransactionUpdateRequest;
 use App\Models\Deposit;
 use App\Models\Repayment;
 use App\Models\Transaction;
-use App\Http\Requests\Dashboard\DashboardTransactionUpdateRequest;
 use Exception;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\DB;
@@ -82,7 +82,7 @@ class DashboardTransactionController extends Controller
             $transaction->update($payload->toArray());
 
             DB::commit();
-            
+
             return $this->success('Transaction is updated successfully', $transaction);
         } catch (Exception $e) {
             throw $e;

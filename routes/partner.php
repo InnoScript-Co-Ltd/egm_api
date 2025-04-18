@@ -71,11 +71,21 @@ Route::middleware(['partner'])->group(function () {
             Route::get('/{id}', 'PartnerDashboardController@show');
 
         });
+
         Route::group(['prefix' => 'banner'], function () {
             Route::get('/', 'PartnerBannerController@index');
             Route::get('/{id}', 'PartnerBannerController@show');
-
         });
 
+        Route::group(['prefix' => 'wallet'], function () {
+
+            Route::group(['prefix' => 'usdt'], function () {
+                Route::post('/', 'PartnerUSDTAddressController@store');
+                Route::get('/', 'PartnerUSDTAddressController@index');
+                Route::get('/{id}', 'PartnerUSDTAddressController@show');
+                Route::put('/{id}', 'PartnerUSDTAddressController@update');
+                Route::delete('/{id}', 'PartnerUSDTAddressController@destory');
+            });
+        });
     });
 });
