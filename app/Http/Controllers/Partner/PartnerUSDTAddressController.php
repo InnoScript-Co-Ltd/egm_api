@@ -2,7 +2,12 @@
 
 namespace App\Http\Controllers\Partner;
 
-use App\Http\Controllers\Controller;
+use App\Http\Controllers\Dashboard\Controller;
+use App\Http\Requests\Partner\PartnerUSDTAddressStoreRequest;
+use App\Http\Requests\Partner\PartnerUSDTAddressUpdateRequest;
+use App\Models\USDTAddress;
+use Exception;
+use Illuminate\Support\Facades\DB;
 
 class PartnerUSDTAddressController extends Controller
 {
@@ -39,11 +44,11 @@ class PartnerUSDTAddressController extends Controller
         }
     }
 
-    public function update(USDTAddressUpdateRequest $request, $id)
+    public function update(PartnerUSDTAddressUpdateRequest $request, $id)
     {
         $partner = auth('partner')->user();
-        $payload = collect($request->validated());
 
+        $payload = collect($request->validated());
         DB::beginTransaction();
 
         try {
@@ -62,7 +67,7 @@ class PartnerUSDTAddressController extends Controller
         }
     }
 
-    public function store(USDTAddressStoreRequest $request)
+    public function store(PartnerUSDTAddressStoreRequest $request)
     {
 
         $payload = collect($request->validated());
