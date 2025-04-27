@@ -9,6 +9,7 @@ use App\Http\Controllers\Dashboard\Controller;
 use App\Http\Requests\Partner\PartnerReferralStoreRequest;
 use App\Models\Partner;
 use App\Models\Referral;
+use App\Models\Transaction;
 use Carbon\Carbon;
 use Exception;
 use Illuminate\Support\Facades\DB;
@@ -43,6 +44,51 @@ class PartnerReferralController extends Controller
         return $this->badRequest('You does not have permission right now.');
     }
 
+    public function show($id)
+    {
+        $partner = auth('partner')->user();
+
+        if ($partner->kyc_status === 'FULL_KYC' && $partner->status === 'ACTIVE') {
+            DB::beginTransaction();
+
+            try {
+                $referral = Referral::where(['id' => $id, 'partner_id' => $partner->id])->firstOrFail();
+                $partners = Partner::select(['id', 'first_name', 'last_name', 'kyc_status', 'status', 'created_at', 'roi'])
+                    ->wherein('id', $referral->register_agents)->get();
+
+                $partners = collect($partners)->map(function ($value) use ($referral, $partner) {
+
+                    $value['comission'] = $partner->roi - $referral->commission;
+
+                    $transactionAmount = Transaction::select(['package_deposit_amount', 'sender_id', 'transaction_type', 'sender_type', 'status'])
+                        ->where([
+                            'sender_id' => $value->id,
+                            'transaction_type' => 'DEPOSIT',
+                            'sender_type' => 'PARTNER',
+                            'status' => 'DEPOSIT_PAYMENT_ACCEPTED',
+                        ])
+                        ->sum('package_deposit_amount');
+
+                    // $value['transaction_amount'] = $transactionAmount;
+                    $value['comission_amount'] = $transactionAmount * $value['comission'] / 100;
+
+                    return $value;
+                });
+
+                $referral->register_agents = $partners;
+                $referral->register_agents_count = count($referral->register_agents);
+                DB::commit();
+
+                return $this->success('Partner referral links are successfully retrived', $referral);
+            } catch (Exception $e) {
+                DB::rollback();
+                throw $e;
+            }
+        }
+
+        return $this->badRequest('You does not have permission right now.');
+    }
+
     public function partnerIndex($id)
     {
         $partner = auth('partner')->user();
@@ -50,9 +96,7 @@ class PartnerReferralController extends Controller
         if ($partner->kyc_status === 'FULL_KYC' && $partner->status === 'ACTIVE') {
 
             try {
-
                 $partners = Referral::where(['partner_id' => $partner->id])->get();
-
                 $referralPartners = collect($partners)->map(function ($partner) {
 
                     if ($partner['register_agents'] !== null) {

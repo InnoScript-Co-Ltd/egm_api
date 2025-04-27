@@ -2,9 +2,11 @@
 
 namespace App\Http\Controllers\Dashboard;
 
+use App\Enums\RepaymentStatusEnum;
 use App\Enums\TransactionStatusEnum;
+use App\Helpers\Snowflake;
 use App\Http\Requests\Dashboard\DashboardTransactionUpdateRequest;
-use App\Models\Deposit;
+use App\Models\Partner;
 use App\Models\Repayment;
 use App\Models\Transaction;
 use Exception;
@@ -97,78 +99,74 @@ class DashboardTransactionController extends Controller
 
             $transaction = Transaction::findOrFail($id);
 
-            if ($transaction->sender_type === 'MAIN_AGENT' || $transaction->sender_type === 'SUB_AGENT') {
-                $payload['agent_id'] = $transaction->sender_id;
-            } else {
-                $payload['partner_id'] = $transaction->sender_id;
+            if ($transaction->status !== TransactionStatusEnum::DEPOSIT_PENDING->value) {
+                return $this->badRequest('Transaction is not pending');
             }
 
-            $payload['status'] = TransactionStatusEnum::DEPOSIT_PAYMENT_ACCEPTED->value;
-            $payload['expired_at'] = Carbon::now()->addMonths(6);
-            $payload['deposit_amount'] = $transaction->package_deposit_amount;
-            $payload['roi_amount'] = $transaction->package_deposit_amount * $transaction->package_roi_rate / 100;
-            $payload['commission'] = $transaction->package_roi_rate;
-            $payload['transaction_id'] = $transaction->id;
-            $payload['roi_percentage'] = $transaction->package_roi_rate;
+            $partner = Partner::findOrFail($transaction->sender_id);
 
-            $deposit = Deposit::create($payload);
+            if ($partner->kyc_status !== 'FULL_KYC' || $partner->status !== 'ACTIVE') {
+                return $this->badRequest('Partner is not active or not full kyc');
+            }
 
-            $created_at = Carbon::parse($deposit->created_at);
-            $expired_at = Carbon::parse($deposit->expired_at);
+            $transactionUpdate['status'] = TransactionStatusEnum::DEPOSIT_PAYMENT_ACCEPTED->value;
+            $transactionUpdate['expired_at'] = Carbon::parse($transaction->created_at)->addMonths(6);
+            $transactionUpdate['updated_at'] = Carbon::now();
+
+            $created_at = Carbon::parse($transaction->created_at);
+            $expired_at = Carbon::parse($transactionUpdate['expired_at']);
 
             $months = [];
 
             while ($created_at->lte($expired_at)) {
-                $months[] = $created_at->format('Y-m');
+                $months[] = $created_at->format('Y-m-d');
                 $created_at->addMonth();
             }
 
-            $repaymentPayload['deposit_id'] = $deposit->id;
-            $repaymentPayload['transaction_id'] = $transaction->id;
+            $repayments = collect($months)->map(function ($month) use ($transaction, $transactionUpdate) {
 
-            collect($months)->map(function ($month) use ($repaymentPayload, $deposit) {
+                $closeDays = 25;
+                $daysInMonth = Carbon::parse($month)->daysInMonth;
+                $previousLeftDays = $daysInMonth - $closeDays;
 
-                if (isset($deposit['agent_id'])) {
-                    $repaymentPayload['agent_id'] = $deposit['agent_id'];
-                    $repaymentPayload['partner_id'] = null;
-                }
-
-                if (isset($deposit['partner_id'])) {
-                    $repaymentPayload['partner_id'] = $deposit['partner_id'];
-                    $repaymentPayload['agent_id'] = null;
-                }
-
-                $depositYearMonth = Carbon::now()->year.'-'.Carbon::now()->month;
-                $oneDayROI = $deposit->roi_amount / 30;
-
-                $repaymentPayload['total_amount'] = $deposit->roi_amount;
-                $repaymentPayload['oneday_amount'] = $deposit->roi_amount / 30;
+                $repaymentPayload['id'] = (new Snowflake)->short();
+                $repaymentPayload['transaction_id'] = $transaction->id;
+                $repaymentPayload['partner_id'] = $transaction->sender_id;
+                $repaymentPayload['total_amount'] = $transaction->package_deposit_amount * $transaction->package_roi_rate / 100;
+                $repaymentPayload['oneday_amount'] = $repaymentPayload['total_amount'] / 30;
+                $repaymentPayload['created_at'] = $transaction->created_at;
+                $repaymentPayload['status'] = RepaymentStatusEnum::AVAILABLE_WITHDRAW->value;
+                $repaymentPayload['date'] = Carbon::parse($month)->format('Y-m').'-'.'26';
                 $repaymentPayload['total_days'] = 30;
+                $repaymentPayload['count_days'] = $previousLeftDays + $closeDays;
+                $repaymentPayload['amount'] = $repaymentPayload['oneday_amount'] * $repaymentPayload['count_days'];
+                $repaymentPayload['created_at'] = Carbon::now();
 
-                if ($depositYearMonth === $month) {
-                    $repaymentPayload['date'] = $month.'-26';
-                    $repaymentDays = Carbon::parse($deposit->created_at)->diffInDays($repaymentPayload['date']);
-                    $repaymentPayload['amount'] = $oneDayROI * $repaymentDays;
-                    $repaymentPayload['count_days'] = $repaymentDays;
-                } else {
-                    $repaymentPayload['date'] = $month.'-26';
-                    $previousMonth = Carbon::parse($repaymentPayload['date'])->addMonths(-1);
-                    $repaymentDays = Carbon::parse($previousMonth)->diffInDays($repaymentPayload['date']);
-                    $repaymentPayload['amount'] = $oneDayROI * $repaymentDays;
-                    $repaymentPayload['count_days'] = $repaymentDays;
+                if (Carbon::parse($transaction->created_at)->format('Y-m-d') === $month) {
+                    $dayInMonth = Carbon::parse($month)->day;
+                    $repaymentPayload['count_days'] = $closeDays - $dayInMonth;
+                    $repaymentPayload['amount'] = $repaymentPayload['oneday_amount'] * $repaymentPayload['count_days'];
+                    $previousLeftDays = $daysInMonth - $closeDays;
                 }
 
-                Repayment::create($repaymentPayload);
+                if (Carbon::parse($transactionUpdate['expired_at'])->format('Y-m-d') === $month) {
+                    $dayInMonth = Carbon::parse($month)->day;
+                    $repaymentPayload['count_days'] = $previousLeftDays + $dayInMonth;
+                    $repaymentPayload['amount'] = $repaymentPayload['oneday_amount'] * $repaymentPayload['count_days'];
+                }
+
+                return $repaymentPayload;
             });
 
+            Repayment::insert($repayments->toArray());
             $transaction->update(['status' => TransactionStatusEnum::DEPOSIT_PAYMENT_ACCEPTED->value]);
-
             DB::commit();
 
-            return $this->success('Payment deposit is successfully', $payload);
+            return $this->success('Payment deposit is successfully', $repayments);
         } catch (Exception $e) {
             DB::rollback();
-            throw $e;
+
+            return $this->internalServerError('Payment deposit is failed');
         }
     }
 
