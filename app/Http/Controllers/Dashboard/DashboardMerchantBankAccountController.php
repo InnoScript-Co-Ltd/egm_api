@@ -5,10 +5,11 @@ namespace App\Http\Controllers\Dashboard;
 use App\Http\Requests\Dashboard\MerchantBankAccountStoreRequest;
 use App\Http\Requests\Dashboard\MerchantBankAccountUpdateRequest;
 use App\Models\MerchantBankAccount;
+use App\Models\Transaction;
 use Exception;
 use Illuminate\Support\Facades\DB;
 
-class MerchantBankAccountController extends Controller
+class DashboardMerchantBankAccountController extends Controller
 {
     public function index()
     {
@@ -49,17 +50,17 @@ class MerchantBankAccountController extends Controller
 
     public function show($id)
     {
-        DB::beginTransaction();
         try {
-
             $merchantBankAccount = MerchantBankAccount::findOrFail($id);
-            DB::commit();
+            $merchantBankAccount['transactions'] = Transaction::where('merchant_account_id', $id)->get();
+            $merchantBankAccount['total_deposit_amount'] = $merchantBankAccount['transactions']->sum('package_deposit_amount');
+            $merchantBankAccount['this_month_deposit_amount'] = $merchantBankAccount['transactions']->where('created_at', '>=', now()->startOfMonth())->sum('package_deposit_amount');
 
             return $this->success('merchant bank account detail is successfully retrived', $merchantBankAccount);
-
         } catch (Exception $e) {
             DB::rollback();
-            throw $e;
+
+            return $this->internalServerError('merchant bank account detail is not retrived');
         }
     }
 

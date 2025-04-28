@@ -22,4 +22,9 @@ class PartnerBankAccount extends Model
     {
         return $this->hasMany(Deposit::class, 'partner_id', 'id');
     }
+
+    public function transactions()
+    {
+        return $this->hasMany(Transaction::class, 'partner_id', 'id');
+    }
 }

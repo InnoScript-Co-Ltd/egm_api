@@ -35,11 +35,11 @@ Route::middleware('jwt')->group(function () {
     });
 
     Route::group(['prefix' => 'merchant-bank-account'], function () {
-        Route::post('/', 'MerchantBankAccountController@store');
-        Route::get('/', 'MerchantBankAccountController@index');
-        Route::get('/{id}', 'MerchantBankAccountController@show');
-        Route::put('/{id}', 'MerchantBankAccountController@update');
-        Route::delete('/{id}', 'MerchantBankAccountController@destroy');
+        Route::post('/', 'DashboardMerchantBankAccountController@store')->permission(PermissionEnum::MERCHANT_BANK_ACCOUNT_STORE->value);
+        Route::get('/', 'DashboardMerchantBankAccountController@index')->permission(PermissionEnum::MERCHANT_BANK_ACCOUNT_INDEX->value);
+        Route::get('/{id}', 'DashboardMerchantBankAccountController@show')->permission(PermissionEnum::MERCHANT_BANK_ACCOUNT_SHOW->value);
+        Route::post('/{id}', 'DashboardMerchantBankAccountController@update')->permission(PermissionEnum::MERCHANT_BANK_ACCOUNT_UPDATE->value);
+        Route::delete('/{id}', 'DashboardMerchantBankAccountController@destroy')->permission(PermissionEnum::MERCHANT_BANK_ACCOUNT_DESTROY->value);
     });
 
     Route::group(['prefix' => 'partner'], function () {

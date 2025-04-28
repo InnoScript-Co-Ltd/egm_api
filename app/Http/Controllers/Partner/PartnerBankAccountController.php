@@ -94,17 +94,13 @@ class PartnerBankAccountController extends Controller
         $partner = auth('partner')->user();
 
         if ($partner->kyc_status === 'FULL_KYC' && $partner->status === 'ACTIVE') {
-            DB::beginTransaction();
-
             try {
-                $partnerBankAccount = PartnerBankAccount::with(['deposit'])
+                $partnerBankAccount = PartnerBankAccount::with(['transactions'])
                     ->findOrFail($id);
-                DB::commit();
 
-                return $this->success('partner bank account is created successfully', $partnerBankAccount);
+                return $this->success('partner bank account is retrieved successfully', $partnerBankAccount);
             } catch (Exception $e) {
-                DB::rollback();
-                throw $e;
+                return $this->internalServerError('Something went wrong');
             }
         }
 
