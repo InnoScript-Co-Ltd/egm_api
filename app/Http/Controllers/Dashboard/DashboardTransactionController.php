@@ -144,14 +144,14 @@ class DashboardTransactionController extends Controller
 
                 if (Carbon::parse($transaction->created_at)->format('Y-m-d') === $month) {
                     $dayInMonth = Carbon::parse($month)->day;
-                    $repaymentPayload['count_days'] = $closeDays - $dayInMonth;
+                    $repaymentPayload['count_days'] = $dayInMonth - $closeDays;
                     $repaymentPayload['amount'] = $repaymentPayload['oneday_amount'] * $repaymentPayload['count_days'];
                     $previousLeftDays = $daysInMonth - $closeDays;
                 }
 
                 if (Carbon::parse($transactionUpdate['expired_at'])->format('Y-m-d') === $month) {
                     $dayInMonth = Carbon::parse($month)->day;
-                    $repaymentPayload['count_days'] = $previousLeftDays + $dayInMonth;
+                    $repaymentPayload['count_days'] = $previousLeftDays + $closeDays;
                     $repaymentPayload['amount'] = $repaymentPayload['oneday_amount'] * $repaymentPayload['count_days'];
                 }
 
