@@ -165,8 +165,8 @@ class DashboardTransactionController extends Controller
             return $this->success('Payment deposit is successfully', $repayments);
         } catch (Exception $e) {
             DB::rollback();
-
-            return $this->internalServerError('Payment deposit is failed');
+            throw $e;
+           // return $this->internalServerError('Payment deposit is failed');
         }
     }
 
