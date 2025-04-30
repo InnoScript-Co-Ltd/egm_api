@@ -72,10 +72,10 @@ class PartnerDashboardController extends Controller
                     return $deposit;
                 })->sum('total_repayment');
 
-                $month = Carbon::now()->format('m');
+                $thisMonthRepaymentDate = Carbon::now()->format('Y').'-'.Carbon::now()->format('m').'-26';
 
-                $thisMonthRepayment = Repayment::where(['partner_id' => $partner->id])
-                    ->whereMonth('date', $month)
+                $thisMonthRepayment = Repayment::where(['partner_id' => $partner->id, 'status' => RepaymentStatusEnum::AVAILABLE_WITHDRAW->value])
+                    ->whereDate('date', $thisMonthRepaymentDate)
                     ->sum('amount');
 
                 DB::commit();
