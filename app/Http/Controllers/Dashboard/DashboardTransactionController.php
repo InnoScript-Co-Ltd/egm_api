@@ -127,7 +127,7 @@ class DashboardTransactionController extends Controller
 
                 $closeDays = 25;
                 $daysInMonth = Carbon::parse($month)->daysInMonth;
-                $previousLeftDays = ($daysInMonth - $closeDays) + 1;
+                $previousLeftDays = $daysInMonth - $closeDays;
 
                 $repaymentPayload['id'] = (new Snowflake)->short();
                 $repaymentPayload['transaction_id'] = $transaction->id;
@@ -144,7 +144,7 @@ class DashboardTransactionController extends Controller
 
                 if (Carbon::parse($transaction->created_at)->format('Y-m-d') === $month) {
                     $dayInMonth = Carbon::parse($month)->day;
-                    $repaymentPayload['count_days'] = $closeDays - $dayInMonth;
+                    $repaymentPayload['count_days'] = ($closeDays - $dayInMonth) + 1;
                     $repaymentPayload['amount'] = $repaymentPayload['oneday_amount'] * $repaymentPayload['count_days'];
                     $previousLeftDays = $daysInMonth - $closeDays;
                 }
