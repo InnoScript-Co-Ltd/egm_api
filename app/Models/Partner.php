@@ -62,7 +62,6 @@ class Partner extends Authenticatable implements JWTSubject
 
     protected $hidden = [
         'password', 'payment_password',
-        'otp',
     ];
 
     public function getJWTIdentifier()

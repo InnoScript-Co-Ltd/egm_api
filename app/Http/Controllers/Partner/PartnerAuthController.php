@@ -14,6 +14,7 @@ use App\Http\Requests\Partner\PartnerPaymentPasswordUpdateRequest;
 use App\Http\Requests\Partner\PartnerResetPassword;
 use App\Http\Requests\Partner\PartnerVerifiedOtp;
 use App\Models\Partner;
+use Carbon\Carbon;
 use Exception;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
@@ -76,7 +77,7 @@ class PartnerAuthController extends Controller
         return $this->success('Partner profile is retrived successfully', $partner);
     }
 
-    public function forgotPassword(PartnerForgetPasswordRequest $request)
+    public function sendOTPByEmail(PartnerForgetPasswordRequest $request)
     {
         $payload = collect($request->validated());
 
@@ -88,17 +89,21 @@ class PartnerAuthController extends Controller
             if ($partner === null) {
                 return $this->badRequest('Email does not exist');
             }
+
             $otp = rand(100000, 999999);
 
             $partner->update([
-                'otp' => $otp,
+                'email_verify_code' => $otp,
+                'email_expired_at' => Carbon::now()->addMinutes(5),
             ]);
+
             DB::commit();
 
             return $this->success('OTP is sent to your email', [
                 'otp_code' => $otp,
                 'email' => $payload['email'],
             ]);
+
         } catch (Exception $e) {
             DB::rollBack();
 
@@ -106,26 +111,37 @@ class PartnerAuthController extends Controller
         }
     }
 
-    public function verifiedOtp(PartnerVerifiedOtp $request)
+    public function verifyOTPByEmail(PartnerVerifiedOtp $request)
     {
         $payload = collect($request->validated());
 
+        DB::beginTransaction();
+
         try {
-            $partner = Partner::where('email', $request->email)->first();
+            $partner = Partner::where('email', $payload['email'])->first();
 
-            if ($partner !== null && $partner->otp !== $payload['otp']) {
-                return $this->badRequest('invalid otp code');
+            if ($partner !== null && $partner->email_verify_code !== $payload['otp']) {
+                return $this->badRequest('Incorrect otp code');
             }
 
-            if (! $partner) {
-                return $this->badRequest('Invalid');
+            if ($partner->email_expired_at < Carbon::now()) {
+                return $this->badRequest('OTP expired');
             }
 
-            return $this->success('OTP verified successfully. You can now reset your password.', [
-                'email' => $partner->email,
+            $partner->update([
+                'otp' => null,
+                'email_verify_code' => Carbon::now(),
+                'email_expired_at' => null,
             ]);
+
+            DB::commit();
+
+            return $this->success('OTP verified successfully. You can now reset your password.');
+
         } catch (Exception $e) {
-            throw $e;
+            DB::rollBack();
+
+            return $this->internalServerError();
         }
     }
 
