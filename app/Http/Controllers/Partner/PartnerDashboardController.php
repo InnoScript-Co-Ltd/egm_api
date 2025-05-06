@@ -118,8 +118,6 @@ class PartnerDashboardController extends Controller
                     ')
                     ->groupBy('year', 'month');
 
-                dd($monthlyTransactions->get()->toArray());
-
                 return $this->success('deposit static is successfully retrived', [
                     'total_deposit_amount' => $totalDeposit,
                     'total_repayment' => $totalRepayment,
