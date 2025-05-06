@@ -98,6 +98,7 @@ Route::middleware('jwt')->group(function () {
         Route::post('/{id}', 'DashboardTransactionController@update')->permission(PermissionEnum::TRANSACTION_UPDATE->value);
         Route::get('/{id}', 'DashboardTransactionController@show')->permission(PermissionEnum::TRANSACTION_UPDATE->value);
         Route::post('/{id}/make-payment', 'DashboardTransactionController@makePayment')->permission(PermissionEnum::TRANSACTION_MAKE_PAYMENT->value);
+        Route::post('/{id}/reject', 'DashboardTransactionController@makeReject')->permission(PermissionEnum::TRANSACTION_REJECT->value);
     });
 
     Route::group(['prefix' => 'permission'], function () {
