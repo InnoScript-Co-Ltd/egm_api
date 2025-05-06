@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Partner;
 
 use App\Enums\GeneralStatusEnum;
 use App\Enums\RepaymentStatusEnum;
+use App\Enums\TransactionStatusEnum;
 use App\Http\Controllers\Dashboard\Controller;
 use App\Models\BonusPoint;
 use App\Models\Partner;
@@ -21,8 +22,6 @@ class PartnerDashboardController extends Controller
         $partner = auth('partner')->user();
 
         if ($partner && $partner->status === 'ACTIVE' && $partner->kyc_status === 'FULL_KYC') {
-
-            DB::beginTransaction();
 
             try {
 
@@ -78,7 +77,48 @@ class PartnerDashboardController extends Controller
                     ->whereDate('date', $thisMonthRepaymentDate)
                     ->sum('amount');
 
-                DB::commit();
+                // $yearlyReports = DB::table('partners')
+                //     ->where('partners.id', '=', $partner->id)
+                //     ->leftJoin('transactions', 'partners.id', '=', 'transactions.sender_id')
+                //     ->where([
+                //         'transactions.sender_type' => 'PARTNER',
+                //         'transactions.status' => TransactionStatusEnum::DEPOSIT_PAYMENT_ACCEPTED->value,
+                //     ])
+                //     ->selectRaw('
+                //         SUM(transactions.package_deposit_amount) as total_deposit
+                //         , YEAR(COALESCE(transactions.created_at)) as year
+                //         , MONTH(COALESCE(transactions.created_at)) as month
+                //     ')
+                //     ->leftJoin('repayments', 'transactions.id', '=', 'repayments.transaction_id')
+                //     ->groupBy('year', 'month')
+                //     ->get();
+
+                // dd($yearlyReports->toArray());
+
+                // $transactions = DB::table('transactions')
+                //     ->where('transactions.sender_id', '=', $partner->id)
+                //     ->where('transactions.sender_type', '=', 'PARTNER')
+                //     ->where('transactions.status', '=', TransactionStatusEnum::DEPOSIT_PAYMENT_ACCEPTED->value)
+                //     ->selectRaw('
+                //         YEAR(created_at) as year
+                //         , MONTH(created_at) as month
+                //         , SUM(transactions.package_deposit_amount) as total_deposit
+                //     ')
+                //     ->groupBy('year', 'month')
+                //     ->join('repayments', 'transactions.id', '=', 'repayments.transaction_id')
+                //     ->get();
+
+                $monthlyTransactions = Repayment::where([
+                    'parnter_id' => $partner->id,
+                ])
+                    ->selectRaw('
+                        YEAR(created_at) as year
+                        , MONTH(created_at) as month
+                        , SUM(transactions.package_deposit_amount) as total_deposit
+                    ')
+                    ->groupBy('year', 'month');
+
+                dd($monthlyTransactions->get()->toArray());
 
                 return $this->success('deposit static is successfully retrived', [
                     'total_deposit_amount' => $totalDeposit,

@@ -96,7 +96,6 @@ class DashboardTransactionController extends Controller
         DB::beginTransaction();
 
         try {
-
             $transaction = Transaction::findOrFail($id);
 
             if ($transaction->status !== TransactionStatusEnum::DEPOSIT_PENDING->value) {
@@ -165,8 +164,8 @@ class DashboardTransactionController extends Controller
             return $this->success('Payment deposit is successfully', $repayments);
         } catch (Exception $e) {
             DB::rollback();
-            throw $e;
-            // return $this->internalServerError('Payment deposit is failed');
+
+            return $this->internalServerError('Payment deposit is failed');
         }
     }
 
@@ -182,7 +181,8 @@ class DashboardTransactionController extends Controller
             return $this->success('Payment deposit is reject by admin', true);
         } catch (Exception $e) {
             DB::rollback();
-            throw $e;
+
+            return $this->internalServerError('Payment deposit is failed');
         }
     }
 }

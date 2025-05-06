@@ -19,6 +19,8 @@ class MerchantBankAccount extends Model
         'holder_name',
         'account_number',
         'bank_type_label',
+        'transaction_limit',
+        'transaction_limit_status',
         'status',
     ];
 }

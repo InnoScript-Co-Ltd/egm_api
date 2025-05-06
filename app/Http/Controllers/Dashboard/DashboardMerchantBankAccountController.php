@@ -13,7 +13,6 @@ class DashboardMerchantBankAccountController extends Controller
 {
     public function index()
     {
-        DB::beginTransaction();
         try {
 
             $merchantBankAccount = MerchantBankAccount::searchQuery()
@@ -21,13 +20,13 @@ class DashboardMerchantBankAccountController extends Controller
                 ->filterQuery()
                 ->filterDateQuery()
                 ->paginationQuery();
-            DB::commit();
 
             return $this->success('Merchant bank account list is successfully retrived', $merchantBankAccount);
 
         } catch (Exception $e) {
             DB::rollback();
-            throw $e;
+
+            return $this->internalServerError('Something went wrong while retrieving merchant bank account list');
         }
     }
 
@@ -60,7 +59,7 @@ class DashboardMerchantBankAccountController extends Controller
         } catch (Exception $e) {
             DB::rollback();
 
-            return $this->internalServerError('merchant bank account detail is not retrived');
+            return $this->internalServerError('Something went wrong while retrieving merchant bank account detail');
         }
     }
 
@@ -68,17 +67,17 @@ class DashboardMerchantBankAccountController extends Controller
     {
         $payload = collect($request->validated());
         DB::beginTransaction();
-        try {
 
+        try {
             $merchantBankAccount = MerchantBankAccount::findOrFail($id);
             $merchantBankAccount->update($payload->toArray());
             DB::commit();
 
             return $this->success('merchant bank account is updated successfully', $merchantBankAccount);
-
         } catch (Exception $e) {
             DB::rollback();
-            throw $e;
+
+            return $this->internalServerError('Something went wrong while updating merchant bank account');
         }
     }
 
@@ -95,7 +94,8 @@ class DashboardMerchantBankAccountController extends Controller
 
         } catch (Exception $e) {
             DB::rollback();
-            throw $e;
+
+            return $this->internalServerError('Something went wrong while deleting merchant bank account');
         }
     }
 }

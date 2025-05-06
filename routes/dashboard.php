@@ -38,7 +38,7 @@ Route::middleware('jwt')->group(function () {
         Route::post('/', 'DashboardMerchantBankAccountController@store')->permission(PermissionEnum::MERCHANT_BANK_ACCOUNT_STORE->value);
         Route::get('/', 'DashboardMerchantBankAccountController@index')->permission(PermissionEnum::MERCHANT_BANK_ACCOUNT_INDEX->value);
         Route::get('/{id}', 'DashboardMerchantBankAccountController@show')->permission(PermissionEnum::MERCHANT_BANK_ACCOUNT_SHOW->value);
-        Route::post('/{id}', 'DashboardMerchantBankAccountController@update')->permission(PermissionEnum::MERCHANT_BANK_ACCOUNT_UPDATE->value);
+        Route::put('/{id}', 'DashboardMerchantBankAccountController@update')->permission(PermissionEnum::MERCHANT_BANK_ACCOUNT_UPDATE->value);
         Route::delete('/{id}', 'DashboardMerchantBankAccountController@destroy')->permission(PermissionEnum::MERCHANT_BANK_ACCOUNT_DESTROY->value);
     });
 

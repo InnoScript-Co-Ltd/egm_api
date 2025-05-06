@@ -25,6 +25,7 @@ class MerchantBankAccountStoreRequest extends FormRequest
             'bank_type_label' => 'required | string',
             'holder_name' => 'required | string',
             'account_number' => 'required | string | unique:merchant_bank_accounts,account_number',
+            'transaction_limit' => 'required | numeric',
             'bank_type' => 'required | string',
         ];
     }
