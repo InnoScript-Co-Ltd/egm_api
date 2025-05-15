@@ -177,9 +177,9 @@ class PartnerReferralController extends Controller
 
         try {
 
-            $partner = Partner::with(['deposit'])->findOrFail($auth->id)->toArray();
+            $partner = Partner::with(['transactions'])->findOrFail($auth->id)->toArray();
 
-            if (count($partner['deposit']) > 0 && $partner['kyc_status'] === KycStatusEnum::FULL_KYC->value && $partner['status'] === PartnerStatusEnum::ACTIVE->value) {
+            if (count($partner['transactions']) > 0 && $partner['kyc_status'] === KycStatusEnum::FULL_KYC->value && $partner['status'] === PartnerStatusEnum::ACTIVE->value) {
 
                 $linkArray = explode('-', Str::uuid());
                 $link = implode('', $linkArray);
@@ -187,7 +187,7 @@ class PartnerReferralController extends Controller
                 $referral = Referral::create([
                     'partner_id' => $partner['id'],
                     'agent_type' => 'PARTNER',
-                    'expired_at' => Carbon::now()->addMonths(12),
+                    'expired_at' => Carbon::now()->addMonths(6),
                     'link' => strtoupper($link),
                     'count' => 0,
                     'commission' => $payload['percentage'],
