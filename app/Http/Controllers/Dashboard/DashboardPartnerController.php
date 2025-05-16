@@ -17,7 +17,7 @@ use Illuminate\Support\HtmlString;
 use Illuminate\Support\Str;
 use Mail;
 
-class PartnerController extends Controller
+class DashboardPartnerController extends Controller
 {
     public function generatePassword()
     {
@@ -34,15 +34,12 @@ class PartnerController extends Controller
 
     public function index()
     {
-        DB::beginTransaction();
         try {
-
             $partner = Partner::searchQuery()
                 ->sortingQuery()
                 ->filterQuery()
                 ->filterDateQuery()
                 ->paginationQuery();
-            DB::commit();
 
             return $this->success('partner list is successfully retrived', $partner);
 

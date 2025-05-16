@@ -12,7 +12,8 @@ class DashboardRepaymentController extends Controller
     public function index()
     {
         try {
-            $repayments = Repayment::searchQuery()
+            $repayments = Repayment::with(['partner'])
+                ->searchQuery()
                 ->sortingQuery()
                 ->filterQuery()
                 ->filterDateQuery()

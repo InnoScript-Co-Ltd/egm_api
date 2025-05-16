@@ -43,14 +43,14 @@ Route::middleware('jwt')->group(function () {
     });
 
     Route::group(['prefix' => 'partner'], function () {
-        Route::get('/generate-password', 'PartnerController@generatePassword')->permission(PermissionEnum::PARTNER_GENERATE_PASSWORD->value);
-        Route::post('/', 'PartnerController@store')->permission(PermissionEnum::PARTNER_STORE->value);
-        Route::get('/', 'PartnerController@index')->permission(PermissionEnum::PARTNER_INDEX->value);
-        Route::get('/{id}', 'PartnerController@show')->permission(PermissionEnum::PARTNER_SHOW->value);
-        Route::put('/{id}', 'PartnerController@update')->permission(PermissionEnum::PARTNER_UPDATE->value);
-        Route::delete('/{id}', 'PartnerController@destroy')->permission(PermissionEnum::PARTNER_DESTROY->value);
-        Route::post('/{id}/approve', 'PartnerController@approveAccount')->permission(PermissionEnum::PARTNER_APPROVE_ACCOUNT->value);
-        Route::post('/{id}/approve-kyc', 'PartnerController@approveKYC')->permission(PermissionEnum::PARTNER_APPROVE_KYC->value);
+        Route::get('/generate-password', 'DashboardPartnerController@generatePassword')->permission(PermissionEnum::PARTNER_GENERATE_PASSWORD->value);
+        Route::post('/', 'DashboardPartnerController@store')->permission(PermissionEnum::PARTNER_STORE->value);
+        Route::get('/', 'DashboardPartnerController@index')->permission(PermissionEnum::PARTNER_INDEX->value);
+        Route::get('/{id}', 'DashboardPartnerController@show')->permission(PermissionEnum::PARTNER_SHOW->value);
+        Route::put('/{id}', 'DashboardPartnerController@update')->permission(PermissionEnum::PARTNER_UPDATE->value);
+        Route::delete('/{id}', 'DashboardPartnerController@destroy')->permission(PermissionEnum::PARTNER_DESTROY->value);
+        Route::post('/{id}/approve', 'DashboardPartnerController@approveAccount')->permission(PermissionEnum::PARTNER_APPROVE_ACCOUNT->value);
+        Route::post('/{id}/approve-kyc', 'DashboardPartnerController@approveKYC')->permission(PermissionEnum::PARTNER_APPROVE_KYC->value);
     });
 
     Route::group(['prefix' => 'email-content'], function () {
@@ -239,6 +239,7 @@ Route::middleware('jwt')->group(function () {
         Route::delete('/{id}', 'DashboardBonusPointController@destroy')->permission(PermissionEnum::BONUS_POINT_DESTROY->value);
     });
 
+    /** Banner */
     Route::group(['prefix' => 'banner'], function () {
         Route::get('/', 'DashboardBannerController@index')->permission(PermissionEnum::BANNER_INDEX->value);
         Route::post('/', 'DashboardBannerController@store')->permission(PermissionEnum::BANNER_STORE->value);
