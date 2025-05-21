@@ -2,11 +2,9 @@
 
 namespace App\Http\Controllers\Partner;
 
-use App\Enums\GeneralStatusEnum;
 use App\Enums\RepaymentStatusEnum;
 use App\Enums\TransactionStatusEnum;
 use App\Http\Controllers\Dashboard\Controller;
-use App\Models\BonusPoint;
 use App\Models\Partner;
 use App\Models\Referral;
 use App\Models\Repayment;
@@ -24,10 +22,6 @@ class PartnerDashboardController extends Controller
         if ($partner && $partner->status === 'ACTIVE' && $partner->kyc_status === 'FULL_KYC') {
 
             try {
-
-                $bonusPoint = BonusPoint::select(['limit_amount'])
-                    ->where(['status' => GeneralStatusEnum::ACTIVE->value])
-                    ->first();
 
                 $referrals = Referral::select(['link'])
                     ->where(['partner_id' => $partner->id])
@@ -56,6 +50,7 @@ class PartnerDashboardController extends Controller
                     ->where([
                         'sender_id' => $partner->id,
                         'sender_type' => 'PARTNER',
+                        'status' => TransactionStatusEnum::DEPOSIT_PAYMENT_ACCEPTED->value,
                     ])
                     ->get();
 
@@ -123,7 +118,6 @@ class PartnerDashboardController extends Controller
                     'total_repayment' => $totalRepayment,
                     'this_month_repayment' => $thisMonthRepayment,
                     'commission_amount' => $referralPartnerDeposit->sum('commission'),
-                    'bonus_point' => $bonusPoint['limit_amount'],
                     'progress_bonus_point' => $referralPartnerDeposit->sum('referral_partner_deposit'),
                 ]);
 
