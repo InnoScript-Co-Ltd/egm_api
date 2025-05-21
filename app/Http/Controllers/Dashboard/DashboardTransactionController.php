@@ -39,7 +39,8 @@ class DashboardTransactionController extends Controller
     {
         DB::beginTransaction();
         try {
-            $transactions = Transaction::searchQuery()
+            $transactions = Transaction::where(['sender_type' => 'PARTNER'])
+                ->searchQuery()
                 ->sortingQuery()
                 ->filterQuery()
                 ->filterDateQuery()
