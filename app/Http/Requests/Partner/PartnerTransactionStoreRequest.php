@@ -43,6 +43,7 @@ class PartnerTransactionStoreRequest extends FormRequest
             'transaction_screenshoot' => 'required | file | max:1024',
             'package_deposit_amount' => 'required | numeric',
             'sender_account_id' => "required | in:$partnerBankAccounts",
+            'note' => 'required | string',
         ];
     }
 }
