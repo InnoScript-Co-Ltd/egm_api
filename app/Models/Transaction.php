@@ -39,6 +39,7 @@ class Transaction extends Model
         'transaction_type',
         'sender_type',
         'status',
+        'note',
         'created_at',
         'updated_at',
         'deleted_at',

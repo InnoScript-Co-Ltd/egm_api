@@ -37,7 +37,6 @@ class DashboardTransactionController extends Controller
 
     public function index()
     {
-        DB::beginTransaction();
         try {
             $transactions = Transaction::where(['sender_type' => 'PARTNER'])
                 ->searchQuery()
@@ -45,10 +44,29 @@ class DashboardTransactionController extends Controller
                 ->filterQuery()
                 ->filterDateQuery()
                 ->paginationQuery();
-            DB::commit();
 
             return $this->success('Transactions are retrived successfully', $transactions);
 
+        } catch (Exception $e) {
+            DB::rollback();
+            throw $e;
+        }
+    }
+
+    public function indexByPartner($id)
+    {
+        try {
+            $transactions = Transaction::where([
+                'sender_type' => 'PARTNER',
+                'sender_id' => $id,
+            ])
+                ->searchQuery()
+                ->sortingQuery()
+                ->filterQuery()
+                ->filterDateQuery()
+                ->paginationQuery();
+
+            return $this->success('Transactions are retrived successfully by partner', $transactions);
         } catch (Exception $e) {
             DB::rollback();
             throw $e;
