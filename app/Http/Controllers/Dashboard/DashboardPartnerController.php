@@ -74,6 +74,7 @@ class DashboardPartnerController extends Controller
             return $this->success('Partner account is successfully created', $partner);
         } catch (Exception $e) {
             DB::rollBack();
+            return $this->error('Failed to create partner account', $e->getMessage(), 500);
             throw $e;
         }
     }
