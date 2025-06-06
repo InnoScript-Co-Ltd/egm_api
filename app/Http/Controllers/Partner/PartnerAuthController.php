@@ -9,7 +9,8 @@ use App\Http\Controllers\Dashboard\Controller;
 use App\Http\Requests\Agents\ConfrimPaymentPasswordRequest;
 use App\Http\Requests\Partner\PartnerChangePasswordRequest;
 use App\Http\Requests\Partner\PartnerForgetPasswordRequest;
-use App\Http\Requests\Partner\PartnerLoginRequest;
+use App\Http\Requests\Partner\PartnerLoginEmailRequest;
+use App\Http\Requests\Partner\PartnerLoginPhoneRequest;
 use App\Http\Requests\Partner\PartnerPaymentPasswordUpdateRequest;
 use App\Http\Requests\Partner\PartnerResetPassword;
 use App\Http\Requests\Partner\PartnerVerifiedOtp;
@@ -35,14 +36,42 @@ class PartnerAuthController extends Controller
         ]);
     }
 
-    public function login(PartnerLoginRequest $request)
+    public function loginEmail(PartnerLoginEmailRequest $request)
+    {
+        $payload = collect($request->validated());
+
+        try {
+            $partner = Partner::where(['email' => $payload['email']])->first();
+
+            if (! $partner) {
+                return $this->badRequest('Account does not found');
+            }
+
+            if ($partner->status !== PartnerStatusEnum::ACTIVE->value) {
+                return $this->badRequest('Account is not active');
+            }
+
+            $token = auth()->guard('partner')->attempt($payload->toArray());
+
+            if ($token) {
+                return $this->createNewToken($token);
+            }
+
+            return $this->badRequest('Incorrect email and passwrod');
+        } catch (Exception $e) {
+            DB::rollBack();
+            throw $e;
+        }
+    }
+
+    public function loginPhone(PartnerLoginPhoneRequest $request)
     {
         $payload = collect($request->validated());
 
         DB::beginTransaction();
 
         try {
-            $partner = Partner::where(['email' => $payload['email']])->first();
+            $partner = Partner::where(['phone' => $payload['phone']])->first();
 
             if (! $partner) {
                 return $this->badRequest('Account does not found');
@@ -60,7 +89,7 @@ class PartnerAuthController extends Controller
                 return $this->createNewToken($token);
             }
 
-            return $this->badRequest('Incorrect email and passwrod');
+            return $this->badRequest('Incorrect phone number and passwrod');
         } catch (Exception $e) {
             DB::rollBack();
             throw $e;

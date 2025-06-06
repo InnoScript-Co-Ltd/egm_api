@@ -44,6 +44,7 @@ Route::middleware('jwt')->group(function () {
 
     Route::group(['prefix' => 'partner'], function () {
         Route::get('/generate-password', 'DashboardPartnerController@generatePassword')->permission(PermissionEnum::PARTNER_GENERATE_PASSWORD->value);
+        Route::post('/reset-password', 'DashboardPartnerController@resetPassword');
         Route::post('/', 'DashboardPartnerController@store')->permission(PermissionEnum::PARTNER_STORE->value);
         Route::get('/', 'DashboardPartnerController@index')->permission(PermissionEnum::PARTNER_INDEX->value);
         Route::get('/{id}', 'DashboardPartnerController@show')->permission(PermissionEnum::PARTNER_SHOW->value);
@@ -259,6 +260,14 @@ Route::middleware('jwt')->group(function () {
             Route::put('/{id}', 'DashboardUSDTAddressController@update')->permission(PermissionEnum::USDT_ADDRESS_UPDATE->value);
             Route::delete('/{id}', 'DashboardUSDTAddressController@destroy')->permission(PermissionEnum::USDT_ADDRESS_DESTROY->value);
         });
+    });
+
+    /** History **/
+    Route::group(['prefix' => 'history'], function () {
+        Route::get('/deposit', 'DashboardHistoryController@indexTransaction')->permission(PermissionEnum::HISTORY_TRANSACTION_INDEX->value);
+        Route::get('/withdraw', 'DashboardHistoryController@indexWithdraw')->permission(PermissionEnum::HISTORY_WITHDRAW_INDEX->value);
+        Route::get('/repayment', 'DashboardHistoryController@indexRepayment')->permission(PermissionEnum::HISTORY_REPAYMENT_INDEX->value);
+        Route::get('/detail/{id}', 'DashboardHistoryController@show')->permission(PermissionEnum::HISTORY_SHOW->value);
     });
 
 });

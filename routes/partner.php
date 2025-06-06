@@ -16,8 +16,9 @@ use Illuminate\Support\Facades\Route;
 Route::middleware(['partner'])->group(function () {
 
     Route::group(['prefix' => 'auth'], function () {
-        Route::post('/login', 'PartnerAuthController@login');
-        Route::post('/register', action: 'PartnerController@store');
+        Route::post('/login/email', 'PartnerAuthController@loginEmail');
+        Route::post('/login/phone', 'PartnerAuthController@loginPhone');
+        Route::post('/register', 'PartnerController@store');
         Route::post('/otp/email', 'PartnerAuthController@sendOTPByEmail');
         Route::post('/otp/verify/email', 'PartnerAuthController@verifyOTPByEmail');
         Route::post('/reset-password', 'PartnerAuthController@resetPassword');

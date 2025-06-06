@@ -6,6 +6,7 @@ use App\Enums\EmailContentTypeEnum;
 use App\Enums\GeneralStatusEnum;
 use App\Enums\KycStatusEnum;
 use App\Enums\PartnerStatusEnum;
+use App\Http\Requests\Dashboard\DashboardPartnerResetPasswordRequest;
 use App\Http\Requests\Dashboard\PartnerStoreRequest;
 use App\Http\Requests\Dashboard\PartnerUpdateRequest;
 use App\Mail\Dashboard\PartnerAccountEmailTemplate;
@@ -74,8 +75,30 @@ class DashboardPartnerController extends Controller
             return $this->success('Partner account is successfully created', $partner);
         } catch (Exception $e) {
             DB::rollBack();
+
             return $this->error('Failed to create partner account', $e->getMessage(), 500);
             throw $e;
+        }
+    }
+
+    public function resetPassword(DashboardPartnerResetPasswordRequest $request)
+    {
+        $payload = collect($request->validated());
+
+        DB::beginTransaction();
+
+        try {
+            $partner = Partner::findOrFail($payload['partner_id']);
+
+            $partner->update([
+                'password' => 'password',
+            ]);
+
+            return $this->success('Partner account password is reseted successfully created', $partner);
+        } catch (Exception $e) {
+            DB::rollback();
+
+            return $this->internalServerError();
         }
     }
 

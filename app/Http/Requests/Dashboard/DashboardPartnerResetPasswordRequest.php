@@ -1,10 +1,11 @@
 <?php
 
-namespace App\Http\Requests\Partner;
+namespace App\Http\Requests\Dashboard;
 
+use App\Models\Partner;
 use Illuminate\Foundation\Http\FormRequest;
 
-class PartnerLoginRequest extends FormRequest
+class DashboardPartnerResetPasswordRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -21,9 +22,10 @@ class PartnerLoginRequest extends FormRequest
      */
     public function rules(): array
     {
+        $partnerIds = implode(',', Partner::pluck('id')->toArray());
+
         return [
-            'email' => 'required | email',
-            'password' => 'required | string',
+            'partner_id' => "required | in:$partnerIds",
         ];
     }
 }

@@ -2,10 +2,12 @@
 
 namespace App\Http\Controllers\Dashboard;
 
+use App\Enums\HistoryTypeEnum;
 use App\Enums\RepaymentStatusEnum;
 use App\Enums\TransactionStatusEnum;
 use App\Helpers\Snowflake;
 use App\Http\Requests\Dashboard\DashboardTransactionUpdateRequest;
+use App\Models\History;
 use App\Models\Partner;
 use App\Models\Repayment;
 use App\Models\Transaction;
@@ -178,13 +180,22 @@ class DashboardTransactionController extends Controller
 
             Repayment::insert($repayments->toArray());
             $transaction->update(['status' => TransactionStatusEnum::DEPOSIT_PAYMENT_ACCEPTED->value]);
+
+            // History::create([
+            //     'partner_id' => $transaction->sender_id,
+            //     'transaction_id' => $transaction->id,
+            //     'type' => HistoryTypeEnum::TRANSACTION->value,
+            //     'deposit_amount' => $transaction->package_deposit_amount,
+            //     'title' => 'ရင်းနှီးမြှုပ်နှံမှုပြုလုပ်ခြင်း',
+            //     'description' => $transaction->sender_name,
+            //     'status' => TransactionStatusEnum::DEPOSIT_PAYMENT_ACCEPTED->value,
+            // ]);
+
             DB::commit();
 
             return $this->success('Payment deposit is successfully', $repayments);
         } catch (Exception $e) {
             DB::rollback();
-
-            return $e;
 
             return $this->internalServerError('Payment deposit is failed');
         }
