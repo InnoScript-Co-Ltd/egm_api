@@ -31,4 +31,9 @@ class Referral extends Model
         'expired_at' => 'date',
         'register_agents' => 'array',
     ];
+
+    public function referralPartner()
+    {
+        return $this->hasMany(ReferralPartner::class, 'referral_id', 'id');
+    }
 }

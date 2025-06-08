@@ -25,7 +25,21 @@ class PartnerReferralController extends Controller
             DB::beginTransaction();
 
             try {
-                $referrals = Referral::where(['partner_id' => $partner->id, 'agent_type' => 'PARTNER'])
+                $referrals = Referral::with(['referralPartner' => function ($query) {
+                    $query->select(['partner_id', 'referral_id'])
+                        ->with(['partners' => function ($query) {
+                            $query->select(['id', 'first_name', 'last_name', 'status', 'created_at'])
+                                ->with(['transactions' => function ($query) {
+                                    $query->select(['package_deposit_amount', 'sender_id', 'transaction_type', 'sender_type', 'status'])
+                                        ->where([
+                                            'transaction_type' => 'DEPOSIT',
+                                            'sender_type' => 'PARTNER',
+                                            'status' => 'DEPOSIT_PAYMENT_ACCEPTED',
+                                        ]);
+                                }]);
+                        }]);
+                }])
+                    ->where(['partner_id' => $partner->id, 'agent_type' => 'PARTNER'])
                     ->searchQuery()
                     ->sortingQuery()
                     ->filterQuery()

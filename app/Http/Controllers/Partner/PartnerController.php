@@ -11,6 +11,7 @@ use App\Http\Requests\Partner\PartnerInfoUpdateRequest;
 use App\Http\Requests\Partner\PartnerKYCUpdateRequest;
 use App\Models\Partner;
 use App\Models\Referral;
+use App\Models\ReferralPartner;
 use Exception;
 use Illuminate\Support\Facades\DB;
 
@@ -31,6 +32,11 @@ class PartnerController extends Controller
             }
 
             $partner = Partner::create($payload->toArray());
+
+            ReferralPartner::create([
+                'partner_id' => $partner->id,
+                'referral_id' => $referral->id ?? null,
+            ]);
             // if ($referral->register_agents === null) {
             //     $referralPayload['register_agents'] = [$partner->id];
             //     $referralPayload['count'] = 1;
