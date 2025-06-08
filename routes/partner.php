@@ -72,6 +72,10 @@ Route::middleware(['partner'])->group(function () {
 
         });
 
+        Route::group(['prefix' => 'repayment'], function () {
+            Route::get('/this-month', 'PartnerRepaymentController@thisMonthRepayment');
+        });
+
         Route::group(['prefix' => 'banner'], function () {
             Route::get('/', 'PartnerBannerController@index');
             Route::get('/{id}', 'PartnerBannerController@show');
